@@ -1,0 +1,319 @@
+.reg_wrapper
+{
+    min-height: 100vh;
+    min-width: 100vw;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Alegreya Sans', sans-serif;
+    background-image:url( "../../images/background.jpg");
+    background-size: cover;
+    background-position: center;
+    padding-bottom: 3em;
+    padding-top: 5em;
+
+    & .languages_nav
+    {
+        top: 0.9vmax;
+        right: 0.9vmax;
+    }
+}
+
+#back_btn
+{
+   position: absolute;
+   left: 1.234vmax;
+}
+
+.reg_container
+{
+    background: white;
+    display: flex;
+    flex-direction: column;
+    outline: 1.2vmin solid rgba(255, 255, 255, 0.678);
+    padding: 30px;
+    margin: auto;
+    min-width: 520px;
+    min-height: 668px;
+    max-width: 95vw;
+}
+
+#logo
+{
+    height: 220px;
+    margin: 0px auto;
+    margin-bottom: 50px;
+}
+
+$active_color : rgb(1, 131, 218);
+$disabled_color : rgb(0, 104, 173);
+
+.regOrLogin_buttons
+{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 2px;
+}
+
+.regOrLogin_buttons button
+{
+    font-size: 25px;
+    color: rgb(252, 252, 252);
+    background-color: $disabled_color;
+    padding: 10px 20px;
+    border-radius: 5px;
+    width: 49.5%;
+    transition: 0.5s;
+}
+
+button.active
+{
+    background-color: $active_color;
+    transition: 0.5s;
+}
+
+.switchers_block
+{
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+.switcher
+{
+    display: flex;
+    font-size: 25px;
+    color: rgb(124, 124, 124);;
+    background-color: white;
+    padding: 10.5px 20px;
+    border-radius: 5px;
+    width: 49.5%;
+    border: 2px solid rgb(124, 124, 124);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.spandot_wrapper
+{
+    display: inline-flex;
+    margin: auto;
+
+    & span {margin: auto;}
+}
+
+.dot
+{
+    position: relative;
+    height: 20px;
+    width: 20px;
+    background: rgb(218, 218, 218);
+    margin: auto;
+    margin-right: 8px;
+    border-radius: 50%;
+}
+
+.dot::after
+{
+    content: "";
+    position: absolute;
+    width: 65%;
+    height: 65%;
+    top: 50%;
+    left: 50%;
+    border-radius: 50%;
+    transform: translate(-50%,-50%);
+}
+.active_switcher
+{
+    background-color: $active_color;
+    border-color: $active_color;
+    & .dot {background: white;}
+    & span {color: white;};
+    & .dot::after{background-color: $active_color;}
+}
+
+.form
+{
+    display: flex;
+    flex-direction: column;
+}
+
+.input_wrapper
+{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 25px;
+}
+
+.input_wrapper input
+{
+    width: 100%;
+    font-size: 20px;
+    padding: 10px;
+    border: 2px solid rgb(124, 124, 124);
+    border-radius: 5px;
+}
+
+.input_wrapper input:first-child
+{
+    margin-bottom: 15px;
+}
+
+.span_wrapper
+{
+    min-height: 40px;
+    margin-bottom: 20px;
+    display: flex;
+}
+
+.form span
+{
+    display: inline-block;
+    font-size: 20px;
+    text-align: center;
+    color: red;
+    margin: auto;
+}
+
+span.off 
+{
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.5s linear;
+}
+span.active 
+{
+    visibility: visible;
+    opacity: 1; 
+    transition: 0.5s linear;
+}
+
+#submit_btn
+{
+    font-size: 25px;
+    color: rgb(252, 252, 252);
+    background-color: $active_color;;
+    padding: 10px 20px;
+    border-radius: 10px;
+    transition: 0.5s;
+    min-width: 50%;
+    margin: 5px auto;
+}
+
+#submit_btn:hover
+{
+    background-color: rgb(0, 113, 189);
+}
+#submit_btn:active
+{
+    background-color: rgb(0, 92, 153);
+}
+
+@media (max-width:550px) and (max-height: 830px)
+{
+    .reg_wrapper .hidden_buttons button:last-child
+    {
+        color: #024047
+    }
+}
+@media (max-width : 550px)
+{
+    .reg_container
+    {
+        padding: 2.15em;
+        min-width: 95vw;
+        min-height: auto;
+    }
+  
+    .switchers_block
+    {
+        margin-bottom: 20px;
+    }
+
+    .switcher
+    {
+        font-size: 4.65vw;
+        padding: 1.95vw 2.5vw;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: 0.5s;
+    }
+
+    .dot
+    {
+        position: relative;
+        height: clamp(5px, 5vw, 20px);
+        width: clamp(5px, 5vw, 20px);
+        background: rgb(218, 218, 218);
+        margin: auto;
+        margin-right: clamp(1px, 2.5vw, 8px);;
+        border-radius: 50%;
+    }
+
+}
+
+@media (max-width : 450px)
+{
+
+    #logo
+    {
+        height: auto;
+        width:clamp(1vw,65vw,203px);
+        margin-bottom: 10vw;
+    }
+
+    .regOrLogin_buttons
+    {
+        width: 100%;
+    }
+    .regOrLogin_buttons button
+    {
+        font-size: 5.5vw;
+        padding: 1.7vw 2.5vw;
+        border-radius: 1.2vw;
+        width: 49%;
+    }
+
+    .input_wrapper
+    {
+        margin-bottom: 3.5vw;
+    }
+
+    .input_wrapper input
+    {
+        font-size: 4.7vw;
+        padding: 2.35vw;
+        border-radius: 1.2vw;
+    }
+
+    .input_wrapper input:first-child
+    {
+        margin-bottom: 3.5vw;
+    }
+
+    .span_wrapper
+    {
+        min-height: 9.4vw;
+        margin-bottom: 3.5vw;
+    }
+    .form span
+    {
+        display: inline-block;
+        font-size: 4.7vw;
+        text-align: center;
+        color: red;
+    }
+    #submit_btn
+    {
+        font-size: 5.5vw;
+        padding: 1.7vw 2.5vw;
+        border-radius: 1.7vw;
+        transition: 0.5s;
+        min-width: 50%;
+        margin: 5px auto;
+    }
+}

@@ -1,0 +1,61 @@
+.languages_nav
+{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    z-index: 4;
+    background-color: transparent;
+}
+
+.hidden_buttons
+{
+    display: flex;
+    flex-direction: column;
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.4s;
+}
+.active
+{
+    visibility: visible;
+    opacity: 1;
+    transition: 0.4s;
+}
+
+#mainBtn.active 
+{
+    opacity: 1;
+    transition: 0.4s;
+}
+.languages_nav button
+{
+    top: 0px;
+    left: 0px;
+    padding: clamp(4px,0.35vw,1vmax);
+    color: white;
+    font-size:clamp(16px,1.1vw,2vmax);
+    text-transform: uppercase;
+    font-weight: bolder;
+    background-color: transparent !important;
+}
+
+#mainBtn
+{
+    
+    border-right: 1px solid white;
+    border-left: 1px solid white;
+    opacity: 0.73;
+}
+
+.blackBtn button
+{
+    color:#024047;;
+}
+.blackBtn #mainBtn
+{
+    border-right: 1px solid #024047;
+    border-left: 1px solid #024047;
+}
+
+
+

@@ -1,0 +1,181 @@
+.welcome_wrapper
+{
+    min-height: 100vh;
+    min-width: 100vw;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Alegreya Sans', sans-serif;
+    overflow-x: hidden;
+}
+.welcome_wrapper .languages_nav
+{
+    top: 0.9vmax;
+    left: 0.9vmax;
+}
+#root
+{
+    background-image: url("../../images/background.jpg");
+    background-size:cover;
+    background-position: center;
+    background-attachment: fixed;
+    overflow-x: hidden;
+}
+
+.welcome_body
+{
+    display: flex;
+    height: 72vh;
+    max-width: 73.438vw;
+    padding: 1.563vw;
+    margin: auto;
+}
+
+.welcome_whatIsIt
+{
+    margin: auto 0;
+    transform: translateY(-2vh);
+    margin-right: 0.521vw;
+    color: whitesmoke;
+
+    & p 
+    {
+        font-weight: 400;
+        font-size: 1.563vmax;
+        line-height: 1.927vw;
+        white-space:pre-wrap;
+    }
+
+    & h1 
+    {
+        font-size: 2.396vw;
+        margin-bottom: 1.406vw;
+    }
+}
+
+.linkTo_btn
+{
+    top:1vmax;
+    font-size:clamp(17px,1.302vmax,1.302vmax) ;
+    color: rgb(12, 118, 130);
+    background-color: white;
+    padding: clamp(8px,0.55vmax,1vmax) clamp(16px,1.05vmax,1.3vmax);
+    -webkit-border-radius: clamp(8px,0.55vmax,1vmax) clamp(19px,1.5vmax,1.5vmax);
+    -moz-border-radius: clamp(8px,0.55vmax,1vmax) clamp(19px,1.5vmax,1.5vmax);
+    border-radius: clamp(8px,0.55vmax,1vmax) clamp(19px,1.5vmax,1.5vmax);
+    -webkit-box-shadow: 0px 0.19em 0px 0.02em rgba(255, 255, 255, 0.363);
+    box-shadow: 0px 0.19em 0px 0.02em rgba(255, 255, 255, 0.363);
+    transition: 0.1s;
+ 
+    &:active {background-color: rgb(246, 247, 248);}
+    &:hover
+    {
+     transition: 0.2s;
+     top: 1em;
+     box-shadow: 0px 0px 0px 0px rgba(3, 62, 102, 0.411);
+    }
+}
+
+#login_btn
+{
+   position: absolute;
+   right: 1.234vmax;
+}
+
+#dairy
+{
+    margin: auto 0;
+    height: 50vmin;
+}
+
+@media (max-aspect-ratio : 1500/850)
+{
+    .welcome_body
+    {
+        max-width:85vw;
+    }
+
+    .welcome_whatIsIt
+    {
+        margin-right: 2vmin;
+
+        & p 
+        {
+            font-size: 3vmin;
+            line-height: 3.63vmin;
+        }
+
+        & h1 
+        {
+            font-size: 3.96vmin;
+            margin-bottom: 2.5vmin;
+        }
+    }
+
+    .linkTo_btn
+    {
+        font-size: clamp(19px, 2.21vmin, 2.5vmin);
+        padding: 1.05vmin 1.9vmin;
+        -webkit-border-radius: 0.7vmin 1.95vmin;
+        -moz-border-radius: 0.7vmin 1.95vmin;
+        border-radius: 1vmin 2.7vmin;
+
+        &:hover { top: 1.35vmax; }
+    }
+}
+
+@media (max-aspect-ratio : 700/850)
+{
+    .welcome_wrapper .languages_nav
+    {
+        top: 1.5vmax;
+        left: 1.5vmax;
+    }
+
+    .welcome_body
+    {
+        max-width: auto;
+        padding: 0.4em;
+        margin: auto auto;
+        flex-direction: column;
+    }
+
+    .welcome_whatIsIt
+    {
+        margin-right: 0em;
+
+        & h1 
+        {
+            font-size: 4.4vmax;
+            margin-bottom: 1.95vmax;
+            text-align: center;
+        }
+
+        & p 
+        {
+            font-size: 2.58vmax;
+            line-height: 4vmax;
+            text-align: center;
+        }
+    }
+
+    .linkTo_btn
+    {
+        font-size: 2.21vmax;
+        padding: 1.05vmax 1.9vmax;
+        -webkit-border-radius: 0.7vmax 1.95vmax;
+        -moz-border-radius: 0.7vmax 1.95vmax;
+        border-radius: 1vmax 2.7vmax;
+    }
+    .linkTo_btn:hover
+    {
+        top: 0.75em;
+    }
+    #dairy
+    {
+        margin: auto;
+        width: 60vw;
+        height: auto;
+        padding-bottom: 3vh;
+    }
+}

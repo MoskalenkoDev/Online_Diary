@@ -1,0 +1,461 @@
+.profile_wrapper
+{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: clamp(500px,35vw,62vw);
+    border-radius: 10px 10px 10px 10px;
+    padding: clamp(12px, 1vmax,50px);
+    background: rgb(255, 255, 255);
+    margin: 2em auto 2em;
+    font-family: 'Nunito', sans-serif;
+    & .languages_nav
+    {
+        & button 
+        {
+            color: #024047;
+            font-size:clamp(12px, 0.9vmax,2vmax);
+            padding: clamp(3px,0.3vw,1vmax);
+            opacity: 0.85;
+        };
+        & #mainBtn 
+        {
+            border-right: 1px solid #024047;
+            border-left: 1px solid #024047;
+            &.active {opacity: 0.85;}
+        }
+    }
+}
+
+.blue_btn
+{
+    font-size: clamp(16px,1vmax,1vmax);
+    color: rgb(252, 252, 252);
+    background-color: rgb(1, 131, 218);
+    padding: clamp(6px,0.5vmax,0.55vmax) clamp(12px, 0.7vmax,1.05vmax);
+    border-radius: clamp(8px,0.5vmax,1.5vw);
+    transition: 0.3s background-color;
+    &:hover{background:rgb(0, 113, 189)}
+    &:active{background:rgb(0, 92, 153)}
+}
+
+.profile_wrapper_exit_btn
+{
+    margin: 0px 0px 2vmax auto;
+}
+
+.profile_img_choose_wrapper
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 85%;
+    margin: 0 auto;
+    margin-bottom: clamp(18px,1.5vmax,1.5vmax);
+    border-bottom: 1px solid #bdbdbd;
+}
+
+.profile_img_choose_wrapper_avatar
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    width: clamp(180px,10.5vmax, 240px);
+    height: clamp(180px,10.5vmax, 240px);
+    border: 3px dashed #bdbdbd;
+    & span 
+    {
+        font-size: clamp(14px,1.1vmax,1.2vmax);
+        color:#486c70;;
+    }
+    & .none_span {display: none;}
+    & img 
+    {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    margin-bottom: clamp(14px,1vmax,1vmax);
+}
+
+#avatar_change_btn
+{
+    display: flex;
+    font-size: clamp(12px,0.8vmax,1vmax);
+    color: #024047;
+    background-color: #f2f4f5;
+    padding: clamp(6px,0.3vmax,0.55vmax) clamp(12px, 0.5vmax,1.05vmax);
+    border: 1px solid #bdbdbd;
+    border-radius: 3px;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+    user-select: none;
+    &:hover{background-color: #ebebeb;}
+    &:active{background-color: #dfdfdf;}
+    & input {display: none;}
+    margin-bottom: clamp(19px,2vmax,2vmax);
+}
+////////////////////////////////////////////////////////////////////// POPUP ZONE
+.profile_img_choose_popup_wrapper // когда popup не активен
+{
+    position: fixed;
+    display: flex;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.788);
+    z-index: 50;
+    visibility: hidden;
+    padding: 10px 0px;
+    overflow-y:scroll;
+    opacity: 0;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+    &.img_show_popup_active{visibility: visible;opacity: 1;}// когда активен
+}
+
+.profile_img_choose_popup // наше окно попапа (контейнер)
+{
+    display: flex;
+    flex-direction: column;
+    border-radius: clamp(4px, 0.2vmax, 1.5vw);
+    overflow: hidden;
+    background: white;
+    margin: auto;
+    width: auto;
+    max-width: 96vw;
+    & span 
+    {
+        text-align: center;
+        font-size: clamp(16px, 0.7vw, 1vmax);
+    }
+}
+/////////////////////////////////////// - Выбор файла
+
+.profile_img_choose_popup_pick_file_wrapper // враппер блока выбора файла
+{
+    display: flex;
+    flex-direction: column;
+    width: clamp(638px , 30vmax, 97vw);
+    &.img_show_crop_wrapper_active {display: none;}
+}
+
+.popup_header
+{
+    display: flex;
+    justify-content: space-between;
+    background: #f0f2f5;
+    & span {padding: clamp(19px , 1vmax, 1vmax) clamp(18px, 1vw, 23px);}
+    & .close_popup_btn
+    {   
+        display: flex;
+        width: clamp(62px,3vw,4vw);
+        background: #f0f2f5;
+    }
+    & .close_popup_btn::before 
+    {
+        content: "";
+        display: block;
+        margin: auto;
+        width: clamp(25px,1.3vw,4vw);
+        height: clamp(25px,1.3vw,4vw);
+        background: #a3a9b5;
+        mask-repeat: no-repeat;
+        mask-position: center;
+        mask-size: contain;
+       -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+       -webkit-mask-position: center;
+        mask-image: url(data:image/svg+xml;charset=utf-8,%3Csvg%20height%3D%2224%22%20viewBox%3D%2232%20155%2024%2024%22%20width%3D%2224%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20fill%3D%22none%22%3E%3Cpath%20d%3D%22m32%20155h24v24h-24z%22%2F%3E%3Cpath%20d%3D%22m44%20165.6-3.8-3.8c-.4-.4-1-.4-1.4%200s-.4%201%200%201.4l3.8%203.8-3.8%203.8c-.4.4-.4%201%200%201.4s1%20.4%201.4%200l3.8-3.8%203.8%203.8c.4.4%201%20.4%201.4%200s.4-1%200-1.4l-3.8-3.8%203.8-3.8c.4-.4.4-1%200-1.4s-1-.4-1.4%200z%22%20fill%3D%22%23828a99%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E);
+       -webkit-mask-image: url(data:image/svg+xml;charset=utf-8,%3Csvg%20height%3D%2224%22%20viewBox%3D%2232%20155%2024%2024%22%20width%3D%2224%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20fill%3D%22none%22%3E%3Cpath%20d%3D%22m32%20155h24v24h-24z%22%2F%3E%3Cpath%20d%3D%22m44%20165.6-3.8-3.8c-.4-.4-1-.4-1.4%200s-.4%201%200%201.4l3.8%203.8-3.8%203.8c-.4.4-.4%201%200%201.4s1%20.4%201.4%200l3.8-3.8%203.8%203.8c.4.4%201%20.4%201.4%200s.4-1%200-1.4l-3.8-3.8%203.8-3.8c.4-.4.4-1%200-1.4s-1-.4-1.4%200z%22%20fill%3D%22%23828a99%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E);
+        transition: background-color 0.2s ease ;
+    }
+    & .close_popup_btn:hover::before
+    {
+        background: #7f838d;
+    } 
+}
+
+.profile_img_choose_popup_pick_file_block_content
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: clamp(35px,1.9vmax,3vmax) 9px;
+    & span {margin-top: 10px;}
+    & #inpFile
+    {
+        font-size: clamp(16px, 0.8vmax, 1vmax);
+        margin-bottom: 0px;
+        margin-top: clamp(30px,1.6vmax, 3vmax) ;
+        border-radius: clamp(4px, 0.2vmax, 1.5vw);
+        transition: 0.3s background-color;
+        & input {display: none;}
+        cursor: pointer;
+        user-select: none;
+    }
+}
+
+.profile_img_choose_popup_pick_file_block_footer
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: auto;
+    padding: clamp(15px, 1vmax, 1.3vmax);
+    background: #f7f8fa;
+}
+
+/////////////////////////////////////// - Выбор файла
+
+////////////////////////////////////// - CROP BLOCK
+
+.profile_img_choose_popup_crop_wrapper.img_show_crop_wrapper_active
+{
+    display: flex;
+    flex-direction: column;
+    animation: 0.4s ease gg;
+}
+.profile_img_choose_popup_crop_wrapper
+{
+    display: none;
+}
+
+@keyframes gg
+{
+    0% {opacity: 0;}
+    100% {opacity: 1;}
+}
+
+.profile_img_choose_popup_crop_content_wrapper
+{
+    display: flex;
+    padding: clamp(15px, 1.3vmax, 2vmax);
+}
+
+.profile_img_choose_popup_crop_image
+{
+    margin-right: clamp(15px, 1.3vmax, 2vmax);
+    & img 
+    {
+        min-width: 300px;
+        min-height: 300px;
+        max-width: 500px;
+        max-height: 500px;
+        pointer-events: none;
+        user-select: none;
+    }
+}
+
+.profile_img_choose_popup_crop_preview_block
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    margin: 0 auto;
+    & canvas 
+    {
+        width: 170px;
+        max-width: 100%;
+    }
+
+    & .profile_data_save_btn 
+    {
+        font-size: clamp(16px, 0.8vmax, 1vmax);
+        margin: 20px auto 0px;
+        border-radius: 4px;
+    }
+}
+
+////////////////////////////////////// - CROP BLOCK
+
+////////////////////////////////////////////////////////////////////// POPUP ZONE
+.profile_data
+{
+    display: flex;
+    flex-direction: column;
+    width: 93%;
+    margin: 0 auto;
+}
+
+.profile_data_fields_block
+{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: clamp(20px,1.5vmax,1.5vmax);
+
+    & input , textarea
+    {
+        background: #f2f4f5;
+        font-size: clamp(16px,1.1vmax,1.2vmax);
+        color: #024047;
+        padding: clamp(6px,0.3vmax,0.55vmax) clamp(12px, 0.5vmax,1.05vmax);
+        border-radius: 0.2vmax;
+        resize: none;
+    }
+}
+
+.profile_data_span_wrapper
+{
+    display: flex;
+    justify-content: space-between;
+    & span{font-size: clamp(13px, 0.95vmax,1.2vmax); color: #486c70;}
+    & .important_field {color: rgb(255, 85, 85); font-size:clamp(11px, 0.7vmax, 0.8vmax); margin: auto 0;}
+    margin-bottom: clamp(8px,0.5vmax,0.5vmax) ;
+    padding: 0px 0.1vmax;
+}
+
+.profile_data_save_btn
+{
+    font-size: clamp(15px,1.1vmax,1.3vmax);
+    color: rgb(252, 252, 252);
+    background-color: rgb(1, 131, 218);
+    padding: clamp(7px,0.5vmax,0.55vmax) clamp(12px, 0.7vmax,1.05vmax);
+    border-radius: clamp(7px, 0.5vmax, 1.5vw);
+    transition: background-color 0.3s ease;
+    margin: 1vmax auto;
+    &:hover{background:rgb(0, 113, 189)}
+    &:active{background:rgb(0, 92, 153)}
+}
+
+.profile_data_save_popup_title
+{
+    min-height: 15px;
+    display: flex;
+    & span
+    {
+        display: inline-block;
+        font-size: clamp(15px,1vmax,1.3vmax);
+        text-align: center;
+        color: rgb(5, 150, 5);
+        margin: 0px auto clamp(8px,0.5vmax,0.5vmax);
+
+        visibility: hidden;
+        opacity: 0;
+        transition: 0.5s linear;
+        &.red_color {color: red;}
+        &.active_save_profile_popup_title
+        {
+            visibility: visible;
+            opacity: 1;
+        }
+    }
+}
+
+@media(max-width : 662px) 
+{
+    .profile_img_choose_popup
+    {
+        & span {font-size: clamp(14px, 2.4vw,3vw);}
+    }
+    .profile_img_choose_popup_pick_file_wrapper {width: 96vw;}
+
+    .profile_img_choose_popup_crop_content_wrapper
+    {
+        max-width: 96vw;
+        padding: clamp(5px, .6vmax, 2vmax);
+    }
+    .profile_img_choose_popup_crop_image
+    {
+        margin-right: clamp(5px, .6vmax, 2vmax);
+        & img 
+        {
+            min-width: 40vw;
+            min-height: 40vw;
+            max-width: 69vw;
+            max-height: 69vw;
+        }
+    }
+
+    .profile_img_choose_popup_crop_preview_block 
+    {
+        & canvas
+        {
+            width: 20vw;
+            margin: 0 auto;
+        }
+        & .profile_data_save_btn
+        {
+            font-size: clamp(10px, 2.2vw, 3vw) !important;
+            padding: clamp(2px, 1.2vw, 1.5vw) clamp(5px, 2.2vw, 2.5vw) !important;
+        }
+    }
+}
+
+@media(max-width : 530px)
+{
+    .profile_img_choose_popup_header 
+    {
+       & span {padding: clamp(15px, 2vmax, 2vmax) 11px;} 
+       & .close_popup_btn {width: clamp(54px, 10vw, 10vw);}
+    }
+
+    .profile_img_choose_popup_pick_file_block_footer
+    {
+        padding: clamp(9px, 3vw, 3vw);
+    }
+    .profile_wrapper
+    {
+        width: 94vw;
+        margin: 1.4em auto 1.4em;
+    }
+    .profile_data
+    {
+        width: 98%;
+    }
+    .profile_data_span_wrapper
+    {
+        & span{font-size: clamp(11px, 1.5vmax,2vmax); }
+        & span:first-child {padding-right: 5px;}
+        & .important_field {font-size:clamp(10px, 1.25vmax, 2vmax);}
+        margin-bottom: clamp(8px,0.5vmax,0.5vmax) ;
+        padding: 0px 0.1vmax;
+    }
+
+    .profile_data_fields_block
+    {
+        & input , textarea
+        {
+            font-size: clamp(14px, 2.9vw,3vw);
+            padding: clamp(6px,1.15vmin, 3vmax) clamp(6px, 2vmin,2vmax);
+        }
+    }
+
+    .profile_img_choose_wrapper_avatar
+    {
+        padding: clamp(7px, 1.9vmin, 2vw);
+        width: clamp(120px, 34vw, 240px);
+        height: clamp(120px, 34vw, 240px);
+        margin-bottom: clamp(14px, 1vmax, 1vmax);
+    }
+
+    #avatar_change_btn
+    {
+        font-size: clamp(10px, 2.28vw, 3vw);
+        padding: clamp(4px, 1.1vw, 1.5vw) clamp(8px, 2.2vw, 2.5vw);
+        margin-bottom: clamp(19px, 2vmax, 2vmax);
+    }
+
+    .blue_btn
+    {
+        font-size: clamp(13px, 3vw, 3vw);
+        padding: clamp(4px, 1.1vw, 1.5vw) clamp(8px, 2.2vw, 2.5vw);
+        border-radius: clamp(2.5px, 1.4vw, 3vw);
+    }
+
+    .profile_data_save_popup_title span
+    {
+        font-size: clamp(12px, 2.9vw,3vw);
+    }    
+
+    .profile_data_save_btn
+    {
+        font-size: clamp(13px, 2.8vw, 3vw);
+        padding: clamp(4px, 1.2vw, 1.5vw) clamp(9px, 2.2vw, 2.5vw);
+        border-radius: clamp(2.5px, 1.4vw, 3vw);
+    }
+
+}
