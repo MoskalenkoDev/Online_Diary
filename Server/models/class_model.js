@@ -1,5 +1,6 @@
-const mongoose = require('mongoose');
-const class_schema = new mongoose.Schema({
+const {Schema,model} = require('mongoose');
+
+const class_schema = new Schema({
   teacher_id : { // login
     type:String
   },
@@ -11,4 +12,4 @@ const class_schema = new mongoose.Schema({
   school_subjects : [String]
 });
 
-module.exports = classes = mongoose.model('classes', class_schema);
+module.exports = classes = model('classes', class_schema);

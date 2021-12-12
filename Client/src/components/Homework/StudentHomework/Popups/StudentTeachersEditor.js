@@ -1,11 +1,12 @@
-import React, {useEffect ,useRef} from 'react';
+import React, {useEffect , useRef, useState} from 'react';
 import * as ActionCreators from '../../../../Redux/Actions/actions_homework';
 import Axios from 'axios';
-
 
 export const StudentTeachersEditor = ({state,onHidePopup}) =>
 {
     let lang = state.lang.language;
+    const [addTeacherLinkState, setAddTeacherLinkState] = useState("");
+
     let langObj =
     {
         ua:
@@ -40,21 +41,17 @@ export const StudentTeachersEditor = ({state,onHidePopup}) =>
         }
     };
 
-    let timer_copy_popup = useRef(null);
-
-    let onCopyInviteLink = () =>
-    {
-        window.clearTimeout(timer_copy_popup.current);
-        state.dispatch(ActionCreators.change_homework_show_invite_link_popup_class("active_invite_copy_link_popup"));
-        timer_copy_popup.current = setTimeout(() =>
-        {
-            state.dispatch(ActionCreators.change_homework_show_invite_link_popup_class(""));
-        },2000);
-    }
-
     let onMenuItemClick = (active_class) =>
     {
         state.dispatch(ActionCreators.change_homework_popup_active_menu_item(active_class));
+    }
+
+    let onSearchTeacher = () => // будет искать нашего учителя по айдишнику
+    {
+        Axios.post("http://localhost:3001/diary_menu/homework/search_teacher_by_id", {id : addTeacherLinkState})
+        .then(response => {
+            console.log(response.data);
+        })
     }
 
     return (
@@ -78,8 +75,8 @@ export const StudentTeachersEditor = ({state,onHidePopup}) =>
                         <div className="homework_popup_menu_item_content_join_inner_content">
 
                             <div className="homework_popup_menu_item_content_join_input_wrapper">
-                                <input type="text" placeholder = {langObj[lang].joinDescription}/>
-                                <button className = "blue_btn homework_popup_btn">{langObj[lang].searchTeacherTitle}</button>
+                                <input type="text" value = {addTeacherLinkState} placeholder = {langObj[lang].joinDescription} onChange = {(e) => setAddTeacherLinkState(e.target.value)}/>
+                                <button className = "blue_btn homework_popup_btn" onClick = {onSearchTeacher}>{langObj[lang].searchTeacherTitle}</button>
                             </div>
 
                         </div>

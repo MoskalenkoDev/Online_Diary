@@ -1,10 +1,10 @@
-const mongoose = require('mongoose');
+const {connect} = require('mongoose');
 
 async function connectDb()
 {
     try
     {
-        await mongoose.connect('mongodb+srv://nikolas2:<password>@cluster0.xfza0.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', // insert your connection link here
+        await connect(process.env.MONGODB_CONNECTION_LINK, 
         {
             useNewUrlParser : true,
             useFindAndModify : false,

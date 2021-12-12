@@ -1,7 +1,7 @@
 import React, {useEffect ,useRef} from 'react';
 import * as ActionCreators from '../../../Redux/Actions/actions_homework';
 import Axios from 'axios';
-import { StudentTeachersEditor } from '../TeacherHomework/Popups/StudentTeachersEditor';
+import { StudentTeachersEditor } from './Popups/StudentTeachersEditor';
 
 export const StudentHomework = ({state}) =>
 {
