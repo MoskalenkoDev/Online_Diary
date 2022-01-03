@@ -1,6 +1,6 @@
 import {
   ACTION_CHANGE_WHAT_CHECKED , ACTION_CHANGE_WHO_LOG , 
-  ACTION_CHANGE_LOGIN , ACTION_CHANGE_PASSWORD ,
+  ACTION_CHANGE_EMAIL , ACTION_CHANGE_PASSWORD ,
   ACTION_CHANGE_REDIRECT , ACTION_CHANGE_POPUP_TITLE ,
   ACTION_CHANGE_SHOW_POPUP,ACTION_CHANGE_INPUT_DATA_ALL,
   ACTION_CHANGE_INPUT_DATA_IMG_SRC,ACTION_CHANGE_INPUT_DATA_TEMPORARY_IMG_SRC,
@@ -26,10 +26,10 @@ export function change_who_log(who) {
   }
 }
 
-export function change_login(newLogin) {
+export function change_email(newEmail) {
   return {
-    type: ACTION_CHANGE_LOGIN,
-    payload: newLogin
+    type: ACTION_CHANGE_EMAIL,
+    payload: newEmail
   }
 }
 

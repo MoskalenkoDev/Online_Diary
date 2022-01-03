@@ -4,7 +4,7 @@ const student_users = new Schema({
   img_src : {
     type:String
   },
-  login: { 
+  email: { 
     type: String,
     unique : true,
     required : true 
@@ -17,9 +17,9 @@ const student_users = new Schema({
     type : Boolean,
     default : false
   },
-  activationLink : {
-    type : String
-  },
+  // activationLink : {
+  //   type : String
+  // },
   name: {
     type: String
   },

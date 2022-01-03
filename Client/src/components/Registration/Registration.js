@@ -20,9 +20,9 @@ class  Registration extends Component
       regBtn : "Реєстрація",
       student : "Учень",
       teacher : "Вчитель",
-      login : "Логін",
+      email : "Пошта",
       password : "Пароль",
-      popupTitleLogin : "Неправильно введений логін або пароль!",
+      popupTitleEmail : "Неправильно введений логін або пароль!",
       popupTitlePassword : "Користувач під таким логіном вже зареєстрований!",
       popupWarningTitle : "Логін та пароль повинні бути не меньше 5-ти символів!",
       submitBtnLogin : "Увійти",
@@ -35,9 +35,9 @@ class  Registration extends Component
       regBtn : "Регистрация",
       student : "Ученик",
       teacher : "Учитель",
-      login : "Логин",
+      email : "Почта",
       password : "Пароль",
-      popupTitleLogin : "Логин или пароль введен неверно!",
+      popupTitleEmail : "Логин или пароль введен неверно!",
       popupTitlePassword : "Пользователь под таким логином уже зарегистрирован!",
       popupWarningTitle : "Логин и пароль должны быть не меньше 5-ти символов!",
       submitBtnLogin : "Войти",
@@ -50,11 +50,11 @@ class  Registration extends Component
       regBtn : "Sign up",
       student : "Student",
       teacher : "Teacher",
-      login : "Login",
+      email : "Email",
       password : "Password",
-      popupTitleLogin : "Incorrect login or password!",
+      popupTitleEmail : "Incorrect email or password!",
       popupTitlePassword : "This username is already taken!",
-      popupWarningTitle : "Login and password must be at least 5 characters!",
+      popupWarningTitle : "Email and password must be at least 5 characters!",
       submitBtnLogin : "Sign in",
       subitBtnReg : "Sign up"
     }
@@ -65,9 +65,9 @@ class  Registration extends Component
     this.props.dispatch(actionCreators.change_what_checked(whatChecked));
   }
 
-  onLoginChanging = (e) =>
+  onEmailChanging = (e) =>
   {
-    if(!e.target.value.includes(" ")) this.props.dispatch(actionCreators.change_login(e.target.value)); // here we block the login with spaces
+    if(!e.target.value.includes(" ")) this.props.dispatch(actionCreators.change_email(e.target.value)); // here we block the email with spaces
   }
 
   onPasswordChanging = (e) =>
@@ -79,7 +79,7 @@ class  Registration extends Component
   {
     if(this.props.redirect === true && prevProps.redirect != true)
     {
-      localStorage.setItem("userToken", md5(this.props.login) );
+      localStorage.setItem("userToken", md5(this.props.email) );
       localStorage.setItem("status", this.props.whoLog);
       this.props.dispatch(actionCreators.change_redirect(false)); // тут надо перезатирать значения потому что это редакс
     }
@@ -91,12 +91,10 @@ class  Registration extends Component
   {
     
     let hashedPass = md5(this.props.password);
-    let hashedLogin = md5(this.props.login);
-    Axios.post("http://localhost:3001/login",
+    Axios.post(`http://localhost:3001/${this.props.whoLog}/login`,
     {
-      login : hashedLogin,
-      password :  hashedPass,
-      status : this.props.whoLog
+      email : this.props.email,
+      password :  hashedPass
     })
     .then((response) =>
     {
@@ -107,7 +105,7 @@ class  Registration extends Component
       else 
       {
         clearTimeout(this.timer);
-        this.props.dispatch(actionCreators.change_popup_title(this.langObj[lang].popupTitleLogin));// if incorrect we report about it our popupTitle in the state
+        this.props.dispatch(actionCreators.change_popup_title(this.langObj[lang].popupTitleEmail));// if incorrect we report about it our popupTitle in the state
         this.props.dispatch(actionCreators.change_show_popup(true));
         this.timer = setTimeout(() =>
         {
@@ -122,12 +120,10 @@ class  Registration extends Component
   {
     
     let hashedPass = md5(this.props.password);
-    let hashedLogin = md5(this.props.login);;
-    Axios.post("http://localhost:3001/signup",
+    Axios.post(`http://localhost:3001/${this.props.whoLog}/signup`,
     {
-      login : hashedLogin,
+      email : this.props.email,
       password : hashedPass,
-      status : this.props.whoLog
     })
     .then((response) =>
     {
@@ -150,7 +146,7 @@ class  Registration extends Component
 
   regOrLog = (lang) =>
   {
-    if( !(this.props.login.length < 5 || this.props.password.length < 5)) this.props.what_checked === "login"? this.login(lang) : this.registration(lang);
+    if( !(this.props.email.length < 5 || this.props.password.length < 5)) this.props.what_checked === "login"? this.login(lang) : this.registration(lang);
     else 
     {
       clearTimeout(this.timer);
@@ -215,7 +211,7 @@ class  Registration extends Component
             <div className="form">
 
               <div className="input_wrapper">
-                <input type="text" name="username" placeholder={this.langObj[lang].login} onChange = {this.onLoginChanging} value = {this.props.login}></input>
+                <input type="text" name="username" placeholder={this.langObj[lang].email} onChange = {this.onEmailChanging} value = {this.props.email}></input>
                 <input type="password" name="password" placeholder={this.langObj[lang].password} onChange = {this.onPasswordChanging} value = {this.props.password}></input>
               </div>
               <div className="span_wrapper"><span className = {popupClass}>{this.props.popupTitle}</span></div>

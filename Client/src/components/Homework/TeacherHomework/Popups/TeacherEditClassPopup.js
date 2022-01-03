@@ -60,7 +60,7 @@ export const TeacherEditClassPopup = ({state,onHidePopup,onPopupClassTitleChange
         }
         else 
         {
-            Axios.post('http://localhost:3001/diary_menu/homework/edit_class',
+            Axios.post('http://localhost:3001/teacher/diary_menu/homework/edit_class',
             {
                 _id : state.edit_obj_id,
                 title : state.new_class_title,
@@ -82,7 +82,7 @@ export const TeacherEditClassPopup = ({state,onHidePopup,onPopupClassTitleChange
 
     let onDeleteClass = () =>
     {
-        Axios.post('http://localhost:3001/diary_menu/homework/delete_class',
+        Axios.post('http://localhost:3001/teacher/diary_menu/homework/delete_class',
         {
             _id : state.edit_obj_id
         }).then(response =>

@@ -48,7 +48,7 @@ export const StudentTeachersEditor = ({state,onHidePopup}) =>
 
     let onSearchTeacher = () => // будет искать нашего учителя по айдишнику
     {
-        Axios.post("http://localhost:3001/diary_menu/homework/search_teacher_by_id", {id : addTeacherLinkState})
+        Axios.post("http://localhost:3001/student/diary_menu/homework/search_teacher_by_id", {id : addTeacherLinkState})
         .then(response => {
             console.log(response.data);
         })

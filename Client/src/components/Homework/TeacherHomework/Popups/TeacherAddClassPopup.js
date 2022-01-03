@@ -52,7 +52,7 @@ export const TeacherAddClassPopup = ({state,onHidePopup,onPopupClassTitleChange,
         {
             try
             {
-                Axios.post("http://localhost:3001/diary_menu/homework/add_new_class",
+                Axios.post("http://localhost:3001/teacher/diary_menu/homework/add_new_class",
                 { 
                     teacher_id : window.localStorage.getItem("userToken"),
                     title : state.new_class_title,

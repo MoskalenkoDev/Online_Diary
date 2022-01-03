@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////// - registration
 export const ACTION_CHANGE_WHAT_CHECKED = 'ACTION_CHANGE_WHAT_CHECKED';
 export const ACTION_CHANGE_WHO_LOG = 'ACTION_CHANGE_WHO_LOG';
-export const ACTION_CHANGE_LOGIN = 'ACTION_CHANGE_LOGIN';                   
+export const ACTION_CHANGE_EMAIL = 'ACTION_CHANGE_EMAIL';                   
 export const ACTION_CHANGE_PASSWORD = 'ACTION_CHANGE_PASSWORD';            // - registration
 export const ACTION_CHANGE_REDIRECT = 'ACTION_CHANGE_REDIRECT';
 export const ACTION_CHANGE_POPUP_TITLE = 'ACTION_CHANGE_POPUP_TITLE';

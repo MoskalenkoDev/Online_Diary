@@ -11,7 +11,7 @@ class Profile extends Component
 {
     componentDidMount()
     {
-        Axios.post("http://localhost:3001/diary_menu/profile",{login : localStorage.getItem("userToken"), status : localStorage.getItem("status")}).then((response) =>
+        Axios.post(`http://localhost:3001/${localStorage.getItem("status")}/diary_menu/profile`,{email : localStorage.getItem("userToken")}).then((response) =>
         {
             let destr = {...response.data};
             if(destr.name !== "") window.localStorage.setItem("isFillProfile",true);

@@ -91,9 +91,9 @@ export const Teacher_Profile = ({input_data}) =>
         }
         try
         {
-            Axios.post("http://localhost:3001/diary_menu/profile/teacher/save_input_data",
+            Axios.post("http://localhost:3001/teacher/diary_menu/profile/save_input_data",
             { 
-                login : window.localStorage.getItem("userToken"),
+                email : window.localStorage.getItem("userToken"),
                 img_src : input_data.img_src,
                 name,
                 surname,

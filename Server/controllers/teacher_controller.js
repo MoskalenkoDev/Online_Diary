@@ -1,7 +1,8 @@
 const class_model = require("../models/class_model");
 const teacher_token_model = require("../models/teacher_token_model");
 const teacher_users_model = require("../models/teacher_users_model");
-const student_users_model = require("../models/student_users_model");
+
+const user_service = require('../service/user_service');
 
 class TeacherController 
 {
@@ -9,11 +10,11 @@ class TeacherController
     async teacher_signup(req,res) {
         try
         {
-            const {login, password} = req.body;
+            const {email, password} = req.body;
 
             const teacher_params = {
                 img_src : "",
-                login : login,
+                email : email,
                 password : password,
                 name : "",
                 surname: "",
@@ -23,21 +24,9 @@ class TeacherController
                 phoneNumbers : ""
             }
 
-            await student_users_model.find({"login" : login}).exec(async(err1, user1) => {
-
-                if(user1.length !== 0) return res.sendStatus(201 , "NEROOOOOO");
-                else {
-                    await teacher_users_model.find({"login" : login}).exec(async(err, user) => {
-                        if(err) return res.send('Error', "ТУТ ОШИБКА");
-                        if(user.length !== 0) return res.sendStatus(201 , "NEROOOOOO");
-                        else {
-                            let userModel = new teacher_users_model(teacher_params);
-                            await userModel.save();
-                            return res.sendStatus(200, 'OK');
-                        }
-                    });
-                }
-            });
+            const userData = await user_service.user_signup("teacher", email, password, teacher_params);
+            res.cookie('refreshToken',userData.refreshToken, {maxAge : 30 * 24 * 60 * 60 * 1000, httpOnly : true});
+            return res.json(userData);
         }
         catch(e) {
             console.log(e, "УЖЕ ТУТ");
@@ -46,8 +35,8 @@ class TeacherController
 
     async teacher_login(req,res) {
         try {
-            const {login, password} = req.body;
-            await teacher_users_model.find({"login" : login ,"password" : password}).exec((err, user) => {
+            const {email, password} = req.body;
+            await teacher_users_model.find({"email" : email ,"password" : password}).exec((err, user) => {
                 if(user.length !== 0) return res.sendStatus(200, 'OK');
                 else return res.sendStatus(201);
             });
@@ -59,12 +48,12 @@ class TeacherController
 
     async profile_get_data(req,res) { 
         try{
-            await teacher_users_model.findOne({"login" : req.body.login}).exec(async(err, user_results) => {
+            await teacher_users_model.findOne({"email" : req.body.email}).exec(async(err, user_results) => {
                 if(user_results === null) return res.status(201);
                 else {
                     let result_obj = {...user_results._doc};
                     delete result_obj._id;
-                    delete result_obj.login;
+                    delete result_obj.email;
                     delete result_obj.password;
                     delete result_obj.__v;
                     return res.status(200).send(result_obj);  
@@ -79,7 +68,7 @@ class TeacherController
     async profile_post_data(req,res) {
         try {
 
-            teacher_users_model.updateOne( {'login' : req.body.login} , { $set:req.body} ).exec(async(err, user_results) =>  {
+            teacher_users_model.updateOne( {'email' : req.body.email} , { $set:req.body} ).exec(async(err, user_results) =>  {
                 if(err) console.log(err);
                 else return res.sendStatus(200, 'OK');                                                 
             }); 
@@ -132,7 +121,7 @@ class TeacherController
 
     // async get_refresh_token(req,res) {
     //     try {
-    //         teacher_user.updateOne( {'login' : req.body.login} , { $set:req.body} ).exec(async(err, user_results) => {
+    //         teacher_user.updateOne( {'email' : req.body.email} , { $set:req.body} ).exec(async(err, user_results) => {
     //             if(err) console.log(err);
     //             else return res.sendStatus(200, 'OK');                                                 
     //         }); 

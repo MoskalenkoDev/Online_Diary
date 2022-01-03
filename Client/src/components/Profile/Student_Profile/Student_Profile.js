@@ -83,7 +83,7 @@ export const Student_Profile = ({input_data}) =>
         }
         try
         {
-            Axios.post("http://localhost:3001/diary_menu/profile/student/save_input_data",
+            Axios.post("http://localhost:3001/student/diary_menu/profile/save_input_data",
             { 
                 login : window.localStorage.getItem("userToken"),
                 img_src : input_data.img_src,

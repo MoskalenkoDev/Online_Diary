@@ -33,7 +33,7 @@ export const TeacherHomework = ({state}) =>
 
     let get_classes_info = () =>
     {
-        Axios.post("http://localhost:3001/diary_menu/homework/get_classes",
+        Axios.post("http://localhost:3001/teacher/diary_menu/homework/get_classes",
         {
             teacher_id : window.localStorage.getItem("userToken")
         }).then(response =>

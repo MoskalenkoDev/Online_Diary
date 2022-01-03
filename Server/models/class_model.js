@@ -1,7 +1,7 @@
 const {Schema,model} = require('mongoose');
 
 const class_schema = new Schema({
-  teacher_id : { // login
+  teacher_id : { // id
     type:String
   },
   title : { // 7 class or 9 class
