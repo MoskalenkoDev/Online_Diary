@@ -1,7 +1,7 @@
 const {Schema,model} = require('mongoose');
 
 const student_token_schema = new Schema({
-  user : {type : Schema.Types.ObjectId, ref: 'student_users'},
+  user : {type : Schema.Types.ObjectId, ref: 'student_users', required: true},
   refresh_token : {type: String, required : true}
 });
 

@@ -2,7 +2,8 @@ const {Schema,model} = require('mongoose');
 
 const teacher_users = new Schema({
   img_src : {
-    type:String
+    type:String,
+    default : ''
   },
   email: { 
     type: String,
@@ -21,22 +22,28 @@ const teacher_users = new Schema({
   //   type : String
   // },
   name: {
-    type: String
+    type: String,
+    default : ''
   },
   surname: {
-    type: String
+    type: String,
+    default : ''
   },
   lastName : {
-    type : String
+    type : String,
+    default : ''
   },
   school : {
-    type: String
+    type: String,
+    default : ''
   },
   school_subject : {
-    type : String
+    type : String,
+    default : ''
   },
   phoneNumbers : {
-    type : String
+    type : String,
+    default : ''
   }
 });
 

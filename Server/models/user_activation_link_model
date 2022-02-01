@@ -4,6 +4,7 @@ const users_activation_link = new Schema({
 
     user_id : {
         type : Schema.Types.ObjectId,
+        required: true,
         refPath : 'ability_type'
     },
     ability_type : {

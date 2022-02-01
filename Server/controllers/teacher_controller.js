@@ -1,3 +1,6 @@
+const argon2 = require('argon2');
+const {validationResult} = require('express-validator');
+
 const class_model = require("../models/class_model");
 const teacher_token_model = require("../models/teacher_token_model");
 const teacher_users_model = require("../models/teacher_users_model");
@@ -7,46 +10,7 @@ const user_service = require('../service/user_service');
 class TeacherController 
 {
 
-    async teacher_signup(req,res) {
-        try
-        {
-            const {email, password} = req.body;
-
-            const teacher_params = {
-                img_src : "",
-                email : email,
-                password : password,
-                name : "",
-                surname: "",
-                lastName : "",
-                school : "",
-                school_subject : "",
-                phoneNumbers : ""
-            }
-
-            const userData = await user_service.user_signup("teacher", email, password, teacher_params);
-            res.cookie('refreshToken',userData.refreshToken, {maxAge : 30 * 24 * 60 * 60 * 1000, httpOnly : true});
-            return res.json(userData);
-        }
-        catch(e) {
-            console.log(e, "УЖЕ ТУТ");
-        }
-    }
-
-    async teacher_login(req,res) {
-        try {
-            const {email, password} = req.body;
-            await teacher_users_model.find({"email" : email ,"password" : password}).exec((err, user) => {
-                if(user.length !== 0) return res.sendStatus(200, 'OK');
-                else return res.sendStatus(201);
-            });
-        }
-        catch(e) {
-            console.log(e, "УЖЕ ТУТ");
-        }
-    }
-
-    async profile_get_data(req,res) { 
+    async profile_get_data(req,res,next) { 
         try{
             await teacher_users_model.findOne({"email" : req.body.email}).exec(async(err, user_results) => {
                 if(user_results === null) return res.status(201);
@@ -61,11 +25,11 @@ class TeacherController
             });            
         }
         catch(e){
-            console.log(e, "УЖЕ ТУТ");
+            next(e);
         }
     }
 
-    async profile_post_data(req,res) {
+    async profile_post_data(req,res,next) {
         try {
 
             teacher_users_model.updateOne( {'email' : req.body.email} , { $set:req.body} ).exec(async(err, user_results) =>  {
@@ -75,11 +39,11 @@ class TeacherController
             
         }
         catch(e) {
-            console.log(e, "УЖЕ ТУТ");
+            next(e);
         }
     }
 
-    async add_new_class(req , res) {
+    async add_new_class(req , res,next) {
         try {
             const {teacher_id, title, school_subjects} = req.body;
             const class_params = {
@@ -95,44 +59,11 @@ class TeacherController
             return res.sendStatus(200, 'OK');
         }
         catch(e) {
-            console.log(e, "УЖЕ ТУТ");
+            next(e);
         }
     }
 
-    // async activate_mail(req,res) {
-    //     try {
-    //         const {teacher_id} = req.body;
-    //         const class_params = {
-    //             teacher_id,
-    //             title,
-    //             new_students : [], 
-    //             students: [], 
-    //             school_subjects // array
-    //         }
-
-    //         let classModel = new class_model(class_params);
-    //         await classModel.save();
-    //         return res.sendStatus(200, 'OK');
-    //     }
-    //     catch(e) {
-    //         console.log(e, "УЖЕ ТУТ");
-    //     }
-    // }
-
-    // async get_refresh_token(req,res) {
-    //     try {
-    //         teacher_user.updateOne( {'email' : req.body.email} , { $set:req.body} ).exec(async(err, user_results) => {
-    //             if(err) console.log(err);
-    //             else return res.sendStatus(200, 'OK');                                                 
-    //         }); 
-            
-    //     }
-    //     catch(e) {
-    //         console.log(e, "УЖЕ ТУТ");
-    //     }
-    // }
-
-    async teacher_delete_class(req, res) {
+    async teacher_delete_class(req, res,next) {
         try {
             const {_id} = req.body;
     
@@ -143,11 +74,11 @@ class TeacherController
     
         }
         catch(e) {
-            console.log(e, "УЖЕ ТУТ");
+            next(e);
         }    
     }
 
-    async teacher_edit_class(req,res) {
+    async teacher_edit_class(req,res,next) {
         try {
             const {_id,title,school_subjects} = req.body;
             let update = {
@@ -160,11 +91,11 @@ class TeacherController
             });             
         }
         catch(e) {
-            console.log(e, "УЖЕ ТУТ");
+            next(e);
         }
     }
 
-    async teacher_get_classes(req,res) {
+    async teacher_get_classes(req,res,next) {
         try {
             const {teacher_id} = req.body;
     
@@ -186,7 +117,7 @@ class TeacherController
     
         }
         catch(e) {
-            console.log(e, "УЖЕ ТУТ");
+            next(e);
         }
     }
 }

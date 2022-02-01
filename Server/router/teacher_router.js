@@ -1,8 +1,7 @@
 const router = require('express').Router();
 const teacher_controller = require('../controllers/teacher_controller');
+const {body} = require('express-validator');
 
-router.post("/signup", teacher_controller.teacher_signup);
-router.post("/login", teacher_controller.teacher_login);
 router.post("/diary_menu/profile", teacher_controller.profile_get_data);
 router.post("/diary_menu/profile/save_input_data", teacher_controller.profile_post_data);
 router.post("/diary_menu/homework/get_classes", teacher_controller.teacher_get_classes);
