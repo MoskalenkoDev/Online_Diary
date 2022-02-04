@@ -67,9 +67,9 @@ class BothUserTypesContrioller {
 
     async profile_get_data(req,res,next) { 
         try{
-            const {accessToken} = req.body;
+            const {id} = req.user; // по идее мы его передаем\
             let userType = req.baseUrl.slice(1);
-            const userData = user_service.profile_get_data(accessToken);
+            const userData = await user_service.profile_get_data(userType, id);
             return res.status(200).json(userData);
         }
         catch(e){
@@ -89,8 +89,17 @@ class BothUserTypesContrioller {
 
     }
 
-
-    async profile_get_data(req,res,next) {}
+    async profile_put_data(req,res,next) {
+        try {
+            const {id} = req.user;
+            let userType = req.baseUrl.slice(1);
+            await user_service.profile_put_data(userType, id, req.body);
+            return res.sendStatus(200);
+        }
+        catch(e) {
+            next(e);
+        }
+    }
 
 }
 

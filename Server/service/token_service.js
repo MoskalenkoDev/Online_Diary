@@ -12,30 +12,30 @@ class TokenService
         };
     }
 
-    async saveToken(tokenModel,userId, refreshToken) {
+    async saveToken(tokenModel,userId, refresh_token) {
 
         const tokenData = await tokenModel.findOne({user : userId});
         if(tokenData) {
-            tokenData.refreshToken = refreshToken;
+            tokenData.refresh_token = refresh_token;
             return await tokenData.save();
         }
-        const token = await tokenModel.create({user : userId, refresh_token : refreshToken});
+        const token = await tokenModel.create({user : userId, refresh_token});
         return token;
     }
 
-    async removeToken(tokenModel, refreshToken) {
-        let token = await tokenModel.deleteOne({refreshToken});
+    async removeToken(tokenModel, refresh_token) { 
+        let token = await tokenModel.deleteOne({refresh_token});
         return token;
     }
 
-    async findToken(tokenModel, refreshToken) {
-        let token = await tokenModel.findOne({refreshToken});
+    async findToken(tokenModel, refresh_token) {
+        let token = await tokenModel.findOne({refresh_token});
         return token;
     }
 
     async validateAccessToken(token) {
         try {
-            const userData = jwt.verify(token , process.env.JWT_ACCESS_SECRET);
+            const userData = await jwt.verify(token , process.env.JWT_ACCESS_SECRET);
             return userData;
         }
         catch(e) {
@@ -45,7 +45,7 @@ class TokenService
 
     async validateRefreshToken(token) {
         try {
-            const userData = jwt.verify(token , process.env.JWT_REFRESH_SECRET);
+            const userData = await jwt.verify(token , process.env.JWT_REFRESH_SECRET);
             return userData;
         }
         catch(e) {

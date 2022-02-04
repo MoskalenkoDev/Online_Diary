@@ -35,7 +35,6 @@ class UserService {
                 break;
             }
         }
-        if(Object.keys(userTypeModel).length === 0) throw ApiError.BadRequest("wrong user type");
 
         const anotherModelFinded = await userTypeModel.anotherUserModel.findOne({"email" : email}).lean();
         const user = await userTypeModel.userModel.findOne({"email" : email}).lean();
@@ -98,11 +97,10 @@ class UserService {
         if(!refreshToken) throw ApiError.UnauthorizedError();
         let user_token_model;
         switch(userType) {
-            case "student" : {user_token_model = student_token_model}
-            case "teacher" : {user_token_model = teacher_token_model}
+            case "student" : {user_token_model = student_token_model; break;}
+            case "teacher" : {user_token_model = teacher_token_model; break;}
         }
         let token = await token_service.removeToken(user_token_model, refreshToken);
-        console.log(token);
         return token;
     }
 
@@ -135,22 +133,46 @@ class UserService {
         return {...tokens, user : userDto}; 
     }
 
-    async profile_get_data(accessToken) {
-        if(!token_service.validateAccessToken(accessToken)) throw ApiError.BadRequest('token is not valid');
+    async profile_get_data(userType , id) {
+        let userModel;
+        switch(userType) { 
+            case "student" : {
+                userModel = student_users_model;
+                break;
+            }
+            case "teacher" : {
+                userModel = teacher_users_model;
+                break;
+            }
+        }
+        let user_results = await userModel.findById(id).lean();
+        if(!user_results) throw ApiError.BadRequest('invalid id');
         
-        await student_users_model.findOne({"email" : req.body.email}).exec(async(err, user_results) => {
-            if(user_results === null) return res.status(201);
-            else {
-                let result_obj = {...user_results._doc};
-                delete result_obj._id;
-                delete result_obj.email;
-                delete result_obj.password;
-                delete result_obj.__v;
-                return res.status(200).send(result_obj);  
-            }                                                                    
-        });  
+        let result_obj = {...user_results};
+        delete result_obj._id;
+        delete result_obj.email;
+        delete result_obj.password;
+        delete result_obj.__v;
+        delete result_obj.isActivated;
+        return result_obj;                                                                       
     }
 
+    async profile_put_data(userType, id , data) {
+        let userModel;
+
+        switch(userType) { 
+            case "student" : {
+                userModel = student_users_model;
+                break;
+            }
+            case "teacher" : {
+                userModel = teacher_users_model;
+                break;
+            }
+        }
+        const result = await userModel.updateOne( {'_id' : id} , { $set: data} );
+        return result;
+    }
 
 }
 

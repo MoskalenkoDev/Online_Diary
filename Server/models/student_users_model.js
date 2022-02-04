@@ -18,9 +18,6 @@ const student_users = new Schema({
     type : Boolean,
     default : false
   },
-  // activationLink : {
-  //   type : String
-  // },
   name: {
     type: String,
     default : ''

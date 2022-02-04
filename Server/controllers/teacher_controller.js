@@ -10,39 +10,6 @@ const user_service = require('../service/user_service');
 class TeacherController 
 {
 
-    async profile_get_data(req,res,next) { 
-        try{
-            await teacher_users_model.findOne({"email" : req.body.email}).exec(async(err, user_results) => {
-                if(user_results === null) return res.status(201);
-                else {
-                    let result_obj = {...user_results._doc};
-                    delete result_obj._id;
-                    delete result_obj.email;
-                    delete result_obj.password;
-                    delete result_obj.__v;
-                    return res.status(200).send(result_obj);  
-                }                                                                    
-            });            
-        }
-        catch(e){
-            next(e);
-        }
-    }
-
-    async profile_post_data(req,res,next) {
-        try {
-
-            teacher_users_model.updateOne( {'email' : req.body.email} , { $set:req.body} ).exec(async(err, user_results) =>  {
-                if(err) console.log(err);
-                else return res.sendStatus(200, 'OK');                                                 
-            }); 
-            
-        }
-        catch(e) {
-            next(e);
-        }
-    }
-
     async add_new_class(req , res,next) {
         try {
             const {teacher_id, title, school_subjects} = req.body;
