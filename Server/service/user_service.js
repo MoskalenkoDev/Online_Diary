@@ -1,5 +1,5 @@
 const uuid = require('uuid');
-const {Schema,model} = require('mongoose');
+const {model} = require('mongoose');
 const argon2 = require('argon2');
 
 const ApiError = require('../exceptions/api_error');
@@ -35,9 +35,10 @@ class UserService {
                 break;
             }
         }
-
+        
         const anotherModelFinded = await userTypeModel.anotherUserModel.findOne({"email" : email}).lean();
         const user = await userTypeModel.userModel.findOne({"email" : email}).lean();
+
         if(anotherModelFinded || user) throw ApiError.UnauthorizedError(); // должна отправится ошибка
 
         const activationLink = uuid.v4();
@@ -47,21 +48,31 @@ class UserService {
         let userModel = await userTypeModel.userModel.create({email, password}); // all other params are defined in the model by default
         
         await user_activation_link_model.create({user_id : userModel._id, ability_type: `${userType}_users`, activation_link : activationLink});
-        
-        const userDto = new UserDto(userModel);
-        const tokens = token_service.generateTokens({...userDto}); // вместо payload мы сюда будем передавать информацию о пользователе, где будет храниться в классе user.dto
-        await token_service.saveToken(userTypeModel.tokenModel, userDto.id, tokens.refreshToken);
-        return {...tokens, user : userDto}; // res.sendStatus(200, 'OK')
-    
+        return true;
     }
 
-    async activate_mail(activalionLink){
-        const record = await user_activation_link_model.findOne({"activation_link" : activalionLink});
-        if(!record) {
-            throw ApiError.MailFail("invalid activation link");
+    async activate_mail(userType, activalionLink) { // we will add promise all in future
+
+        let user_token_model;
+        switch(userType) {
+            case "student" : {user_token_model = student_token_model; break;}
+            case "teacher" : {user_token_model = teacher_token_model; break;}
         }
-        await model(record.ability_type).findById(record.user_id).exec(async(err,user)=>{ user.isActivated = true; await user.save(); });
+
+        const record = await user_activation_link_model.findOne({"activation_link" : activalionLink});
+        if(!record) {throw ApiError.MailFail("invalid activation link");}
+
+        const user = await model(record.ability_type).findById(record.user_id);
+        user.isActivated = true; 
+        await user.save();
+
+        const userDto = new UserDto(user);
+        const tokens = token_service.generateTokens({...userDto});
+        await token_service.saveToken(user_token_model, userDto.id, tokens.refreshToken);
+
         await user_activation_link_model.deleteOne(record);
+
+        return tokens;
     }
 
     async user_login(userType, email, password) { // here we got plain password
@@ -89,7 +100,7 @@ class UserService {
         const userDto = new UserDto(user);
         const tokens = token_service.generateTokens({...userDto}); // вместо payload мы сюда будем передавать информацию о пользователе, где будет храниться в классе user.dto
         await token_service.saveToken(userTypeModel.tokenModel, userDto.id, tokens.refreshToken);
-        return {...tokens, user : userDto};
+        return {...tokens};
     }
 
     async user_logout(userType,refreshToken) {
@@ -130,7 +141,7 @@ class UserService {
         const userDto = new UserDto(user); // we find it in DB because some data may have changed before token expired 
         const tokens = token_service.generateTokens({...userDto}); // вместо payload мы сюда будем передавать информацию о пользователе, где будет храниться в классе user.dto
         await token_service.saveToken(userTypeModel.tokenModel, userDto.id, tokens.refreshToken);
-        return {...tokens, user : userDto}; 
+        return {...tokens}; 
     }
 
     async profile_get_data(userType , id) {

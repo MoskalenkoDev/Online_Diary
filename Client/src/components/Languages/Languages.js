@@ -12,8 +12,9 @@ const Languages = ({color,language,activeClass,firstLabel,secondLabel,dispatch})
 
     const onActive = () =>
     {
-        if(activeClass === "active") dispatch(actionCreators.change_language_active_class(""));
-        else dispatch(actionCreators.change_language_active_class("active"));
+        dispatch(actionCreators.change_language_active_class(activeClass === "active"? "" : "active"));
+        // if(activeClass === "active") dispatch(actionCreators.change_language_active_class(""));
+        // else dispatch(actionCreators.change_language_active_class("active"));
     }
 
     let dispatchChangeLabel = (first,second) =>
@@ -25,9 +26,11 @@ const Languages = ({color,language,activeClass,firstLabel,secondLabel,dispatch})
     }
     const changeLabel = (lang) =>
     {
-        if(lang === "ua") dispatchChangeLabel("ru","en");
-        else if(lang === "ru") dispatchChangeLabel("ua","en");
-        else if(lang === "en") dispatchChangeLabel("ua","ru");
+        switch(lang) {
+            case "ua" : {dispatchChangeLabel("ru","en"); break;}
+            case "ru" : {dispatchChangeLabel("ua","en"); break;}
+            case "en" : {dispatchChangeLabel("ua","ru"); break;}
+        }
     }
     const pickLang = (lang) =>
     {

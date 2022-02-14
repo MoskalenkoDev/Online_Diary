@@ -6,8 +6,8 @@ import {Link ,Redirect} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {WrappedLanguages} from '../Languages/Languages';
 import * as actionCreators from '../../Redux/Actions/actions';
-const md5 = require('md5');
 
+import { registration } from '../../controllers/AuthController';
 class  Registration extends Component
 {
   
@@ -79,7 +79,7 @@ class  Registration extends Component
   {
     if(this.props.redirect === true && prevProps.redirect != true)
     {
-      localStorage.setItem("userToken", md5(this.props.email) );
+      // localStorage.setItem("userToken", md5(this.props.email) );
       localStorage.setItem("status", this.props.whoLog);
       this.props.dispatch(actionCreators.change_redirect(false)); // тут надо перезатирать значения потому что это редакс
     }
@@ -89,12 +89,10 @@ class  Registration extends Component
 
   login = (lang) => // if our login details is correct we gain access
   {
-    
-    let hashedPass = md5(this.props.password);
     Axios.post(`http://localhost:3001/${this.props.whoLog}/login`,
     {
       email : this.props.email,
-      password :  hashedPass
+      password :  this.props.password
     })
     .then((response) =>
     {
@@ -116,37 +114,13 @@ class  Registration extends Component
     })
   }
 
-  registration = (lang) => // if our signup details is correct we gain access
-  {
-    
-    let hashedPass = md5(this.props.password);
-    Axios.post(`http://localhost:3001/${this.props.whoLog}/signup`,
-    {
-      email : this.props.email,
-      password : hashedPass,
-    })
-    .then((response) =>
-    {
-      if(response.status === 200)
-      {
-        this.props.dispatch(actionCreators.change_redirect(true)); 
-      }
-      else 
-      {
-        clearTimeout(this.timer);
-        this.props.dispatch(actionCreators.change_popup_title(this.langObj[lang].popupTitlePassword)); // if incorrect we report about it our popupTitle in the state
-        this.props.dispatch(actionCreators.change_show_popup(true));
-        this.timer = setTimeout(() =>
-        {
-          this.props.dispatch(actionCreators.change_show_popup(false));
-        }, 4000);
-      } 
-    })
+  reg = async (lang) => { // if our signup details is correct we gain access
+    await registration(this.props.whoLog, this.props.email, this.props.password, lang)(this.props.dispatch);
   }
 
   regOrLog = (lang) =>
   {
-    if( !(this.props.email.length < 5 || this.props.password.length < 5)) this.props.what_checked === "login"? this.login(lang) : this.registration(lang);
+    if( !(this.props.email.length < 5 || this.props.password.length < 5)) this.props.what_checked === "login"? this.login(lang) : this.reg(lang);
     else 
     {
       clearTimeout(this.timer);

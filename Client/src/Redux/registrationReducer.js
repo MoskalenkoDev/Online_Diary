@@ -11,9 +11,11 @@ const initialState =
   email : "", 
   password: "",
   redirect : false, // if true, we go to the next page
-  popupTitle : "" ,// idk why i added this shit here
+  popupTitle : "" ,
   show_popup : false
 };
+
+let timer;
 
 // Pure Functions
 export const registrationReducer = (state = initialState, action) => {
@@ -28,7 +30,7 @@ export const registrationReducer = (state = initialState, action) => {
       return { ...state, password: action.payload }
     case ACTION_CHANGE_REDIRECT:
       return { ...state, redirect: action.payload }
-    case ACTION_CHANGE_POPUP_TITLE:
+    case ACTION_CHANGE_POPUP_TITLE: 
       return { ...state, popupTitle: action.payload }
     case ACTION_CHANGE_SHOW_POPUP:
       return { ...state, show_popup: action.payload }

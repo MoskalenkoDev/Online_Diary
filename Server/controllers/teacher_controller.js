@@ -1,28 +1,21 @@
-const argon2 = require('argon2');
 const {validationResult} = require('express-validator');
+const ApiError = require('../exceptions/api_error');
 
-const class_model = require("../models/class_model");
-const teacher_token_model = require("../models/teacher_token_model");
-const teacher_users_model = require("../models/teacher_users_model");
-
-const user_service = require('../service/user_service');
+const teacher_service = require('../service/teacher_service');
+const ObjectId = require('mongoose').Types.ObjectId;
 
 class TeacherController 
 {
 
     async add_new_class(req , res,next) {
         try {
-            const {teacher_id, title, school_subjects} = req.body;
-            const class_params = {
-                teacher_id,
-                title,
-                new_students : [], 
-                students: [], 
-                school_subjects // array
+            const {title, school_subjects} = req.body;
+            const {id} = req.user; // teacher_id
+            const errors = validationResult(req);
+            if(!errors.isEmpty()) {
+               return next(ApiError.BadRequest('wrong parameter type', errors.array())); 
             }
-
-            let classModel = new class_model(class_params);
-            await classModel.save();
+            await teacher_service.add_new_class(id, title, school_subjects);
             return res.sendStatus(200, 'OK');
         }
         catch(e) {
@@ -32,13 +25,13 @@ class TeacherController
 
     async teacher_delete_class(req, res,next) {
         try {
-            const {_id} = req.body;
-    
-            await class_model.deleteOne({"_id" : _id}).exec(async(err, info) => {
-                if(err) return res.sendStatus(201, "not ok");
-                else return res.sendStatus(200, 'OK');                                                                  
-            });             
-    
+            const {class_id} = req.body;
+            if(!errors.isEmpty()) {
+                return next(ApiError.BadRequest('wrong parameter type', errors.array())); 
+            }
+            let isDeleted = await teacher_service.teacher_delete_class(class_id);
+            if(!isDeleted) return next(ApiError.BadRequest('wrong class_id'));
+            return res.sendStatus(200, 'OK');
         }
         catch(e) {
             next(e);
@@ -47,15 +40,12 @@ class TeacherController
 
     async teacher_edit_class(req,res,next) {
         try {
-            const {_id,title,school_subjects} = req.body;
-            let update = {
-                title,
-                school_subjects
+            const {class_id,title,school_subjects} = req.body;
+            if(!errors.isEmpty()) {
+                return next(ApiError.BadRequest('wrong parameter type', errors.array())); 
             }
-            await class_model.updateOne({"_id" : _id},{ $set:update}).exec(async(err, info) => {
-                if(err) return res.sendStatus(201, "not ok");
-                else return res.sendStatus(200, 'OK');                                                                  
-            });             
+            await teacher_service.teacher_edit_class(class_id, {title,school_subjects} );
+            return res.sendStatus(200, 'OK');
         }
         catch(e) {
             next(e);
@@ -64,24 +54,9 @@ class TeacherController
 
     async teacher_get_classes(req,res,next) {
         try {
-            const {teacher_id} = req.body;
-    
-            await class_model.find({"teacher_id" : teacher_id}).exec(async(err, classes) => {
-                if(classes === null) return res.status(201);
-                else
-                {
-                    let new_arr = [];
-                    classes.forEach((class_obj) => 
-                    {
-                        let new_obj = {...class_obj};
-                        delete new_obj._doc.teacher_id;
-                        delete new_obj._doc.__v;
-                        new_arr.push(new_obj._doc);
-                    });
-                    return res.status(200).send(new_arr);  
-                }                                                                    
-            });             
-    
+            const {id} = req.user; // teacher_id
+            let classes = await teacher_service.teacher_get_classes(id);
+            return res.json(classes);
         }
         catch(e) {
             next(e);

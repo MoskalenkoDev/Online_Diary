@@ -3,7 +3,7 @@ const {validationResult} = require('express-validator');
 
 const user_service = require("../service/user_service");
 const ApiErrors = require('../exceptions/api_error');
-
+const ProfilePutDataDto = require('../dtos/profile_put_data_dto');
 class BothUserTypesContrioller {
     
     async user_signup(req,res,next) {
@@ -11,15 +11,15 @@ class BothUserTypesContrioller {
         {
             const errors = validationResult(req);
             if(!errors.isEmpty()) {
+                console.log(ApiErrors.BadRequest('validation error', errors.array()));
                return next(ApiErrors.BadRequest('validation error', errors.array())); 
             }
 
             const {email, password} = req.body;
             let userType = req.baseUrl.slice(1);
             let hashedPassword = await argon2.hash(password);
-            const userData = await user_service.user_signup(userType, email, hashedPassword);
-            res.cookie('refreshToken',userData.refreshToken, {maxAge : 30 * 24 * 60 * 60 * 1000, httpOnly : true});
-            return res.json(userData);
+            await user_service.user_signup(userType, email, hashedPassword);
+            return res.sendStatus(200);
         }
         catch(e) {
             next(e);
@@ -80,8 +80,11 @@ class BothUserTypesContrioller {
     async activate_mail(req,res,next) {
         try {
             const activationLink = req.params.link;
-            await user_service.activate_mail(activationLink);
-            return res.redirect(process.env.FRONT_END_URL)      
+            let userType = req.baseUrl.slice(1);
+            const userData = await user_service.activate_mail(userType, activationLink);
+            res.cookie('refreshToken',userData.refreshToken, {maxAge : 30 * 24 * 60 * 60 * 1000, httpOnly : true});
+            res.json(userData.accessToken);
+            return res.redirect(process.env.FRONT_END_URL);      
         }
         catch(e) {
             next(e);
@@ -92,8 +95,9 @@ class BothUserTypesContrioller {
     async profile_put_data(req,res,next) {
         try {
             const {id} = req.user;
-            let userType = req.baseUrl.slice(1);
-            await user_service.profile_put_data(userType, id, req.body);
+            let userType = req.baseUrl.slice(1); 
+            let changesObj = new ProfilePutDataDto(userType,req.body);
+            await user_service.profile_put_data(userType, id, changesObj);
             return res.sendStatus(200);
         }
         catch(e) {

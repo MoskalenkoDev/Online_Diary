@@ -18,9 +18,11 @@ app.use('/', (req,res,next) =>{
 
 app.use(express.urlencoded({ extended: true}));
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    credentials: true,
+    origin: process.env.FRONT_END_URL
+}));
 app.use(cookieParser());
-app.use(errorMiddleware); // this one should be last in the chain of middlewares
 
 const PORT = process.env.PORT || 3001;
 async function start()
@@ -42,6 +44,8 @@ async function start()
 app.use("/student",both_user_types_router ) //, student_router); // явно мені ще треба добавити міделвер общого призначення і для вчителя і для учня ну і оставити окремі теж
 app.use("/teacher",both_user_types_router ) //, teacher_router);
 app.use("/api", activate_mail_router);
+
+app.use(errorMiddleware); // this one should be last in the chain of middlewares
 start();
 
 
