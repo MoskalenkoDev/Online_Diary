@@ -4,6 +4,7 @@ const {validationResult} = require('express-validator');
 const user_service = require("../service/user_service");
 const ApiErrors = require('../exceptions/api_error');
 const ProfilePutDataDto = require('../dtos/profile_put_data_dto');
+const { response } = require('express');
 class BothUserTypesContrioller {
     
     async user_signup(req,res,next) {
@@ -11,7 +12,6 @@ class BothUserTypesContrioller {
         {
             const errors = validationResult(req);
             if(!errors.isEmpty()) {
-                console.log(ApiErrors.BadRequest('validation error', errors.array()));
                return next(ApiErrors.BadRequest('validation error', errors.array())); 
             }
 
@@ -43,8 +43,8 @@ class BothUserTypesContrioller {
         try {
             const {refreshToken} = req.cookies;
             let userType = req.baseUrl.slice(1);
-            await user_service.user_logout(userType, refreshToken);
             res.clearCookie('refreshToken');
+            await user_service.user_logout(userType, refreshToken);
             res.sendStatus(200);
         }
         catch(e) {
@@ -80,11 +80,9 @@ class BothUserTypesContrioller {
     async activate_mail(req,res,next) {
         try {
             const activationLink = req.params.link;
-            let userType = req.baseUrl.slice(1);
-            const userData = await user_service.activate_mail(userType, activationLink);
-            res.cookie('refreshToken',userData.refreshToken, {maxAge : 30 * 24 * 60 * 60 * 1000, httpOnly : true});
-            res.json(userData.accessToken);
-            return res.redirect(process.env.FRONT_END_URL);      
+            const userData = await user_service.activate_mail(activationLink);
+            res.cookie('refreshToken',userData.tokens.refreshToken, {maxAge : 30 * 24 * 60 * 60 * 1000, httpOnly : true});
+            return res.redirect(`${process.env.FRONT_END_URL}/account_activation/${userData.userType}/${userData.tokens.accessToken}`); 
         }
         catch(e) {
             next(e);
@@ -94,10 +92,11 @@ class BothUserTypesContrioller {
 
     async profile_put_data(req,res,next) {
         try {
-            const {id} = req.user;
+            const {id, isFilledProfile} = req.user;
             let userType = req.baseUrl.slice(1); 
             let changesObj = new ProfilePutDataDto(userType,req.body);
             await user_service.profile_put_data(userType, id, changesObj);
+            if(!isFilledProfile) throw ApiErrors.BadRequest("you must refresh tokens");
             return res.sendStatus(200);
         }
         catch(e) {

@@ -16,11 +16,9 @@ const mail_service = require('./mail_service');
 const token_service = require('./token_service');
 const UserDto = require('../dtos/user_dto');
 
-class UserService {
+const getUserTypeModel = (userType) => {
 
-    async user_signup(userType, email, password){
-
-        let userTypeModel = {};
+    let userTypeModel = {};
         switch(userType) { 
             case "student" : {
                 userTypeModel.userModel = student_users_model;
@@ -35,11 +33,18 @@ class UserService {
                 break;
             }
         }
+    return userTypeModel;
+} 
+class UserService {
+
+    async user_signup(userType, email, password){
+
+        let userTypeModel = getUserTypeModel(userType);
         
         const anotherModelFinded = await userTypeModel.anotherUserModel.findOne({"email" : email}).lean();
         const user = await userTypeModel.userModel.findOne({"email" : email}).lean();
 
-        if(anotherModelFinded || user) throw ApiError.UnauthorizedError(); // должна отправится ошибка
+        if(anotherModelFinded || user) throw ApiError.BadRequest("already registered user"); // должна отправится ошибка
 
         const activationLink = uuid.v4();
         try { await mail_service.sendMail(email, `${process.env.BACK_END_URL}/api/activate_mail/${activationLink}`); }
@@ -51,13 +56,7 @@ class UserService {
         return true;
     }
 
-    async activate_mail(userType, activalionLink) { // we will add promise all in future
-
-        let user_token_model;
-        switch(userType) {
-            case "student" : {user_token_model = student_token_model; break;}
-            case "teacher" : {user_token_model = teacher_token_model; break;}
-        }
+    async activate_mail(activalionLink) { // we will add promise all in future
 
         const record = await user_activation_link_model.findOne({"activation_link" : activalionLink});
         if(!record) {throw ApiError.MailFail("invalid activation link");}
@@ -66,34 +65,25 @@ class UserService {
         user.isActivated = true; 
         await user.save();
 
+        let userType = record.ability_type.split("_")[0];
+        let userTypeModel = getUserTypeModel(userType);
+
         const userDto = new UserDto(user);
         const tokens = token_service.generateTokens({...userDto});
-        await token_service.saveToken(user_token_model, userDto.id, tokens.refreshToken);
+        await token_service.saveToken(userTypeModel.tokenModel, userDto.id, tokens.refreshToken);
 
         await user_activation_link_model.deleteOne(record);
 
-        return tokens;
+        return {tokens, userType};
     }
 
     async user_login(userType, email, password) { // here we got plain password
 
-        let userTypeModel = {};
-        switch(userType) { 
-            case "student" : {
-                userTypeModel.userModel = student_users_model;
-                userTypeModel.tokenModel = student_token_model;
-                break;
-            }
-            case "teacher" : {
-                userTypeModel.userModel = teacher_users_model;
-                userTypeModel.tokenModel = teacher_token_model;
-                break;
-            }
-        }
+        let userTypeModel = getUserTypeModel(userType);
 
         let user = await userTypeModel.userModel.findOne({email});
 
-        if(!user) throw ApiError.BadRequest("user with this email is not registered");
+        if(!user) throw ApiError.BadRequest("unregistered user");
         if(!user.isActivated) throw ApiError.BadRequest("unconfirmed email");
         if(!await argon2.verify(user.password , password)) throw ApiError.BadRequest("incorrect password");
         
@@ -105,31 +95,15 @@ class UserService {
 
     async user_logout(userType,refreshToken) {
 
-        if(!refreshToken) throw ApiError.UnauthorizedError();
-        let user_token_model;
-        switch(userType) {
-            case "student" : {user_token_model = student_token_model; break;}
-            case "teacher" : {user_token_model = teacher_token_model; break;}
-        }
-        let token = await token_service.removeToken(user_token_model, refreshToken);
+        if(!refreshToken) throw ApiError.BadRequest("missing refresh token");
+        let userTypeModel = getUserTypeModel(userType);
+        let token = await token_service.removeToken(userTypeModel.tokenModel, refreshToken);
         return token;
     }
 
     async user_refresh_token(userType , refreshToken) {
 
-        let userTypeModel = {};
-        switch(userType) { 
-            case "student" : {
-                userTypeModel.userModel = student_users_model;
-                userTypeModel.tokenModel = student_token_model;
-                break;
-            }
-            case "teacher" : {
-                userTypeModel.userModel = teacher_users_model;
-                userTypeModel.tokenModel = teacher_token_model;
-                break;
-            }
-        }
+        let userTypeModel = getUserTypeModel(userType);
 
         if(!refreshToken) throw ApiError.UnauthorizedError();
         const userData = await token_service.validateRefreshToken(refreshToken); // here we got user data hashed inside token
@@ -145,19 +119,9 @@ class UserService {
     }
 
     async profile_get_data(userType , id) {
-        let userModel;
-        switch(userType) { 
-            case "student" : {
-                userModel = student_users_model;
-                break;
-            }
-            case "teacher" : {
-                userModel = teacher_users_model;
-                break;
-            }
-        }
-        let user_results = await userModel.findById(id).lean();
-        if(!user_results) throw ApiError.BadRequest('invalid id');
+
+        let userTypeModel = getUserTypeModel(userType);
+        let user_results = await userTypeModel.userModel.findById(id).lean();
         
         let result_obj = {...user_results};
         delete result_obj._id;
@@ -169,19 +133,9 @@ class UserService {
     }
 
     async profile_put_data(userType, id , data) {
-        let userModel;
 
-        switch(userType) { 
-            case "student" : {
-                userModel = student_users_model;
-                break;
-            }
-            case "teacher" : {
-                userModel = teacher_users_model;
-                break;
-            }
-        }
-        const result = await userModel.updateOne( {'_id' : id} , { $set: data} );
+        let userTypeModel = getUserTypeModel(userType);
+        const result = await userTypeModel.userModel.updateOne( {'_id' : id} , { $set: data} );
         return result;
     }
 

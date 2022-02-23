@@ -6,7 +6,7 @@ const auth_middleware = require('../middlewares/auth_middleware');
 router.post( 
     "/signup", 
     body('email').isEmail(), 
-    body('password').isLength({min: 6 , max: 32}),
+    body('password').isLength({min: 6 }),
     both_user_types_controller.user_signup
 );
 router.post("/login", both_user_types_controller.user_login);

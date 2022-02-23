@@ -2,7 +2,8 @@ import React, {useRef} from 'react';
 import * as ActionCreators from '../../../Redux/Actions/actions';
 import {Image_Picker} from '../Image_Picker/Image_Picker';
 import {WrappedLanguages} from '../../Languages/Languages';
-import Axios from 'axios';
+import { profile_get_data, profile_put_data , showPopup} from '../../../controllers/ProfileController';
+import { logout } from '../../../controllers/AuthController';
 
 export const Student_Profile = ({input_data}) =>
 {
@@ -14,7 +15,6 @@ export const Student_Profile = ({input_data}) =>
             requiredField: "*Обов'язкове поле",
             warningTitleRequired: "Ви не заповнили обов'язкові поля!",
             errorTitle: "Щось пішло не так",
-            successChanges : "Зміни успішно збережені",
             exit : "Вихід",
             firstname: "Ім'я",
             surname:"Фамілія",
@@ -27,7 +27,6 @@ export const Student_Profile = ({input_data}) =>
             requiredField: "*Обязательное поле",
             warningTitleRequired: "Вы не заполнили обязательные поля!",
             errorTitle: "Что-то пошло не так",
-            successChanges : "Изменения успешно сохранены",
             exit : "Выход",
             firstname: "Имя",
             surname:"Фамилия",
@@ -40,7 +39,6 @@ export const Student_Profile = ({input_data}) =>
             requiredField: "*Required field",
             warningTitleRequired: "You need to fill in the required fields!",
             errorTitle: "Something went wrong",
-            successChanges : "Changes saved successfully",
             exit : "Log out",
             firstname: "Name",
             surname:"Surname",
@@ -61,55 +59,30 @@ export const Student_Profile = ({input_data}) =>
         }
     }
 
-    let timer = useRef(null);
-    let show_save_popup = (title) =>
-    {
-        clearTimeout(timer.current);
-        input_data.dispatch(ActionCreators.change_profile_save_popup_class("active_save_profile_popup_title"));
-        input_data.dispatch(ActionCreators.change_profile_save_popup_title(title));
-        timer.current = window.setTimeout(() =>
-        {
-            input_data.dispatch(ActionCreators.change_profile_save_popup_class(""));
-        }, 3000);
-    }
-
-    let onSaveInputData = () =>
-    {
+    let onSaveInputData = async() => {
+        
         let {name,surname,lastName} = input_data;
-        if(name == "" || surname == "" || lastName == "") 
-        {
-            show_save_popup(langObj[lang].warningTitleRequired);
-            return;
-        }
-        try
-        {
-            Axios.post("http://localhost:3001/student/diary_menu/profile/save_input_data",
-            { 
-                login : window.localStorage.getItem("userToken"),
+
+        if(name.length || surname.length || lastName.length) {
+            let changedDataObj = {
                 img_src : input_data.img_src,
                 name,
                 surname,
                 lastName,
-                phoneNumbers : input_data.phoneNumbers
-            }).then((response) =>
-            {
-                show_save_popup(langObj[lang].successChanges);
-            });
+                phoneNumbers : input_data.phoneNumbers              
+            }       
+            await profile_put_data(changedDataObj)(input_data.dispatch);
         }
-        catch(e)
-        {
-            show_save_popup(langObj[lang].errorTitle);
-        }
+
+        else showPopup(input_data.dispatch, langObj[lang].warningTitleRequired, false);
     }
 
-    let onLogOut = () =>
-    {
-      window.localStorage.removeItem('userToken');
-      window.localStorage.removeItem('status');
-      input_data.dispatch(ActionCreators.change_redirect_logout());
+    let onLogOut = async() => {
+        await logout("student");
+    //   window.localStorage.removeItem('token');
+    //   window.localStorage.removeItem('userType');
+    //   input_data.dispatch(ActionCreators.change_redirect_logout());
     }
-    
-    let popup_span_color = input_data.save_popup_span_title === langObj[lang].successChanges ? "" : " red_color";
 
     return (
         <div className="profile_wrapper">
@@ -154,7 +127,7 @@ export const Student_Profile = ({input_data}) =>
                     </textarea>
                 </div>
                 <div className="profile_data_save_popup_title">
-                    <span className = {input_data.save_popup_span_class + popup_span_color}>{input_data.save_popup_span_title}</span>
+                    <span className = {input_data.save_popup_span_class}>{input_data.save_popup_span_title}</span>
                 </div>
                 <button className = "profile_data_save_btn blue_btn" onClick = {onSaveInputData}>{langObj[lang].save}</button>
 

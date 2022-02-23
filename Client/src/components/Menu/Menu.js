@@ -33,7 +33,7 @@ export default class Menu extends Component
   render() 
   {  
     let lang = this.props.lang.language;
-    if(!localStorage.getItem('userToken')) return ( <Redirect from = "/diary_menu/profile" to = "/signup"/>);
+    if(!localStorage.getItem('token')) return ( <Redirect from = "/diary_menu/profile" to = "/signup"/>);
     return(
       <div className = "menu_wrapper">
       

@@ -28,7 +28,7 @@ const initialState =
   school : "",
   school_subject: "",
   phoneNumbers : "",
-  save_popup_span_class : "", // когда активен
+  save_popup_span_class : "", // active_save_profile_popup_title - когда активен
   save_popup_span_title : "Изменения успешно сохранены" // или (Что-то пошло не так) когда что-то не так
 };
 

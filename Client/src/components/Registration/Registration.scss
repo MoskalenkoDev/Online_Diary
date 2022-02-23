@@ -33,9 +33,7 @@
     outline: 1.2vmin solid rgba(255, 255, 255, 0.678);
     padding: 30px;
     margin: auto;
-    min-width: 520px;
-    min-height: 668px;
-    max-width: 95vw;
+    width: 520px;
 }
 
 #logo
@@ -163,11 +161,19 @@ button.active
     margin-bottom: 15px;
 }
 
-.span_wrapper
+.warning_span_wrapper
 {
     min-height: 40px;
     margin-bottom: 20px;
     display: flex;
+}
+
+.warning_span_wrapper.success span {
+    color: rgb(5, 150, 5);
+}
+
+.warning_span_wrapper.warning span {
+    color: red;
 }
 
 .form span
@@ -175,7 +181,7 @@ button.active
     display: inline-block;
     font-size: 20px;
     text-align: center;
-    color: red;
+
     margin: auto;
 }
 
@@ -224,8 +230,8 @@ span.active
 {
     .reg_container
     {
-        padding: 2.15em;
-        min-width: 95vw;
+        padding: 5.5vw;
+        width: 95vw;
         min-height: auto;
     }
   
@@ -295,17 +301,14 @@ span.active
         margin-bottom: 3.5vw;
     }
 
-    .span_wrapper
+    .warning_span_wrapper
     {
         min-height: 9.4vw;
         margin-bottom: 3.5vw;
     }
     .form span
     {
-        display: inline-block;
         font-size: 4.7vw;
-        text-align: center;
-        color: red;
     }
     #submit_btn
     {

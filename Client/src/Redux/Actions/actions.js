@@ -9,7 +9,8 @@ import {
   ACTION_CHANGE_INPUT_DATA_NAME, ACTION_CHANGE_INPUT_DATA_SURNAME,
   ACTION_CHANGE_INPUT_DATA_LASTNAME,ACTION_CHANGE_INPUT_DATA_SCHOOL,
   ACTION_CHANGE_INPUT_DATA_SCHOOL_SUBJECT,ACTION_CHANGE_INPUT_DATA_PHONE_NUMBERS,
-  ACTION_SAVE_INPUT_DATA_ALL,ACTION_SAVE_PROFILE_POPUP_SPAN_CLASS,ACTION_SAVE_PROFILE_POPUP_SPAN_TITLE} from '../types';
+  ACTION_SAVE_INPUT_DATA_ALL,ACTION_SAVE_PROFILE_POPUP_SPAN_CLASS,ACTION_SAVE_PROFILE_POPUP_SPAN_TITLE,
+  ACTION_CHANGE_REGISTRATION_POPUP_WARNING_TITLE_CLASS} from '../types';
 
 
 export function change_what_checked(log_or_reg) {
@@ -60,6 +61,13 @@ export function change_show_popup(isShow) {
     payload : isShow
   }
 }                                               // REGISTRATION
+
+export function change_popup_warning_title_class(warningOrSuccess) {
+  return {
+    type: ACTION_CHANGE_REGISTRATION_POPUP_WARNING_TITLE_CLASS,
+    payload: warningOrSuccess
+  }
+}
 ////////////////////////////////////////////////////////////////////////////////////////
 
 export function change_redirect_logout() {

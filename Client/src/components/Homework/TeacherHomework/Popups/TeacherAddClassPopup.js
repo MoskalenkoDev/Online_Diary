@@ -54,7 +54,7 @@ export const TeacherAddClassPopup = ({state,onHidePopup,onPopupClassTitleChange,
             {
                 Axios.post("http://localhost:3001/teacher/diary_menu/homework/add_new_class",
                 { 
-                    teacher_id : window.localStorage.getItem("userToken"),
+                    teacher_id : window.localStorage.getItem("token"),
                     title : state.new_class_title,
                     school_subjects : final_school_subject_arr
                 }).then((response) =>

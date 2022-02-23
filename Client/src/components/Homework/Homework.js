@@ -7,7 +7,7 @@ class Homework extends Component
 {
     render()
     {
-        switch(window.localStorage.getItem('status'))
+        switch(window.localStorage.getItem('userType'))
         {
             case "teacher" :
                 return(<TeacherHomework state = {this.props}/>)

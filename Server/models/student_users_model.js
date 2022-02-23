@@ -18,6 +18,10 @@ const student_users = new Schema({
     type : Boolean,
     default : false
   },
+  isFilledProfile : {
+    type : Boolean,
+    default : false
+  },
   name: {
     type: String,
     default : ''

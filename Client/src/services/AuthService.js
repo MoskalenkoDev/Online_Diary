@@ -1,5 +1,5 @@
 import $api from "../http/axios_instance";
-
+import axios from "axios";
 export default class AuthService {
  
     static async registration(userType,email, password) {
@@ -12,6 +12,10 @@ export default class AuthService {
 
     static async logout(userType) {
         return $api.post(`/${userType}/logout`);
+    }
+
+    static async refresh(userType) {
+        return axios.get(`/${userType}/refresh`, {withCredentials: true});
     }
 
 }

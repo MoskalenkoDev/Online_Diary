@@ -2,20 +2,20 @@ import {
   ACTION_CHANGE_WHAT_CHECKED , ACTION_CHANGE_WHO_LOG , 
   ACTION_CHANGE_EMAIL , ACTION_CHANGE_PASSWORD ,
   ACTION_CHANGE_REDIRECT , ACTION_CHANGE_POPUP_TITLE ,
-  ACTION_CHANGE_SHOW_POPUP} from './types';
+  ACTION_CHANGE_SHOW_POPUP,
+  ACTION_CHANGE_REGISTRATION_POPUP_WARNING_TITLE_CLASS} from './types';
 
 const initialState = 
 {
-  what_checked : "login", // what is checked now
-  whoLog : "student",
-  email : "", 
-  password: "",
-  redirect : false, // if true, we go to the next page
-  popupTitle : "" ,
-  show_popup : false
+  what_checked : "login", // what is checked now                 ******
+  whoLog : "student",                                         // ******
+  email : "",                                                 // ******
+  password: "",                                               // ******
+  redirect : false, // if true, we go to the next page        // ******
+  popupTitle : "" ,                                           // ******
+  show_popup : false,                                         // ******
+  warning_title_class: "warning" // or success                // ******
 };
-
-let timer;
 
 // Pure Functions
 export const registrationReducer = (state = initialState, action) => {
@@ -34,6 +34,8 @@ export const registrationReducer = (state = initialState, action) => {
       return { ...state, popupTitle: action.payload }
     case ACTION_CHANGE_SHOW_POPUP:
       return { ...state, show_popup: action.payload }
+    case ACTION_CHANGE_REGISTRATION_POPUP_WARNING_TITLE_CLASS: 
+      return {...state, warning_title_class : action.payload}
     default: return state
   }
 }

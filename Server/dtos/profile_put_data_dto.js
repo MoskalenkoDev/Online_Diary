@@ -13,7 +13,8 @@ module.exports = class ProfilePutDataDto {
         this.#ifExisted(model.surname, "surname");
         this.#ifExisted(model.lastName, "lastName");
         this.#ifExisted(model.phoneNumbers, "phoneNumbers");
-        
+        this.isFilledProfile = true;
+
         if(userType === "teacher") {
             this.#ifExisted(model.school_subject, "school_subject");
             this.#ifExisted(model.school, "school");

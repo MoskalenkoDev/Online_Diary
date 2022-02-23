@@ -2,6 +2,8 @@ import React, { useRef} from 'react';
 import * as ActionCreators from '../../../Redux/Actions/actions';
 import {Image_Picker} from '../Image_Picker/Image_Picker';
 import {WrappedLanguages} from '../../Languages/Languages';
+import { profile_get_data, profile_put_data , showPopup} from '../../../controllers/ProfileController';
+import { logout } from '../../../controllers/AuthController';
 import Axios from 'axios';
 
 export const Teacher_Profile = ({input_data}) =>
@@ -69,54 +71,28 @@ export const Teacher_Profile = ({input_data}) =>
         }
     }
 
-    let timer = useRef(null);
-    let show_save_popup = (title) =>
-    {
-        clearTimeout(timer.current);
-        input_data.dispatch(ActionCreators.change_profile_save_popup_class("active_save_profile_popup_title"));
-        input_data.dispatch(ActionCreators.change_profile_save_popup_title(title));
-        timer.current = window.setTimeout(() =>
-        {
-            input_data.dispatch(ActionCreators.change_profile_save_popup_class(""));
-        }, 3000);
-    }
+    let onSaveInputData = async() => {
 
-    let onSaveInputData = () =>
-    {
         let {name,surname,lastName,school,school_subject} = input_data;
-        if(name == "" || surname == "" || lastName == "" || school == "" || school_subject == "") 
-        {
-            show_save_popup(langObj[lang].warningTitleRequired);
-            return;
-        }
-        try
-        {
-            Axios.post("http://localhost:3001/teacher/diary_menu/profile/save_input_data",
-            { 
-                email : window.localStorage.getItem("userToken"),
-                img_src : input_data.img_src,
+
+        if(name.length || surname.length || lastName.length, school.length, school_subject.length) {
+            let changedDataObj = {
+               img_src : input_data.img_src,
                 name,
                 surname,
                 lastName,
                 school,
                 school_subject,
-                phoneNumbers : input_data.phoneNumbers
-            }).then((response) =>
-            {
-                show_save_popup(langObj[lang].successChanges);
-            });
+                phoneNumbers : input_data.phoneNumbers            
+            }       
+            await profile_put_data(changedDataObj)(input_data.dispatch);
         }
-        catch(e)
-        {
-            show_save_popup(langObj[lang].errorTitle);
-        }
+
+        else showPopup(input_data.dispatch, langObj[lang].warningTitleRequired, false);
     }
 
-    let onLogOut = () =>
-    {
-      window.localStorage.removeItem('userToken');
-      window.localStorage.removeItem('status');
-      input_data.dispatch(ActionCreators.change_redirect_logout());
+    let onLogOut = async() => { 
+        await logout("teacher");
     }
     
     let popup_span_color = input_data.save_popup_span_title === langObj[lang].successChanges ? "" : " red_color";

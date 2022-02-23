@@ -13,8 +13,6 @@ const Languages = ({color,language,activeClass,firstLabel,secondLabel,dispatch})
     const onActive = () =>
     {
         dispatch(actionCreators.change_language_active_class(activeClass === "active"? "" : "active"));
-        // if(activeClass === "active") dispatch(actionCreators.change_language_active_class(""));
-        // else dispatch(actionCreators.change_language_active_class("active"));
     }
 
     let dispatchChangeLabel = (first,second) =>

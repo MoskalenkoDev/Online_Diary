@@ -6,6 +6,7 @@ export const ACTION_CHANGE_PASSWORD = 'ACTION_CHANGE_PASSWORD';            // - 
 export const ACTION_CHANGE_REDIRECT = 'ACTION_CHANGE_REDIRECT';
 export const ACTION_CHANGE_POPUP_TITLE = 'ACTION_CHANGE_POPUP_TITLE';
 export const ACTION_CHANGE_SHOW_POPUP = 'ACTION_CHANGE_SHOW_POPUP';
+export const ACTION_CHANGE_REGISTRATION_POPUP_WARNING_TITLE_CLASS = 'ACTION_CHANGE_REGISTRATION_POPUP_WARNING_TITLE_CLASS';
 
 ///////////////////////////////////////////////////////////////////////////// - registration
 

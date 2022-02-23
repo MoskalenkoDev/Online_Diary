@@ -35,7 +35,7 @@ export const TeacherHomework = ({state}) =>
     {
         Axios.post("http://localhost:3001/teacher/diary_menu/homework/get_classes",
         {
-            teacher_id : window.localStorage.getItem("userToken")
+            teacher_id : window.localStorage.getItem("token")
         }).then(response =>
         {
             if(response.data.length != 0) li_creator(response.data);
