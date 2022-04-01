@@ -1,5 +1,6 @@
 import axios from "axios";
 import {logout} from "../controllers/AuthController";
+import { useDispatch } from "react-redux";
 
 export const API_URL = 'http://localhost:3001';
 
@@ -20,6 +21,7 @@ $api.interceptors.response.use( (config) => {
 }, async (err) => {
     const originalRequest = err.config;
     const userType = originalRequest.url.split('/')[1];
+    // if(err.response.status == 404) logout(userType)(useDispatch());
     if(err.response.status == 401 && err.config) { // && !err.config._isRetry
         // originalRequest._isRetry = true;
         try {
@@ -28,7 +30,7 @@ $api.interceptors.response.use( (config) => {
             return $api.request(originalRequest);
         }
         catch(e){
-            logout(userType); // if we don't have accessToken and refreshToken we have to log out
+            logout(userType)(useDispatch()); // if we don't have accessToken and refreshToken we have to log out
             console.log("Сюда я тоже попал, хотя не должен был")
         }
     }

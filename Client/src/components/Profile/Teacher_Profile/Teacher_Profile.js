@@ -9,6 +9,7 @@ import Axios from 'axios';
 export const Teacher_Profile = ({input_data}) =>
 {
     let lang = input_data.lang.language;
+    
     let langObj =
     {
         ua:
@@ -21,7 +22,6 @@ export const Teacher_Profile = ({input_data}) =>
             firstname: "Ім'я",
             surname:"Фамілія",
             patronymic :"По батькові",
-            subjects: "Предмет викладання",
             school : "Назва школи",
             phone: "Номер телефону",
             save: "Зберегти зміни"
@@ -36,7 +36,6 @@ export const Teacher_Profile = ({input_data}) =>
             firstname: "Имя",
             surname:"Фамилия",
             patronymic :"Отчество",
-            subjects: "Предмет преподавания",
             school : "Название школы",
             phone: "Номер телефона",
             save: "Сохранить изменения"
@@ -51,7 +50,6 @@ export const Teacher_Profile = ({input_data}) =>
             firstname: "Name",
             surname:"Surname",
             patronymic :"Patronymic",
-            subjects: "School subjects",
             school : "School",
             phone: "Phone number",
             save: "Save changes"
@@ -66,23 +64,21 @@ export const Teacher_Profile = ({input_data}) =>
             case 'surname_input' : {input_data.dispatch(ActionCreators.change_input_data_surname(value));break;}
             case 'lastName_input' : {input_data.dispatch(ActionCreators.change_input_data_lastName(value));break;}
             case 'school_input' : {input_data.dispatch(ActionCreators.change_input_data_school(value));break;}
-            case 'school_subject_input' : {input_data.dispatch(ActionCreators.change_input_data_school_subject(value));break;}
             case 'phone_input' : {input_data.dispatch(ActionCreators.change_input_data_phone_numbers(value));break;}
         }
     }
 
     let onSaveInputData = async() => {
-
-        let {name,surname,lastName,school,school_subject} = input_data;
-
-        if(name.length || surname.length || lastName.length, school.length, school_subject.length) {
+        
+        let {name,surname,lastName,school} = input_data;
+        
+        if(name.length && surname.length && lastName.length && school.length) {
             let changedDataObj = {
-               img_src : input_data.img_src,
+                img_src : input_data.img_src,
                 name,
                 surname,
                 lastName,
                 school,
-                school_subject,
                 phoneNumbers : input_data.phoneNumbers            
             }       
             await profile_put_data(changedDataObj)(input_data.dispatch);
@@ -92,7 +88,7 @@ export const Teacher_Profile = ({input_data}) =>
     }
 
     let onLogOut = async() => { 
-        await logout("teacher");
+        await logout("teacher")(input_data.dispatch);
     }
     
     let popup_span_color = input_data.save_popup_span_title === langObj[lang].successChanges ? "" : " red_color";
@@ -126,14 +122,6 @@ export const Teacher_Profile = ({input_data}) =>
                         <span className = "important_field">{langObj[lang].requiredField}</span>
                     </div> 
                     <input type="text" onChange = {(e) => {onChange_input_fields("lastName_input",e.target.value)}} value = {input_data.lastName}/>
-                </div>
-                
-                <div className="profile_data_fields_block">
-                    <div className="profile_data_span_wrapper">
-                        <span>{langObj[lang].subjects}</span>
-                        <span className = "important_field">{langObj[lang].requiredField}</span>
-                    </div> 
-                    <input type="text" onChange = {(e) => {onChange_input_fields("school_subject_input",e.target.value)}} value = {input_data.school_subject}/>
                 </div>
 
                 <div className="profile_data_fields_block">

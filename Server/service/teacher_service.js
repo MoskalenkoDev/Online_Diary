@@ -28,15 +28,11 @@ class TeacherService {
     async teacher_get_classes(teacher_id) {
 
         let classes = await class_model.find({teacher_id});
-        if(!classes) throw ApiError.BadRequest("wrong parameter value");
-
+        
         let new_arr = [];
         classes.forEach((class_obj) => 
         {
             let new_obj = {...class_obj};
-
-            console.log(new_obj);
-
             delete new_obj._doc.teacher_id;
             delete new_obj._doc.__v;
             new_arr.push(new_obj._doc);

@@ -1,74 +1,12 @@
 import {
-  ACTION_CHANGE_WHAT_CHECKED , ACTION_CHANGE_WHO_LOG , 
-  ACTION_CHANGE_EMAIL , ACTION_CHANGE_PASSWORD ,
-  ACTION_CHANGE_REDIRECT , ACTION_CHANGE_POPUP_TITLE ,
-  ACTION_CHANGE_SHOW_POPUP,ACTION_CHANGE_INPUT_DATA_ALL,
+  ACTION_CHANGE_INPUT_DATA_ALL,
   ACTION_CHANGE_INPUT_DATA_IMG_SRC,ACTION_CHANGE_INPUT_DATA_TEMPORARY_IMG_SRC,
   ACTION_CHANGE_INPUT_DATA_IMG_CROP_INFO,ACTION_LOGOUT,
   ACTION_CHANGE_INPUT_DATA_IMG_SHOW_POPUP,ACTION_CHANGE_INPUT_DATA_IMG_SHOW_POPUP_CROP_WRAPPER,
   ACTION_CHANGE_INPUT_DATA_NAME, ACTION_CHANGE_INPUT_DATA_SURNAME,
-  ACTION_CHANGE_INPUT_DATA_LASTNAME,ACTION_CHANGE_INPUT_DATA_SCHOOL,
-  ACTION_CHANGE_INPUT_DATA_SCHOOL_SUBJECT,ACTION_CHANGE_INPUT_DATA_PHONE_NUMBERS,
+  ACTION_CHANGE_INPUT_DATA_LASTNAME,ACTION_CHANGE_INPUT_DATA_SCHOOL,ACTION_CHANGE_INPUT_DATA_PHONE_NUMBERS,
   ACTION_SAVE_INPUT_DATA_ALL,ACTION_SAVE_PROFILE_POPUP_SPAN_CLASS,ACTION_SAVE_PROFILE_POPUP_SPAN_TITLE,
-  ACTION_CHANGE_REGISTRATION_POPUP_WARNING_TITLE_CLASS} from '../types';
-
-
-export function change_what_checked(log_or_reg) {
-  return {
-    type: ACTION_CHANGE_WHAT_CHECKED,
-    payload: log_or_reg
-  }
-}
-
-export function change_who_log(who) {
-  return {
-    type: ACTION_CHANGE_WHO_LOG,
-    payload: who
-  }
-}
-
-export function change_email(newEmail) {
-  return {
-    type: ACTION_CHANGE_EMAIL,
-    payload: newEmail
-  }
-}
-
-export function change_password(newPassword) {
-  return {
-    type: ACTION_CHANGE_PASSWORD,
-    payload: newPassword
-  }
-}
-
-export function change_redirect(isRedirect) {
-  return {
-    type: ACTION_CHANGE_REDIRECT,
-    payload: isRedirect
-  }
-}
-
-export function change_popup_title(title) {
-  return {
-    type: ACTION_CHANGE_POPUP_TITLE,
-    payload: title
-  }
-}
-
-export function change_show_popup(isShow) {
-  return { 
-    type: ACTION_CHANGE_SHOW_POPUP,
-    payload : isShow
-  }
-}                                               // REGISTRATION
-
-export function change_popup_warning_title_class(warningOrSuccess) {
-  return {
-    type: ACTION_CHANGE_REGISTRATION_POPUP_WARNING_TITLE_CLASS,
-    payload: warningOrSuccess
-  }
-}
-////////////////////////////////////////////////////////////////////////////////////////
+} from '../types';
 
 export function change_redirect_logout() {
   return { 
@@ -143,13 +81,6 @@ export function change_input_data_school(new_input_school) {
   return { 
     type: ACTION_CHANGE_INPUT_DATA_SCHOOL,
     payload : new_input_school
-  }
-}
-
-export function change_input_data_school_subject(new_input_school_subject) {
-  return { 
-    type: ACTION_CHANGE_INPUT_DATA_SCHOOL_SUBJECT,
-    payload : new_input_school_subject
   }
 }
 

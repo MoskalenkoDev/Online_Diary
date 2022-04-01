@@ -1,6 +1,9 @@
 import * as ActionCreators from '../../../../Redux/Actions/actions_homework';
 import Axios from 'axios';
 
+import { edit_class, delete_class } from '../../../../controllers/HomeworkController';
+
+
 export const TeacherEditClassPopup = ({state,onHidePopup,onPopupClassTitleChange,onPopupSchoolSubjectsChange,timer, get_classes_info}) =>
 {
     let lang = state.lang.language;
@@ -44,7 +47,7 @@ export const TeacherEditClassPopup = ({state,onHidePopup,onPopupClassTitleChange
         }
     };
 
-    let onSaveChanges = () =>
+    let onSaveChanges = async() =>
     {
         let final_school_subject_arr = state.school_subjects.split(',').map((subj) => { // фильтруем нашу строку предметов и превращаем ее в массив
             let sub = subj.trim();
@@ -60,42 +63,45 @@ export const TeacherEditClassPopup = ({state,onHidePopup,onPopupClassTitleChange
         }
         else 
         {
-            Axios.post('http://localhost:3001/teacher/diary_menu/homework/edit_class',
-            {
-                _id : state.edit_obj_id,
-                title : state.new_class_title,
-                school_subjects : final_school_subject_arr
-            }).then(response =>
-            {
-                if(response.status == 200){get_classes_info();onHidePopup();} 
-                else
-                {
-                    window.clearTimeout(timer.current);
-                    state.dispatch(ActionCreators.change_homework_warning_title(langObj[lang].warningEditTitle));
-                    state.dispatch(ActionCreators.change_homework_popup_warning_title_class("homework_popup_warning_active"));
-                    timer.current = window.setTimeout(()=> {state.dispatch(ActionCreators.change_homework_popup_warning_title_class(""))},4000);
-                };
-            });
+            await edit_class(state.edit_obj_id, state.new_class_title, final_school_subject_arr)(state.dispatch); // WE NEED TO IMPROVE THIS SHIT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //     Axios.post('http://localhost:3001/teacher/diary_menu/homework/edit_class',
+        //     {
+        //         _id : state.edit_obj_id,
+        //         title : state.new_class_title,
+        //         school_subjects : final_school_subject_arr
+        //     }).then(response =>
+        //     {
+        //         if(response.status == 200){get_classes_info();onHidePopup();} 
+        //         else
+        //         {
+        //             window.clearTimeout(timer.current);
+        //             state.dispatch(ActionCreators.change_homework_warning_title(langObj[lang].warningEditTitle));
+        //             state.dispatch(ActionCreators.change_homework_popup_warning_title_class("homework_popup_warning_active"));
+        //             timer.current = window.setTimeout(()=> {state.dispatch(ActionCreators.change_homework_popup_warning_title_class(""))},4000);
+        //         };
+        //     });
         }
 
     }
 
-    let onDeleteClass = () =>
+    let onDeleteClass = async() =>
     {
-        Axios.post('http://localhost:3001/teacher/diary_menu/homework/delete_class',
-        {
-            _id : state.edit_obj_id
-        }).then(response =>
-        {
-            if(response.status == 200){get_classes_info();onHidePopup();} 
-            else
-            {
-                window.clearTimeout(timer.current);
-                state.dispatch(ActionCreators.change_homework_warning_title(langObj[lang].errorTitle));
-                state.dispatch(ActionCreators.change_homework_popup_warning_title_class("homework_popup_warning_active"));
-                timer.current = window.setTimeout(()=> {state.dispatch(ActionCreators.change_homework_popup_warning_title_class(""))},4000);
-            };
-        });
+        await delete_class(state.edit_obj_id)(state.dispatch); // WE NEED TO IMPROVE THIS SHIT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+        // Axios.post('http://localhost:3001/teacher/diary_menu/homework/delete_class',
+        // {
+        //     _id : state.edit_obj_id
+        // }).then(response =>
+        // {
+        //     if(response.status == 200){get_classes_info();onHidePopup();} 
+        //     else
+        //     {
+        //         window.clearTimeout(timer.current);
+        //         state.dispatch(ActionCreators.change_homework_warning_title(langObj[lang].errorTitle));
+        //         state.dispatch(ActionCreators.change_homework_popup_warning_title_class("homework_popup_warning_active"));
+        //         timer.current = window.setTimeout(()=> {state.dispatch(ActionCreators.change_homework_popup_warning_title_class(""))},4000);
+        //     };
+        // });
     }
 
     return(

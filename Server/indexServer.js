@@ -41,8 +41,8 @@ async function start()
     }
 }
 
-app.use("/student",both_user_types_router ) //, student_router); // явно мені ще треба добавити міделвер общого призначення і для вчителя і для учня ну і оставити окремі теж
-app.use("/teacher",both_user_types_router ) //, teacher_router);
+app.use("/student",both_user_types_router, student_router ); // явно мені ще треба добавити міделвер общого призначення і для вчителя і для учня ну і оставити окремі теж
+app.use("/teacher",both_user_types_router, teacher_router );
 app.use("/api", activate_mail_router);
 
 app.use(errorMiddleware); // this one should be last in the chain of middlewares

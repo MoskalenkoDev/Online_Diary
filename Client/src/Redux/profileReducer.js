@@ -4,7 +4,7 @@ import {ACTION_CHANGE_INPUT_DATA_ALL, ACTION_CHANGE_INPUT_DATA_IMG_SRC,
   ACTION_CHANGE_INPUT_DATA_IMG_SHOW_POPUP_CROP_WRAPPER,
   ACTION_CHANGE_INPUT_DATA_NAME, ACTION_CHANGE_INPUT_DATA_SURNAME,
   ACTION_CHANGE_INPUT_DATA_LASTNAME,ACTION_CHANGE_INPUT_DATA_SCHOOL,
-  ACTION_CHANGE_INPUT_DATA_SCHOOL_SUBJECT,ACTION_CHANGE_INPUT_DATA_PHONE_NUMBERS,
+  ACTION_CHANGE_INPUT_DATA_PHONE_NUMBERS,
   ACTION_SAVE_PROFILE_POPUP_SPAN_CLASS,ACTION_SAVE_PROFILE_POPUP_SPAN_TITLE} from './types';
 
 const initialState = 
@@ -26,7 +26,6 @@ const initialState =
   surname : "",
   lastName : "",
   school : "",
-  school_subject: "",
   phoneNumbers : "",
   save_popup_span_class : "", // active_save_profile_popup_title - когда активен
   save_popup_span_title : "Изменения успешно сохранены" // или (Что-то пошло не так) когда что-то не так
@@ -63,8 +62,6 @@ export const profileReducer = (state = initialState, action) => {
       return { ...state, lastName: action.payload }
     case ACTION_CHANGE_INPUT_DATA_SCHOOL:
       return { ...state, school: action.payload }
-    case ACTION_CHANGE_INPUT_DATA_SCHOOL_SUBJECT:
-      return { ...state, school_subject: action.payload }
     case ACTION_CHANGE_INPUT_DATA_PHONE_NUMBERS:
       return { ...state, phoneNumbers: action.payload }
     case ACTION_SAVE_PROFILE_POPUP_SPAN_CLASS:

@@ -7,7 +7,7 @@ export default class ProfileService {
     }
 
     static async profile_put_data(userType, changedData) {
-        return $api.post(`/${userType}/diary_menu/profile/save_input_data`, {...changedData});
+        return $api.put(`/${userType}/diary_menu/profile/save_input_data`, {...changedData});
     }
 
 }

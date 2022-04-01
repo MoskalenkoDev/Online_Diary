@@ -1,6 +1,7 @@
 import * as ActionCreators from '../../../../Redux/Actions/actions_homework';
 import Axios from 'axios';
 
+import { add_new_class } from '../../../../controllers/HomeworkController';
 
 export const TeacherAddClassPopup = ({state,onHidePopup,onPopupClassTitleChange,onPopupSchoolSubjectsChange,get_classes_info,timer}) =>
 {
@@ -35,7 +36,7 @@ export const TeacherAddClassPopup = ({state,onHidePopup,onPopupClassTitleChange,
             addClassTitle: "Create class"
         }
     };
-    let onPopupSubmit = () =>
+    let onPopupSubmit = async() =>
     {
         let final_school_subject_arr = state.school_subjects.split(',').map((subj) => { // фильтруем нашу строку предметов и превращаем ее в массив
             let sub = subj.trim();
@@ -50,23 +51,9 @@ export const TeacherAddClassPopup = ({state,onHidePopup,onPopupClassTitleChange,
         }
         else 
         {
-            try
-            {
-                Axios.post("http://localhost:3001/teacher/diary_menu/homework/add_new_class",
-                { 
-                    teacher_id : window.localStorage.getItem("token"),
-                    title : state.new_class_title,
-                    school_subjects : final_school_subject_arr
-                }).then((response) =>
-                {
-                    onHidePopup();
-                    get_classes_info();
-                });
-            }
-            catch(e)
-            {
-                console.log("что-то не так");
-            }
+            await add_new_class( state.new_class_title, final_school_subject_arr)(state.dispatch); // WE NEED TO IMPROVE THIS SHIT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            onHidePopup();
+            get_classes_info();
         }
     }
 

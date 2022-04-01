@@ -1,11 +1,9 @@
 import React,{Component} from 'react';
 import './Registration.scss';
 import logo from "../../images/logo2.png";
-import Axios from 'axios';
 import {Link ,Redirect} from 'react-router-dom';
-import {connect} from 'react-redux';
 import {WrappedLanguages} from '../Languages/Languages';
-import * as actionCreators from '../../Redux/Actions/actions';
+import { connect } from 'react-redux';
 
 import { registration, login, showPopup } from '../../controllers/AuthController';
 
@@ -57,15 +55,14 @@ const langObj = {
   }
 }
 
-export default class Registration extends Component
+class Registration extends Component
 {
 
   state = {
     what_checked : "login", // what is checked now                 
     whoLog : "student",                                         
     email : "",                                                 
-    password: "",                                               
-    redirect : false, // if true, we go to the next page        
+    password: "",                                                      
     popupTitle : "" ,                                          
     show_popup : false,                                         
     warning_title_class: "warning" // or success 
@@ -74,38 +71,25 @@ export default class Registration extends Component
   onBtn_click = (what_checked) =>
   {
     this.setState({what_checked});
-    // this.props.dispatch(actionCreators.change_what_checked(whatChecked));
   }
 
   onEmailChanging = (e) =>
   {
     if(!e.target.value.includes(" ")) this.setState({email: e.target.value});
-    // if(!e.target.value.includes(" ")) this.props.dispatch(actionCreators.change_email(e.target.value)); // here we block the email with spaces
   }
 
   onPasswordChanging = (e) =>
   {
     if(!e.target.value.includes(" ")) this.setState({password: e.target.value});
-    // if(!e.target.value.includes(" "))  this.props.dispatch(actionCreators.change_password(e.target.value)); // here we block the password with spaces
   }
 
   componentDidMount = () => {
     this.setState = this.setState.bind(this); // if i will pass this.setState as param to showPopup() we'll get Error. That's why we should bind this before
   }
 
-  componentDidUpdate = (prevProps, prevState) =>
-  {
-    if(this.state.redirect === true && prevState.redirect != true)
-    {
-      localStorage.setItem("userType", this.state.whoLog);
-      this.setState({redirect : false})
-      // this.props.dispatch(actionCreators.change_redirect(false)); // тут надо перезатирать значения потому что это редакс
-    }
-  }
-
   login = async (lang) => // if our login details is correct we gain access
   {
-    await login(this.state.whoLog, this.state.email, this.state.password, lang)(this.setState);
+    await login(this.state.whoLog, this.state.email, this.state.password, lang)(this.setState, this.props.dispatch);
   }
 
   registration = async (lang) => { // if our signup details is correct we gain access
@@ -126,10 +110,11 @@ export default class Registration extends Component
   render() 
   {       
     let lang = this.props.lang.language;
-    if(localStorage.getItem('token'))
-    {
+
+    if(this.props.isLogged) {
       return (<Redirect to = "/diary_menu/profile" />)
     }
+
     const headline = this.state.what_checked === "login" ? langObj[lang].submitBtnLogin : langObj[lang].subitBtnReg;
 
     let popupClass = this.state.show_popup ? "active" : "off";
@@ -187,9 +172,10 @@ export default class Registration extends Component
   
 };
 
-// const mapStateToProps = (state) => // кладет стейт в качестве пропса в наш компонент (который мы законектили)
-// {
-//   return{...state.registrationState}
-// }
 
-// export const WrappedRegistration = connect(mapStateToProps)(Registration);
+const mapStateToProps = (state) => // кладет стейт в качестве пропса в наш компонент (который мы законектили)
+{
+  return{...state.signupState}
+}
+
+export const WrappedRegistration = connect(mapStateToProps)(Registration);

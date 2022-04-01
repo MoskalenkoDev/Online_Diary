@@ -1,10 +1,12 @@
 import React, {useEffect ,useRef} from 'react';
 import * as ActionCreators from '../../../Redux/Actions/actions_homework';
-import Axios from 'axios';
+import jwtDecode from 'jwt-decode';
 import {TeacherAddClassPopup} from './Popups/TeacherAddClassPopup';
 import {TeacherEditClassPopup} from './Popups/TeacherEditClassPopup';
 import {TeacherCopyInviteLink} from './Popups/TeacherCopyInviteLink';
 import {TeacherStudentsEditor} from './Popups/TeacherStudentsEditor';
+
+import { get_classes_info } from '../../../controllers/HomeworkController';
 
 export const TeacherHomework = ({state}) =>
 {
@@ -30,18 +32,7 @@ export const TeacherHomework = ({state}) =>
             alertWarningTitle: "First fill in the data in the profile!"
         }
     }
-
-    let get_classes_info = () =>
-    {
-        Axios.post("http://localhost:3001/teacher/diary_menu/homework/get_classes",
-        {
-            teacher_id : window.localStorage.getItem("token")
-        }).then(response =>
-        {
-            if(response.data.length != 0) li_creator(response.data);
-        })
-    }
-
+    
     let onEditBtnClick = (li_info) =>
     {
         let current_school_subjects = li_info.school_subjects.join();
@@ -77,13 +68,15 @@ export const TeacherHomework = ({state}) =>
         state.dispatch(ActionCreators.change_homework_classes_li_list(our_li_components));
     }
 
-    useEffect(() => 
+    useEffect(async() => 
     {
-        get_classes_info();
+        let classes_info = await get_classes_info()(state.dispatch); // in my opinion it is correct
+        if(classes_info.length != 0) li_creator(classes_info);
         state.dispatch(ActionCreators.change_homework_popup_active_menu_item("active_popup_menu_students_list")); // Ставим активным первый пункт меню
     },[]);
 
     let timer = useRef(null);
+
     let onHidePopup = () =>
     {
         window.clearTimeout(timer.current);
@@ -91,9 +84,8 @@ export const TeacherHomework = ({state}) =>
         window.setTimeout(()=>
         {
             state.dispatch(ActionCreators.change_homework_popup_warning_title_class(""));
-            state.dispatch(ActionCreators.change_homework_popup_clear_inputs());
-            if(state.homework_popup_active_menu_item !== "active_popup_menu_students_list")
-            {
+            state.dispatch(ActionCreators.change_homework_popup_clear_inputs());         // ???
+            if(state.homework_popup_active_menu_item !== "active_popup_menu_students_list") {
                 state.dispatch(ActionCreators.change_homework_popup_active_menu_item("active_popup_menu_students_list"));
             }
         },250);
@@ -101,7 +93,7 @@ export const TeacherHomework = ({state}) =>
 
     let onShowAddClassPopup = () =>
     {   
-        if(window.localStorage.getItem("isFillProfile"))
+        if(jwtDecode(window.localStorage.getItem("token")).isFilledProfile)
         {
             state.dispatch(ActionCreators.change_homework_show_popup_class("homework_popup_active")); 
             state.dispatch(ActionCreators.change_homework_popup_type("homework_add_class_popup")); 

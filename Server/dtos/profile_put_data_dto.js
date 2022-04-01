@@ -16,7 +16,6 @@ module.exports = class ProfilePutDataDto {
         this.isFilledProfile = true;
 
         if(userType === "teacher") {
-            this.#ifExisted(model.school_subject, "school_subject");
             this.#ifExisted(model.school, "school");
         }
     }

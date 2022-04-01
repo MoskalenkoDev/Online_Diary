@@ -1,6 +1,6 @@
 import AuthService from "../services/AuthService";
 import * as actionCreators from "../Redux/Actions/actions";
-
+import {change_is_logged} from '../Redux/Actions/action_signup';
 let timer;
 let showTime = 4000;
 let showActivateMailPopupTime = 7000;
@@ -47,9 +47,6 @@ export const showPopup = ( setState, popupTitle , isSuccess, time = showTime) =>
     setState({popupTitle});
     setState({warning_title_class: isSuccess? "success" : "warning"});
     setState({show_popup: true});
-    // dispatch(actionCreators.change_popup_title(popupTitle));
-    // dispatch(actionCreators.change_popup_warning_title_class(isSuccess? "success" : "warning"));
-    // dispatch(actionCreators.change_show_popup(true));
     timer = setTimeout(() => { setState({show_popup: false}) }, time);
 }
 
@@ -94,39 +91,34 @@ export function registration(whoLog, email, password, lang){
 
 export function login(whoLog, email, password, lang) {
 
-    return async(setState) => {
+    return async(setState, dispatch) => {
 
-        console.log(setState);
         try {
            let response = await AuthService.login(whoLog, email, password);
            localStorage.setItem("token",response.data.accessToken);
-           setState({redirect: true});
-        //    dispatch(actionCreators.change_redirect(true));
+           localStorage.setItem("userType", whoLog);
+           dispatch(change_is_logged(true));
         }
         catch(e) {
             switch(e.response.data.message) {
 
                 case "unregistered user" : {
                     showPopup(setState, langObj[lang].popupWarningUnregisteredUser, false);
-                    // showPopup(dispatch, langObj[lang].popupWarningUnregisteredUser, false);
                     break;
                 }
 
                 case "unconfirmed email" : {
                     showPopup(setState, langObj[lang].popupWarningEmailUnconfirmed, false);
-                    // showPopup(dispatch, langObj[lang].popupWarningEmailUnconfirmed, false);
                     break;
                 }
 
                 case "incorrect password" : {
                     showPopup(setState, langObj[lang].popupWarningIncorrectPassword, false);
-                    // showPopup(dispatch, langObj[lang].popupWarningIncorrectPassword, false);
                     break;
                 }
 
                 default: {
                     showPopup(setState, langObj[lang].popupWarningUnexpected, false);
-                    // showPopup(dispatch, langObj[lang].popupWarningUnexpected, false);
                 }
             }
         }
@@ -134,14 +126,19 @@ export function login(whoLog, email, password, lang) {
 
 }
 
-export async function logout(whoLog) {
-    try {
-        localStorage.removeItem("userType");
-        localStorage.removeItem("token");
-        // perhaps we have to add ActionCreators.change_redirect_logout() for calling re-render
-        await AuthService.logout(whoLog);
+export function logout(whoLog) {
+
+    return async(dispatch) => {
+
+        try {
+            localStorage.removeItem("userType");
+            localStorage.removeItem("token");
+            dispatch(change_is_logged(false)); // no matter if we can log out in the server side (since we  have already removed the token from localstorage )
+            await AuthService.logout(whoLog);
+        }   
+        catch(e) {
+            console.log("куда-то рефреш токен пропал, но мы его с куки удалили, так что ничего страшного");
+        }  
     }
-    catch(e) {
-        console.log("куда-то рефреш токен пропал, но мы его с куки удалили, так что ничего страшного");
-    }
+
 }

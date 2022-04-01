@@ -47,7 +47,7 @@ export const Image_Picker = ({input_data}) =>
         }
     }
 
-    const maxFileSize = 250000; //bytes == 250kb
+    const maxFileSize = 25000000; //bytes == 250kb
     const acceptedFileTypes = "image/x-png, image/png, image/jpg, image/jpeg";
     const acceptedFileTypesArray = acceptedFileTypes.split(',').map(item => (item.trim()));
     const inpFileRef = useRef();
@@ -93,9 +93,9 @@ export const Image_Picker = ({input_data}) =>
 
     const onLoad = useCallback((img) => {
         imgRef.current = img;
-      }, []);
+    }, []);
 
-    let getCroppedImg = (crop) =>
+    let getCroppedImg = (crop) => // here we draw the cropped image on a square of canvas 
     { 
         const image = imgRef.current;
         const canvas = canvasRef.current;
@@ -163,7 +163,7 @@ export const Image_Picker = ({input_data}) =>
 
                             <span>{langObj[lang].popupContentInfo}</span>
                             <label id = "inpFile" className = "profile_data_save_btn">
-                                <input type="file" accept="image/png, image/gif, image/jpeg , image/x-png" onChange = {onFileChange} ref = {inpFileRef}/> 
+                                <input type="file" accept= {acceptedFileTypes} onChange = {onFileChange} ref = {inpFileRef}/> 
                                 {langObj[lang].popupChooseImgBtn}
                             </label>
 

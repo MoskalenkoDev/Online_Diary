@@ -38,10 +38,6 @@ const teacher_users = new Schema({
     type: String,
     default : ''
   },
-  school_subject : {
-    type : String,
-    default : ''
-  },
   phoneNumbers : {
     type : String,
     default : ''

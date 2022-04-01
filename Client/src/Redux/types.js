@@ -1,15 +1,3 @@
-///////////////////////////////////////////////////////////////////////////// - registration
-export const ACTION_CHANGE_WHAT_CHECKED = 'ACTION_CHANGE_WHAT_CHECKED';
-export const ACTION_CHANGE_WHO_LOG = 'ACTION_CHANGE_WHO_LOG';
-export const ACTION_CHANGE_EMAIL = 'ACTION_CHANGE_EMAIL';                   
-export const ACTION_CHANGE_PASSWORD = 'ACTION_CHANGE_PASSWORD';            // - registration
-export const ACTION_CHANGE_REDIRECT = 'ACTION_CHANGE_REDIRECT';
-export const ACTION_CHANGE_POPUP_TITLE = 'ACTION_CHANGE_POPUP_TITLE';
-export const ACTION_CHANGE_SHOW_POPUP = 'ACTION_CHANGE_SHOW_POPUP';
-export const ACTION_CHANGE_REGISTRATION_POPUP_WARNING_TITLE_CLASS = 'ACTION_CHANGE_REGISTRATION_POPUP_WARNING_TITLE_CLASS';
-
-///////////////////////////////////////////////////////////////////////////// - registration
-
 //////////////////////////////////////////////////////////////////////////// - Profile
 export const ACTION_LOGOUT = 'ACTION_LOGOUT';
 export const ACTION_CHANGE_INPUT_DATA_ALL = 'ACTION_CHANGE_INPUT_DATA_ALL';
@@ -22,7 +10,6 @@ export const ACTION_CHANGE_INPUT_DATA_NAME = 'ACTION_CHANGE_INPUT_DATA_NAME';
 export const ACTION_CHANGE_INPUT_DATA_SURNAME = 'ACTION_CHANGE_INPUT_DATA_SURNAME';
 export const ACTION_CHANGE_INPUT_DATA_LASTNAME = 'ACTION_CHANGE_INPUT_DATA_LASTNAME';                  // Profile
 export const ACTION_CHANGE_INPUT_DATA_SCHOOL = 'ACTION_CHANGE_INPUT_DATA_SCHOOL';
-export const ACTION_CHANGE_INPUT_DATA_SCHOOL_SUBJECT = 'ACTION_CHANGE_INPUT_DATA_SCHOOL_SUBJECT';
 export const ACTION_CHANGE_INPUT_DATA_PHONE_NUMBERS = 'ACTION_CHANGE_INPUT_DATA_PHONE_NUMBERS';
 export const ACTION_SAVE_INPUT_DATA_ALL= 'ACTION_SAVE_INPUT_DATA_ALL';
 export const ACTION_SAVE_PROFILE_POPUP_SPAN_CLASS= 'ACTION_SAVE_PROFILE_POPUP_SPAN_CLASS';
@@ -50,3 +37,7 @@ export const ACTION_CHANGE_LANGUAGE_ACTIVE_CLASS= 'ACTION_CHANGE_LANGUAGE_ACTIVE
 export const ACTION_CHANGE_LANGUAGE_FIRST_LABEL= 'ACTION_CHANGE_LANGUAGE_FIRST_LABEL';
 export const ACTION_CHANGE_LANGUAGE_SECOND_LABEL= 'ACTION_CHANGE_LANGUAGE_SECOND_LABEL';
 //////////////////////////////////////////////////////////////////////////// - Language
+
+//////////////////////////////////////////////////////////////////////////// - SignupReducer
+export const ACTION_CHANGE_IS_LOGGED = 'ACTION_CHANGE_IS_LOGGED';
+//////////////////////////////////////////////////////////////////////////// - SignupReducer

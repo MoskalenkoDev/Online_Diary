@@ -78,10 +78,7 @@ export const Student_Profile = ({input_data}) =>
     }
 
     let onLogOut = async() => {
-        await logout("student");
-    //   window.localStorage.removeItem('token');
-    //   window.localStorage.removeItem('userType');
-    //   input_data.dispatch(ActionCreators.change_redirect_logout());
+        await logout("student")(input_data.dispatch);
     }
 
     return (
