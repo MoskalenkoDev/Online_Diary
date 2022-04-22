@@ -1,5 +1,5 @@
 import {ACTION_CHANGE_INPUT_DATA_ALL, ACTION_CHANGE_INPUT_DATA_IMG_SRC,
-  ACTION_CHANGE_INPUT_DATA_TEMPORARY_IMG_SRC,ACTION_LOGOUT,
+  ACTION_CHANGE_INPUT_DATA_TEMPORARY_IMG_SRC,
   ACTION_CHANGE_INPUT_DATA_IMG_CROP_INFO,ACTION_CHANGE_INPUT_DATA_IMG_SHOW_POPUP,
   ACTION_CHANGE_INPUT_DATA_IMG_SHOW_POPUP_CROP_WRAPPER,
   ACTION_CHANGE_INPUT_DATA_NAME, ACTION_CHANGE_INPUT_DATA_SURNAME,
@@ -9,7 +9,6 @@ import {ACTION_CHANGE_INPUT_DATA_ALL, ACTION_CHANGE_INPUT_DATA_IMG_SRC,
 
 const initialState = 
 {
-  redirect_back : false, // когда нажмем кнопку выхода из аккаунта
   img_src : "", // сгенерированная ссылка для img (полученная из бд или после сохранения обрезанного фото)
   temporary_img_src : "", // когда нажимает сменить фото и обрезаем его, то здесь храниться обрезаное фото до сохранения
   img_crop_info: 
@@ -35,8 +34,6 @@ const initialState =
 export const profileReducer = (state = initialState, action) => {
   switch (action.type) 
   {
-    case ACTION_LOGOUT:
-      return {...initialState, redirect_back: !state.redirect_back }
     case ACTION_CHANGE_INPUT_DATA_ALL:
       {
         return action.payload.img_src === "" ? {...state , ...action.payload, img_src : initialState.img_src } : {...state , ...action.payload }; // возможно криво работает

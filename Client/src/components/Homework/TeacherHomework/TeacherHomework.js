@@ -93,8 +93,8 @@ export const TeacherHomework = ({state}) =>
 
     let onShowAddClassPopup = () =>
     {   
-        if(jwtDecode(window.localStorage.getItem("token")).isFilledProfile)
-        {
+        if(state.isFilledProfile) {
+            
             state.dispatch(ActionCreators.change_homework_show_popup_class("homework_popup_active")); 
             state.dispatch(ActionCreators.change_homework_popup_type("homework_add_class_popup")); 
         } 

@@ -9,7 +9,7 @@ class Homework extends Component
     render()
     {   
         if(!this.props.isLogged) return (<Redirect to = "/signup" />);
-        switch(window.localStorage.getItem('userType'))
+        switch(this.props.userType)
         {
             case "teacher" :
                 return(<TeacherHomework state = {this.props}/>)

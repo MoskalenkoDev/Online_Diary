@@ -47,8 +47,11 @@ class UserService {
         if(anotherModelFinded || user) throw ApiError.BadRequest("already registered user"); // должна отправится ошибка
 
         const activationLink = uuid.v4();
-        try { await mail_service.sendMail(email, `${process.env.BACK_END_URL}/api/activate_mail/${activationLink}`); }
-        catch(e) {throw ApiError.MailFail("mailer can't send activation mail");}
+        try { 
+           let result = await mail_service.sendMail(email, `${process.env.BACK_END_URL}/api/activate_mail/${activationLink}`); 
+           console.log(result);
+        }
+        catch(e) {console.log(e);throw ApiError.MailFail("mailer can't send activation mail");}
 
         let userModel = await userTypeModel.userModel.create({email, password}); // all other params are defined in the model by default
         
@@ -68,13 +71,13 @@ class UserService {
         let userType = record.ability_type.split("_")[0];
         let userTypeModel = getUserTypeModel(userType);
 
-        const userDto = new UserDto(user);
+        const userDto = new UserDto(user, userType);
         const tokens = token_service.generateTokens({...userDto});
         await token_service.saveToken(userTypeModel.tokenModel, userDto.id, tokens.refreshToken);
 
         await user_activation_link_model.deleteOne(record);
 
-        return {tokens, userType};
+        return {tokens};
     }
 
     async user_login(userType, email, password) { // here we got plain password
@@ -87,7 +90,7 @@ class UserService {
         if(!user.isActivated) throw ApiError.BadRequest("unconfirmed email");
         if(!await argon2.verify(user.password , password)) throw ApiError.BadRequest("incorrect password");
         
-        const userDto = new UserDto(user);
+        const userDto = new UserDto(user, userType);
         const tokens = token_service.generateTokens({...userDto}); // вместо payload мы сюда будем передавать информацию о пользователе, где будет храниться в классе user.dto
         await token_service.saveToken(userTypeModel.tokenModel, userDto.id, tokens.refreshToken);
         return {...tokens};
@@ -101,18 +104,20 @@ class UserService {
         return token;
     }
 
-    async user_refresh_token(userType , refreshToken) {
+    async user_refresh_token(refreshToken) {
 
-        let userTypeModel = getUserTypeModel(userType);
+        const userData = await token_service.validateRefreshToken(refreshToken); // here we got user data hashed inside token
+
+        let userTypeModel = getUserTypeModel(userData.userType);
 
         if(!refreshToken) throw ApiError.UnauthorizedError();
-        const userData = await token_service.validateRefreshToken(refreshToken); // here we got user data hashed inside token
+        
         const tokenFromDB = await token_service.findToken(userTypeModel.tokenModel, refreshToken);
 
         if(!userData || !tokenFromDB) { throw ApiError.UnauthorizedError()}
 
         const user = await userTypeModel.userModel.findById(userData.id);
-        const userDto = new UserDto(user); // we find it in DB because some data may have changed before token expired 
+        const userDto = new UserDto(user, userData.userType); // we find it in DB because some data may have changed before token expired 
         const tokens = token_service.generateTokens({...userDto}); // вместо payload мы сюда будем передавать информацию о пользователе, где будет храниться в классе user.dto
         await token_service.saveToken(userTypeModel.tokenModel, userDto.id, tokens.refreshToken);
         return {...tokens}; 

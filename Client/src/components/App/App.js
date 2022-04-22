@@ -22,7 +22,7 @@ export default class  App extends Component
             <Route path= "/" exact><Welcome_page lang ={this.props}/></Route>
             <Route path = "/signup"><WrappedRegistration lang= {this.props}/></Route>
             <Route path= "/diary_menu"><Menu lang = {this.props}/></Route>
-            <Route path="/account_activation/:isStudent/:accessToken"><Account_Activation lang = {this.props.language}/></Route>
+            <Route path="/account_activation/:accessToken"><Account_Activation lang = {this.props.language}/></Route>
           </Switch> 
           <Route path= "/diary_menu/profile" ><WrappedProfile lang = {this.props}/></Route>
           <Route path= "/diary_menu/homework"><WrappedHomework lang = {this.props}/></Route>

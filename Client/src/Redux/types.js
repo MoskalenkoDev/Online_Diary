@@ -1,5 +1,4 @@
 //////////////////////////////////////////////////////////////////////////// - Profile
-export const ACTION_LOGOUT = 'ACTION_LOGOUT';
 export const ACTION_CHANGE_INPUT_DATA_ALL = 'ACTION_CHANGE_INPUT_DATA_ALL';
 export const ACTION_CHANGE_INPUT_DATA_IMG_SRC = 'ACTION_CHANGE_INPUT_DATA_IMG_SRC';
 export const ACTION_CHANGE_INPUT_DATA_TEMPORARY_IMG_SRC = 'ACTION_CHANGE_INPUT_DATA_TEMPORARY_IMG_SRC';
@@ -40,4 +39,6 @@ export const ACTION_CHANGE_LANGUAGE_SECOND_LABEL= 'ACTION_CHANGE_LANGUAGE_SECOND
 
 //////////////////////////////////////////////////////////////////////////// - SignupReducer
 export const ACTION_CHANGE_IS_LOGGED = 'ACTION_CHANGE_IS_LOGGED';
+export const ACTION_CHANGE_USER_TYPE = 'ACTION_CHANGE_USER_TYPE';
+export const ACTION_CHANGE_IS_FILLED_PROFILE = 'ACTION_CHANGE_IS_FILLED_PROFILE';
 //////////////////////////////////////////////////////////////////////////// - SignupReducer

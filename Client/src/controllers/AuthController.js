@@ -1,6 +1,7 @@
 import AuthService from "../services/AuthService";
 import * as actionCreators from "../Redux/Actions/actions";
-import {change_is_logged} from '../Redux/Actions/action_signup';
+import jwtDecode from 'jwt-decode';
+import { change_is_logged, change_is_filled_profile, change_user_type } from '../Redux/Actions/action_signup';
 let timer;
 let showTime = 4000;
 let showActivateMailPopupTime = 7000;
@@ -59,7 +60,7 @@ export function registration(whoLog, email, password, lang){
             showPopup(setState, langObj[lang].popupActivateMailTitle, true , showActivateMailPopupTime);
         }
         catch(e) {
-
+            console.log(e);
             switch(e.response.status) {
     
                 case 400 : {
@@ -96,7 +97,10 @@ export function login(whoLog, email, password, lang) {
         try {
            let response = await AuthService.login(whoLog, email, password);
            localStorage.setItem("token",response.data.accessToken);
-           localStorage.setItem("userType", whoLog);
+
+           let decodedInfo = jwtDecode(response.data.accessToken);
+           dispatch(change_is_filled_profile(decodedInfo.isFilledProfile));
+           dispatch(change_user_type(decodedInfo.userType));
            dispatch(change_is_logged(true));
         }
         catch(e) {
@@ -126,15 +130,18 @@ export function login(whoLog, email, password, lang) {
 
 }
 
-export function logout(whoLog) {
+export function logout(userType) {
 
     return async(dispatch) => {
 
         try {
-            localStorage.removeItem("userType");
             localStorage.removeItem("token");
+
             dispatch(change_is_logged(false)); // no matter if we can log out in the server side (since we  have already removed the token from localstorage )
-            await AuthService.logout(whoLog);
+            dispatch(change_is_filled_profile(false));
+            dispatch(change_user_type(""));
+            
+            await AuthService.logout(userType);
         }   
         catch(e) {
             console.log("куда-то рефреш токен пропал, но мы его с куки удалили, так что ничего страшного");

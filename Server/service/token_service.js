@@ -12,7 +12,7 @@ class TokenService
         };
     }
 
-    async saveToken(tokenModel,userId, refresh_token) {
+    async saveToken(tokenModel, userId, refresh_token) {
 
         const tokenData = await tokenModel.findOne({user : userId});
         if(tokenData) {

@@ -36,6 +36,7 @@ export const TeacherAddClassPopup = ({state,onHidePopup,onPopupClassTitleChange,
             addClassTitle: "Create class"
         }
     };
+
     let onPopupSubmit = async() =>
     {
         let final_school_subject_arr = state.school_subjects.split(',').map((subj) => { // фильтруем нашу строку предметов и превращаем ее в массив
@@ -53,7 +54,7 @@ export const TeacherAddClassPopup = ({state,onHidePopup,onPopupClassTitleChange,
         {
             await add_new_class( state.new_class_title, final_school_subject_arr)(state.dispatch); // WE NEED TO IMPROVE THIS SHIT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             onHidePopup();
-            get_classes_info();
+            get_classes_info(); //??
         }
     }
 

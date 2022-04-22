@@ -63,7 +63,7 @@ export const Student_Profile = ({input_data}) =>
         
         let {name,surname,lastName} = input_data;
 
-        if(name.length || surname.length || lastName.length) {
+        if(name.length && surname.length && lastName.length) {
             let changedDataObj = {
                 img_src : input_data.img_src,
                 name,
@@ -71,7 +71,7 @@ export const Student_Profile = ({input_data}) =>
                 lastName,
                 phoneNumbers : input_data.phoneNumbers              
             }       
-            await profile_put_data(changedDataObj)(input_data.dispatch);
+            await profile_put_data(changedDataObj, this.props.userType)(input_data.dispatch);
         }
 
         else showPopup(input_data.dispatch, langObj[lang].warningTitleRequired, false);

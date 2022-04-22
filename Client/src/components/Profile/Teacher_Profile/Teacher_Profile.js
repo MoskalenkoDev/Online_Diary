@@ -80,10 +80,9 @@ export const Teacher_Profile = ({input_data}) =>
                 lastName,
                 school,
                 phoneNumbers : input_data.phoneNumbers            
-            }       
-            await profile_put_data(changedDataObj)(input_data.dispatch);
+            }      
+            await profile_put_data(changedDataObj, input_data.userType)(input_data.dispatch);
         }
-
         else showPopup(input_data.dispatch, langObj[lang].warningTitleRequired, false);
     }
 

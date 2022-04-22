@@ -1,4 +1,4 @@
-import $api from "../http/axios_instance";
+import $api, {API_URL} from "../http/axios_instance";
 import axios from "axios";
 export default class AuthService {
  
@@ -15,7 +15,7 @@ export default class AuthService {
     }
 
     static async refresh(userType) {
-        return axios.get(`/${userType}/refresh`, {withCredentials: true});
+        return axios.get(`${API_URL}/${userType}/refresh`, {withCredentials: true});
     }
 
 }

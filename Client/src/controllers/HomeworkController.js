@@ -35,6 +35,7 @@ export function get_classes_info() {
 
         try {
             let response = await HomeworkService.get_classes_info();
+            console.log(response.data);
             return response.data;
         }
         catch(e) {
