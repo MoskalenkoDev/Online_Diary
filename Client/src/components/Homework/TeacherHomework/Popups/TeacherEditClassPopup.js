@@ -1,10 +1,21 @@
 import * as ActionCreators from '../../../../Redux/Actions/actions_homework';
 import Axios from 'axios';
 
-import { edit_class, delete_class } from '../../../../controllers/HomeworkController';
+import { edit_class, delete_class, get_classes_info } from '../../../../controllers/HomeworkController';
 
 
-export const TeacherEditClassPopup = ({state,onHidePopup,onPopupClassTitleChange,onPopupSchoolSubjectsChange,timer, get_classes_info}) =>
+export const TeacherEditClassPopup = ({
+    state,
+    school_subjects,
+    new_class_title,
+    edit_obj_id,
+    homework_popup_active_type,
+    onHidePopup,
+    onPopupClassTitleChange,
+    onPopupSchoolSubjectsChange,
+    timer, 
+    setClasses_info
+}) =>
 {
     let lang = state.lang.language;
     let langObj =
@@ -49,12 +60,12 @@ export const TeacherEditClassPopup = ({state,onHidePopup,onPopupClassTitleChange
 
     let onSaveChanges = async() =>
     {
-        let final_school_subject_arr = state.school_subjects.split(',').map((subj) => { // фильтруем нашу строку предметов и превращаем ее в массив
+        let final_school_subject_arr = school_subjects.split(',').map((subj) => { // фильтруем нашу строку предметов и превращаем ее в массив
             let sub = subj.trim();
             return sub.charAt(0).toUpperCase() + sub.slice(1);
         }).filter(subj => {if(subj != 0) return subj;});
 
-        if(state.new_class_title === "" || final_school_subject_arr.length === 0) // проверяем не пустые ли обязательные поля в попапе
+        if(new_class_title === "" || final_school_subject_arr.length === 0) // проверяем не пустые ли обязательные поля в попапе
         {   
             window.clearTimeout(timer.current);
             state.dispatch(ActionCreators.change_homework_popup_warning_title_class("homework_popup_warning_active"));
@@ -63,49 +74,22 @@ export const TeacherEditClassPopup = ({state,onHidePopup,onPopupClassTitleChange
         }
         else 
         {
-            await edit_class(state.edit_obj_id, state.new_class_title, final_school_subject_arr)(state.dispatch); // WE NEED TO IMPROVE THIS SHIT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        //     Axios.post('http://localhost:3001/teacher/diary_menu/homework/edit_class',
-        //     {
-        //         _id : state.edit_obj_id,
-        //         title : state.new_class_title,
-        //         school_subjects : final_school_subject_arr
-        //     }).then(response =>
-        //     {
-        //         if(response.status == 200){get_classes_info();onHidePopup();} 
-        //         else
-        //         {
-        //             window.clearTimeout(timer.current);
-        //             state.dispatch(ActionCreators.change_homework_warning_title(langObj[lang].warningEditTitle));
-        //             state.dispatch(ActionCreators.change_homework_popup_warning_title_class("homework_popup_warning_active"));
-        //             timer.current = window.setTimeout(()=> {state.dispatch(ActionCreators.change_homework_popup_warning_title_class(""))},4000);
-        //         };
-        //     });
+            await edit_class(edit_obj_id, new_class_title, final_school_subject_arr); 
+            await get_classes_info(setClasses_info);
+            onHidePopup();
         }
 
     }
 
     let onDeleteClass = async() =>
     {
-        await delete_class(state.edit_obj_id)(state.dispatch); // WE NEED TO IMPROVE THIS SHIT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-        // Axios.post('http://localhost:3001/teacher/diary_menu/homework/delete_class',
-        // {
-        //     _id : state.edit_obj_id
-        // }).then(response =>
-        // {
-        //     if(response.status == 200){get_classes_info();onHidePopup();} 
-        //     else
-        //     {
-        //         window.clearTimeout(timer.current);
-        //         state.dispatch(ActionCreators.change_homework_warning_title(langObj[lang].errorTitle));
-        //         state.dispatch(ActionCreators.change_homework_popup_warning_title_class("homework_popup_warning_active"));
-        //         timer.current = window.setTimeout(()=> {state.dispatch(ActionCreators.change_homework_popup_warning_title_class(""))},4000);
-        //     };
-        // });
+        await delete_class(edit_obj_id);
+        await get_classes_info(setClasses_info);
+        onHidePopup();
     }
 
     return(
-        <div className= {"homework_popup edit_popup " + state.homework_popup_active_type}>
+        <div className= {"homework_popup edit_popup " + homework_popup_active_type}>
 
             <div className="popup_header">
                 <span>{langObj[lang].popupHeader}</span>
@@ -121,7 +105,7 @@ export const TeacherEditClassPopup = ({state,onHidePopup,onPopupClassTitleChange
                             <span>{langObj[lang].classTitle}</span>
                             <span className = "important_field">{langObj[lang].requiredField}</span>
                         </div> 
-                        <input type="text" onChange ={onPopupClassTitleChange} value= {state.new_class_title}/>
+                        <input type="text" onChange ={onPopupClassTitleChange} value= {new_class_title}/>
                     </div>
                     
                     <div className="profile_data_fields_block">
@@ -129,7 +113,7 @@ export const TeacherEditClassPopup = ({state,onHidePopup,onPopupClassTitleChange
                             <span>{langObj[lang].subjectField}</span>
                             <span className = "important_field">{langObj[lang].requiredField}</span>
                         </div> 
-                        <input type="text" onChange= {onPopupSchoolSubjectsChange} value = {state.school_subjects}/>
+                        <input type="text" onChange= {onPopupSchoolSubjectsChange} value = {school_subjects}/>
                     </div>
 
                 </div>

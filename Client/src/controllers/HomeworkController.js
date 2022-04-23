@@ -4,20 +4,20 @@ import * as actionCreators from "../Redux/Actions/actions";
 let timer;
 let showTime = 4000;
 
-const langObj = 
+const langObj =
 {
-  ua: {
-      successChanges : "Зміни успішно збережені",
-      popupWarningUnexpected: "Щось пішло не так..."
-  },
-  ru: {
-      successChanges : "Изменения успешно сохранены",
-      popupWarningUnexpected: "Что-то пошло не так..."
-  },
-  en: {
-      successChanges : "Changes saved successfully",
-      popupWarningUnexpected: "Something went wrong..."
-  }
+    ua: {
+        successChanges: "Зміни успішно збережені",
+        popupWarningUnexpected: "Щось пішло не так..."
+    },
+    ru: {
+        successChanges: "Изменения успешно сохранены",
+        popupWarningUnexpected: "Что-то пошло не так..."
+    },
+    en: {
+        successChanges: "Changes saved successfully",
+        popupWarningUnexpected: "Something went wrong..."
+    }
 }
 
 // export const showPopup = ( dispatch, popupTitle , isSuccess) => {
@@ -27,97 +27,76 @@ const langObj =
 //     timer = setTimeout(() => { dispatch(actionCreators.change_profile_save_popup_class("")); }, showTime);
 // }
 
-export function get_classes_info() {
-    
-    return async(dispatch) => {
+export async function get_classes_info(setClasses_info) {
+    // const lang = localStorage.getItem('language');
+    try {
+        let response = await HomeworkService.get_classes_info();
+        setClasses_info(response.data);
+    }
+    catch (e) {
 
-        const lang = localStorage.getItem('language');
-
-        try {
-            let response = await HomeworkService.get_classes_info();
-            console.log(response.data);
-            return response.data;
+        switch (e.response.status) {
+            case 500: {
+                console.log(e.response)
+                // showPopup(dispatch, langObj[lang].popupWarningUnexpected, false);
+                break;
+            }
         }
-        catch(e) {
+    }
+}
 
-            switch(e.response.status) {
-                case 500 : {
-                    console.log(e.response)
-                    // showPopup(dispatch, langObj[lang].popupWarningUnexpected, false);
-                    break;
-                }
+export async function add_new_class(title, school_subjects) {
+
+    // const lang = localStorage.getItem('language');
+    try {
+        await HomeworkService.add_new_class(title, school_subjects);
+    }
+    catch (e) {
+
+        switch (e.response.status) {
+            case 500: {
+                console.log(e.response)
+                // showPopup(dispatch, langObj[lang].popupWarningUnexpected, false);
+                break;
             }
         }
     }
 
 }
 
-export function add_new_class(title, school_subjects) {
-    
-    return async(dispatch) => {
+export async function edit_class(class_id, title, school_subjects) {
+    // const lang = localStorage.getItem('language');
 
-        const lang = localStorage.getItem('language');
+    try {
+        await HomeworkService.edit_class(class_id, title, school_subjects);
+    }
+    catch (e) {
 
-        try {
-            await HomeworkService.add_new_class(title, school_subjects);
-        }
-        catch(e) {
-
-            switch(e.response.status) {
-                case 500 : {
-                    console.log(e.response)
-                    // showPopup(dispatch, langObj[lang].popupWarningUnexpected, false);
-                    break;
-                }
+        switch (e.response.status) {
+            case 500: {
+                console.log(e.response)
+                // showPopup(dispatch, langObj[lang].popupWarningUnexpected, false);
+                break;
             }
         }
     }
-
-}
-
-export function edit_class(class_id, title, school_subjects) {
-    
-    return async(dispatch) => {
-
-        const lang = localStorage.getItem('language');
-
-        try {
-            await HomeworkService.edit_class(class_id, title, school_subjects);
-        }
-        catch(e) {
-
-            switch(e.response.status) {
-                case 500 : {
-                    console.log(e.response)
-                    // showPopup(dispatch, langObj[lang].popupWarningUnexpected, false);
-                    break;
-                }
-            }
-        }
-    }
-
 }
 
 
-export function delete_class(class_id) {
-    
-    return async(dispatch) => {
+export async function delete_class(class_id) {
+    // const lang = localStorage.getItem('language');
 
-        const lang = localStorage.getItem('language');
+    try {
+        await HomeworkService.delete_class(class_id);
+    }
+    catch (e) {
 
-        try {
-            await HomeworkService.delete_class(class_id);
-        }
-        catch(e) {
-
-            switch(e.response.status) {
-                case 500 : {
-                    console.log(e.response)
-                    // showPopup(dispatch, langObj[lang].popupWarningUnexpected, false);
-                    break;
-                }
+        switch (e.response.status) {
+            case 500: {
+                console.log(e.response)
+                // showPopup(dispatch, langObj[lang].popupWarningUnexpected, false);
+                break;
             }
         }
     }
-
 }

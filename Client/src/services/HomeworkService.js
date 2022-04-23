@@ -15,7 +15,7 @@ export default class HomeworkService {
     }
 
     static async delete_class(class_id) {
-        return $api.delete(`/teacher/diary_menu/homework/delete_class`, {class_id});
+        return $api.delete(`/teacher/diary_menu/homework/delete_class`, {data : {class_id}});
     }
 
 }

@@ -1,4 +1,4 @@
-import React, {useEffect ,useRef} from 'react';
+import React, {useEffect ,useRef, useState} from 'react';
 import * as ActionCreators from '../../../Redux/Actions/actions_homework';
 import Axios from 'axios';
 import { StudentTeachersEditor } from './Popups/StudentTeachersEditor';
@@ -25,6 +25,9 @@ export const StudentHomework = ({state}) =>
         }
     };
 
+
+    const [homework_popup_active_type, setHomework_popup_active_type] = useState("homework_add_class_popup");
+
     useEffect(() => 
     {
         state.dispatch(ActionCreators.change_homework_popup_active_menu_item("active_popup_menu_teachers_list")); // Ставим активным первый пункт меню
@@ -38,19 +41,18 @@ export const StudentHomework = ({state}) =>
         window.setTimeout(()=>
         {
             state.dispatch(ActionCreators.change_homework_popup_warning_title_class(""));
-            state.dispatch(ActionCreators.change_homework_popup_clear_inputs());
-            state.dispatch(ActionCreators.change_homework_popup_active_menu_item("active_popup_menu_teachers_list"));
             if(state.homework_popup_active_menu_item !== "active_popup_menu_teachers_list")
             {
                 state.dispatch(ActionCreators.change_homework_popup_active_menu_item("active_popup_menu_teachers_list"));
             }
         },250);
+
     }
 
     let onTeacherShowPopup = () =>
     {
         state.dispatch(ActionCreators.change_homework_show_popup_class("homework_popup_active"));
-        state.dispatch(ActionCreators.change_homework_popup_type("homework_students_editor"));
+        setHomework_popup_active_type("homework_students_editor");
         state.dispatch(ActionCreators.change_homework_popup_active_menu_item("active_popup_menu_teachers_list"));
     }
 

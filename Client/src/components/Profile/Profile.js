@@ -11,7 +11,6 @@ import { Redirect } from 'react-router-dom';
 class Profile extends Component {
 
     async componentDidMount() {
-        console.log("yes")
         await profile_get_data(this.props.userType)(this.props.dispatch);
     }
 

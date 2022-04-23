@@ -11,7 +11,7 @@ export const Image_Picker = ({input_data}) =>
     {
         ua:
         {
-            warningSize: "Розмір файла має бути не більше 250 кб",
+            warningSize: "Розмір файла має бути не більше 1мб",
             warningType: "Тип файла має бути jpg png x-png jpeg",
             imageBgSpan: "Ваш аватар",
             changeImgBtn: "Змінити фотографію",
@@ -23,7 +23,7 @@ export const Image_Picker = ({input_data}) =>
         },
         ru:
         {
-            warningSize: "Размер файла должен быть не более 250 кб",
+            warningSize: "Размер файла должен быть не более 1мб",
             warningType: "Тип файла должен быть jpg png x-png jpeg",
             imageBgSpan: "Ваш аватар",
             changeImgBtn: "Сменить фотографию",
@@ -35,7 +35,7 @@ export const Image_Picker = ({input_data}) =>
         },
         en:
         {
-            warningSize: "File size must be less 250 kb",
+            warningSize: "File size must be less 1mb",
             warningType: "File type must be jpg png x-png jpeg",
             imageBgSpan: "Your avatar",
             changeImgBtn: "Change image",
@@ -47,7 +47,7 @@ export const Image_Picker = ({input_data}) =>
         }
     }
 
-    const maxFileSize = 25000000; //bytes == 250kb
+    const maxFileSize = 1000000; //bytes == 250kb
     const acceptedFileTypes = "image/x-png, image/png, image/jpg, image/jpeg";
     const acceptedFileTypesArray = acceptedFileTypes.split(',').map(item => (item.trim()));
     const inpFileRef = useRef();
