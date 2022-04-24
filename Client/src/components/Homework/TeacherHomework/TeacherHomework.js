@@ -1,6 +1,5 @@
 import React, {useEffect ,useRef, useState} from 'react';
 import * as ActionCreators from '../../../Redux/Actions/actions_homework';
-import jwtDecode from 'jwt-decode';
 import {TeacherAddClassPopup} from './Popups/TeacherAddClassPopup';
 import {TeacherEditClassPopup} from './Popups/TeacherEditClassPopup';
 import {TeacherCopyInviteLink} from './Popups/TeacherCopyInviteLink';

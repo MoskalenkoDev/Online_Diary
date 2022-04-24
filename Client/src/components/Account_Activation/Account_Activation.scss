@@ -1,68 +1,30 @@
-.menu_wrapper
-{
-	display: flex;
-	width: clamp(500px,55vw,62vw);
-	background: rgb(255, 255, 255);
-	border-radius: 0px 0px 10px 10px;
-	margin: 0 auto;
-	font-family: 'Nunito', sans-serif;
-}
-
-.main_nav 
-{
-	position: relative;
+.account_activated_wrapper {
+    font-family: 'Alegreya Sans', sans-serif;
     display: flex;
-	width: 85%;
-	margin: auto;
-	justify-content: space-between;
+    height: 100vh;
+    width: 100vw;
+    & .languages_nav {
+        top: 0.9vmax;
+        right: 0.9vmax;
+    }
 }
 
-.main_nav a
-{
-	height: 100%;
-	display: flex;
-	padding: clamp(15px,0.8vmax,50px); 
-	& .a_inner_wrapper
-	{
-		display: flex;
-		margin: auto;
-	}
-	& span 
-	{
-		color: #024047;
-		font-size: clamp(14px,1.1vmax,1.2vmax);
-		margin: auto 0;
-	}
-	& img 
-	{
-		height: clamp(28px, 2.3vmax, 2.3vmax); 
-		padding-right: 1vmax; 
-		margin: auto 0;
-	}
-}
-
-@media(max-width : 530px)
-{
-	.menu_wrapper
-	{
-		width: 94vw;
-	}
-	.main_nav  
-	{
-		width: 100%;
-		justify-content: space-around;
-
-		& a {padding: 9px;}  
-		& a span 
-		{
-			display: none;
-		}
-
-		& a img 
-		{
-			height: 40px;
-			padding: 0px;
-		}
-		
-	}
+.account_activated {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    width: clamp(270px, 41vw, 90vw);
+    background: #ffffff;
+    padding: 20px 15px;
+    border-radius: 10px;
+    & span {
+        text-align: center;
+        color: white;
+        color: #486c70;
+        font-size: clamp(20px, 2vw, 3vw);
+    }
+    & .header {
+        font-size: clamp(27px, 2.8vw, 5vw);
+        margin-bottom: 10px;
+    }
 }

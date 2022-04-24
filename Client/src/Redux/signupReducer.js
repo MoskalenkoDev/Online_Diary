@@ -13,10 +13,17 @@ const initialState = {
 
 let token = localStorage.getItem("token");
 if(token) {
-  initialState.isLogged = true;
-  let decodedInfo = jwtDecode(token);
-  initialState.userType = decodedInfo.userType;
-  initialState.isFilledProfile = decodedInfo.isFilledProfile;
+  let decodedInfo;
+  try {
+    decodedInfo = jwtDecode(token);
+    initialState.isLogged = true;
+    initialState.userType = decodedInfo.userType;
+    initialState.isFilledProfile = decodedInfo.isFilledProfile;
+  }
+  catch(e) {
+    localStorage.removeItem("token")
+  }
+
   console.log("Hello from signupReducer");
 } 
 

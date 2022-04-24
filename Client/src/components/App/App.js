@@ -12,6 +12,7 @@ import {Account_Activation} from '../Account_Activation/Account_Activation';
 
 export default class  App extends Component
 {
+
   render() 
   {  
     // є ідея що якщо уже тут змінити signup props то ререндер станеться і воно відкине сторінку назад

@@ -62,7 +62,7 @@ class UserService {
     async activate_mail(activalionLink) { // we will add promise all in future
 
         const record = await user_activation_link_model.findOne({"activation_link" : activalionLink});
-        if(!record) {throw ApiError.MailFail("invalid activation link");}
+        if(!record) {throw new Error("")}
 
         const user = await model(record.ability_type).findById(record.user_id);
         user.isActivated = true; 

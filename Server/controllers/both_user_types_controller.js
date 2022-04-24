@@ -56,6 +56,7 @@ class BothUserTypesContrioller {
             const {refreshToken} = req.cookies;
             const userData = await user_service.user_refresh_token(refreshToken); // we will get the userType after parsing the refreshToken 
             res.cookie('refreshToken',userData.refreshToken, {maxAge : 30 * 24 * 60 * 60 * 1000, httpOnly : true});
+            console.log(userData);
             return res.json(userData);
         }
         catch(e) {
@@ -82,7 +83,7 @@ class BothUserTypesContrioller {
             return res.redirect(`${process.env.FRONT_END_URL}/account_activation/${userData.tokens.accessToken}`); 
         }
         catch(e) {
-            next(e);
+            return res.redirect(`${process.env.FRONT_END_URL}/account_activation/fail`);
         }
 
     }

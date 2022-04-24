@@ -70,7 +70,6 @@ export function profile_put_data(changedData, userType) {
                 case 400: {
                     try {
                         let response = await AuthService.refresh(userType); // юзаю так походу щоб воно не попало в інтерцептор та не повторило запит ще раз
-                        console.log(response);
                         localStorage.setItem("token", response.data.accessToken);
 
                         let decodedInfo = jwtDecode(response.data.accessToken);
