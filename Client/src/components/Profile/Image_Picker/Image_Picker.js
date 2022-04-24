@@ -11,43 +11,43 @@ export const Image_Picker = ({input_data}) =>
     {
         ua:
         {
-            warningSize: "Розмір файла має бути не більше 1мб",
+            warningSize: "Розмір файла має бути не більше 5 мб",
             warningType: "Тип файла має бути jpg png x-png jpeg",
             imageBgSpan: "Ваш аватар",
             changeImgBtn: "Змінити фотографію",
             popupHeaderTitle: "Завантаження нового фото",
             popupContentInfo: "Ви можете завантажити зображення в форматі JPG PNG X-PNG JPEG",
             popupChooseImgBtn: "Виберіть файл",
-            popupFooterInfo: "Розмір фотографії має бути не більше 250 кб",
+            popupFooterInfo: "Розмір фотографії має бути не більше 5 мб",
             popupSaveBtn: "Зберегти"
         },
         ru:
         {
-            warningSize: "Размер файла должен быть не более 1мб",
+            warningSize: "Размер файла должен быть не более 5 мб",
             warningType: "Тип файла должен быть jpg png x-png jpeg",
             imageBgSpan: "Ваш аватар",
             changeImgBtn: "Сменить фотографию",
             popupHeaderTitle: "Загрузка новой фотографии",
             popupContentInfo: "Вы можете загрузить изображения в формате JPG PNG X-PNG JPEG",
             popupChooseImgBtn: "Выберите файл",
-            popupFooterInfo: "Размер загружаемой фотографии должен не превышать 250 кб",
+            popupFooterInfo: "Размер загружаемой фотографии должен не превышать 5 мб",
             popupSaveBtn: "Сохранить"
         },
         en:
         {
-            warningSize: "File size must be less 1mb",
+            warningSize: "File size must be less 5 mb",
             warningType: "File type must be jpg png x-png jpeg",
             imageBgSpan: "Your avatar",
             changeImgBtn: "Change image",
             popupHeaderTitle: "Choosing new image",
             popupContentInfo: "You can upload images as JPG PNG X-PNG JPEG",
             popupChooseImgBtn: "Choose file",
-            popupFooterInfo: "File size must be less 250 kb",
+            popupFooterInfo: "File size must be less 5 mb",
             popupSaveBtn: "Save"
         }
     }
 
-    const maxFileSize = 1000000; //bytes == 250kb
+    const maxFileSize = 5000000; //bytes == 5mb
     const acceptedFileTypes = "image/x-png, image/png, image/jpg, image/jpeg";
     const acceptedFileTypesArray = acceptedFileTypes.split(',').map(item => (item.trim()));
     const inpFileRef = useRef();

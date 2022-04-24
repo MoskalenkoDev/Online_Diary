@@ -27,11 +27,11 @@ const langObj =
 //     timer = setTimeout(() => { dispatch(actionCreators.change_profile_save_popup_class("")); }, showTime);
 // }
 
-export async function get_classes_info(setClasses_info) {
+export async function get_classes_info(li_creator) {
     // const lang = localStorage.getItem('language');
     try {
         let response = await HomeworkService.get_classes_info();
-        setClasses_info(response.data);
+        li_creator(response.data);
     }
     catch (e) {
 

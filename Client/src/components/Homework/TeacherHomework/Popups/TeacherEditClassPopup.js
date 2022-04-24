@@ -14,7 +14,7 @@ export const TeacherEditClassPopup = ({
     onPopupClassTitleChange,
     onPopupSchoolSubjectsChange,
     timer, 
-    setClasses_info
+    li_creator
 }) =>
 {
     let lang = state.lang.language;
@@ -75,7 +75,7 @@ export const TeacherEditClassPopup = ({
         else 
         {
             await edit_class(edit_obj_id, new_class_title, final_school_subject_arr); 
-            await get_classes_info(setClasses_info);
+            await get_classes_info(li_creator);
             onHidePopup();
         }
 
@@ -84,7 +84,7 @@ export const TeacherEditClassPopup = ({
     let onDeleteClass = async() =>
     {
         await delete_class(edit_obj_id);
-        await get_classes_info(setClasses_info);
+        await get_classes_info(li_creator);
         onHidePopup();
     }
 

@@ -34,8 +34,6 @@ export const TeacherHomework = ({state}) =>
     }
     
     const [invite_link, setInvite_link] = useState(""); // ссылка, по которой студенты будут регистрироватся на преподавателей
-    const [classes_li_list, setClasses_li_list] = useState([]);
-    const [classes_info, setClasses_info] = useState([]);
     const [school_subjects, setSchool_subjects] = useState(""); // пока что строка, но при отправке на бек мы превратим ее в массив
     const [new_class_title, setNew_class_title] = useState("");
     const [edit_obj_id, setEdit_obj_id] = useState(""); // _id обьекта в бд который мы изменяем или удаляем
@@ -74,18 +72,20 @@ export const TeacherHomework = ({state}) =>
                 </li>
             )
         });
-        setClasses_li_list(our_li_components);
+        state.dispatch(ActionCreators.change_homework_classes_li_list(our_li_components));
+        // setClasses_li_list(our_li_components);
     }
 
     useEffect(async() => 
     {
-        await get_classes_info(setClasses_info); // in my opinion it is correct
+        await get_classes_info(li_creator); // in my opinion it is correct
+        console.log(state)
         state.dispatch(ActionCreators.change_homework_popup_active_menu_item("active_popup_menu_students_list")); // Ставим активным первый пункт меню
     },[]);
 
-    useEffect(async() => {
-        li_creator(classes_info);
-    },[classes_info])
+    // useEffect(async() => {
+    //     li_creator(classes_info);
+    // },[classes_info])
 
     let timer = useRef(null);
 
@@ -142,7 +142,7 @@ export const TeacherHomework = ({state}) =>
                     onPopupClassTitleChange = {onPopupClassTitleChange} 
                     onPopupSchoolSubjectsChange = {onPopupSchoolSubjectsChange} 
                     timer = {timer}
-                    setClasses_info = {setClasses_info}
+                    li_creator = {li_creator}
                 />
                 <TeacherEditClassPopup 
                     state = {state} 
@@ -153,7 +153,7 @@ export const TeacherHomework = ({state}) =>
                     onHidePopup = {onHidePopup} 
                     onPopupClassTitleChange = {onPopupClassTitleChange} 
                     onPopupSchoolSubjectsChange = {onPopupSchoolSubjectsChange}
-                    setClasses_info = {setClasses_info}
+                    li_creator = {li_creator}
                     timer = {timer}
                 />
                 <TeacherStudentsEditor
@@ -167,7 +167,7 @@ export const TeacherHomework = ({state}) =>
 
             <div className="homework_class_list_block">
                 <ul className= "homework_class_list">
-                    {classes_li_list}
+                    {state.homework_classes_li_list}
                 </ul>
             </div>
 

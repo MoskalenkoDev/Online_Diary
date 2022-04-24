@@ -12,7 +12,7 @@ export const TeacherAddClassPopup = ({
     onHidePopup,
     onPopupClassTitleChange,
     onPopupSchoolSubjectsChange,
-    setClasses_info,
+    li_creator,
     timer
 }) => {
     
@@ -62,7 +62,7 @@ export const TeacherAddClassPopup = ({
         }
         else {
             await add_new_class(new_class_title, final_school_subject_arr);
-            await get_classes_info(setClasses_info);
+            await get_classes_info(li_creator);
             onHidePopup();
         }
     }

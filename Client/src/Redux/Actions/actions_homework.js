@@ -1,6 +1,7 @@
 import {
   ACTION_CHANGE_HOMEWORK_SHOW_POPUP, ACTION_CHANGE_HOMEWORK_POPUP_WARNING_TITLE_CLASS,
-  ACTION_CHANGE_HOMEWORK_POPUP_WARNING_TITLE, ACTION_CHANGE_HOMEWORK_POPUP_ACTIVE_MENU_ITEM
+  ACTION_CHANGE_HOMEWORK_POPUP_WARNING_TITLE, ACTION_CHANGE_HOMEWORK_POPUP_ACTIVE_MENU_ITEM,
+  ACTION_CHANGE_HOMEWORK_CLASSES_LI_LIST
 } from '../types';
 
 export function change_homework_show_popup_class(isShowClass) {
@@ -28,5 +29,12 @@ export function change_homework_popup_active_menu_item(new_active_item) {
   return {
     type: ACTION_CHANGE_HOMEWORK_POPUP_ACTIVE_MENU_ITEM, // )))
     payload: new_active_item
+  }
+}
+
+export function change_homework_classes_li_list(new_list) {
+  return {
+    type: ACTION_CHANGE_HOMEWORK_CLASSES_LI_LIST, // )))
+    payload: new_list
   }
 }
