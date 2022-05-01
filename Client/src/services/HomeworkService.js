@@ -18,4 +18,14 @@ export default class HomeworkService {
         return $api.delete(`/teacher/diary_menu/homework/delete_class`, {data : {class_id}});
     }
 
+    //////////////////////////////////////////StudentHomeworkController///////////////////////////////////////////////////
+
+    static async search_teacher_by_id(_id) {
+        return $api.get(`/student/diary_menu/homework/search_teacher_by_id/${_id}`)
+    }
+
+    static async send_subscription_request(class_id) {
+        return $api.post(`/student/diary_menu/homework/send_subscription_request`, {class_id});
+    }
+
 }

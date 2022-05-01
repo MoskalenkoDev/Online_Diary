@@ -10,7 +10,9 @@ const initialState =
   homework_popup_active_menu_item : "active_popup_menu_students_list", // "active_popup_menu_requests_list" "active_popup_menu_invite_link" 
   homework_warning_title : "..", // 
   popup_warning_class: "", //активный класс - homework_popup_warning_active
-  homework_classes_li_list: []
+  homework_classes_li_list: [],
+  homework_subscribed_teacher_cards : [], // for the list of teachers we are subscribed to
+  homework_request_teacher_cards: [], // for the list of teachers to whom the request was sent
 };
 
 

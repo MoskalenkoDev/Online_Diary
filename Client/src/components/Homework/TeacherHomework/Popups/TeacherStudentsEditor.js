@@ -14,6 +14,7 @@ export const TeacherStudentsEditor= ({state,invite_link,homework_popup_active_ty
             menuStudents: "Студенти",
             menuRequests : "Запити",
             menuInvite : "Посилання",
+            copyBtnText: "Копіювати",
             inviteLinkDescription: "Це посилання для реєстрації на ваш курс. Відправте його своїм учням.",
         },
         ru:
@@ -22,6 +23,7 @@ export const TeacherStudentsEditor= ({state,invite_link,homework_popup_active_ty
             menuStudents: "Студенты",
             menuRequests : "Запросы",
             menuInvite : "Ссылка",
+            copyBtnText: "Копировать",
             inviteLinkDescription: "Это ссылка для регистрации на ваш курс.Скиньте ее своим ученикам.",
         },
         en: 
@@ -30,6 +32,7 @@ export const TeacherStudentsEditor= ({state,invite_link,homework_popup_active_ty
             menuStudents: "Students",
             menuRequests : "Requests",
             menuInvite : "Invite link",
+            copyBtnText: "Copy",
             inviteLinkDescription: "This is a link to an invitation to your course.Send this to your students.",
         }
     };
@@ -66,18 +69,21 @@ export const TeacherStudentsEditor= ({state,invite_link,homework_popup_active_ty
                     <li className = {"homework_popup_students_menu_requests_list "} onClick = {() => onMenuItemClick("active_popup_menu_requests_list")}>{langObj[lang].menuRequests}</li>
                     <li className = {"homework_popup_students_menu_invite_link "} onClick = {() => onMenuItemClick("active_popup_menu_invite_link")}>{langObj[lang].menuInvite}</li>
                 </nav>
+                
                 <div className="homework_popup_menu_item_content">
 
                     <div className = {"homework_popup_menu_item_content_invite_link " + state.homework_popup_active_menu_item}>
+
                         <div className="homework_popup_menu_item_content_invite_link_inner_content">
 
                             <div className="homework_popup_menu_item_content_invite_link_input_wrapper">
                                 <input type="text" value = {invite_link} readOnly/>
-                                <button className = "homework_grey_btn invite_link_copy_btn" onClick = {onCopyInviteLink}></button>
+                                <button className = "blue_btn homework_popup_btn" onClick = {onCopyInviteLink}>{langObj[lang].copyBtnText}</button>
                             </div>
                             <span>{langObj[lang].inviteLinkDescription}</span>
 
                         </div>
+
                     </div>
 
                 </div>

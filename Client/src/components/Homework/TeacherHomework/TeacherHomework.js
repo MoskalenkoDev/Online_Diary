@@ -5,7 +5,7 @@ import {TeacherEditClassPopup} from './Popups/TeacherEditClassPopup';
 import {TeacherCopyInviteLink} from './Popups/TeacherCopyInviteLink';
 import {TeacherStudentsEditor} from './Popups/TeacherStudentsEditor';
 
-import { get_classes_info } from '../../../controllers/HomeworkController';
+import { get_classes_info } from '../../../controllers/TeacherHomeworkController';
 
 export const TeacherHomework = ({state}) =>
 {
@@ -72,19 +72,14 @@ export const TeacherHomework = ({state}) =>
             )
         });
         state.dispatch(ActionCreators.change_homework_classes_li_list(our_li_components));
-        // setClasses_li_list(our_li_components);
     }
 
     useEffect(async() => 
     {
         await get_classes_info(li_creator); // in my opinion it is correct
-        console.log(state)
         state.dispatch(ActionCreators.change_homework_popup_active_menu_item("active_popup_menu_students_list")); // Ставим активным первый пункт меню
     },[]);
 
-    // useEffect(async() => {
-    //     li_creator(classes_info);
-    // },[classes_info])
 
     let timer = useRef(null);
 

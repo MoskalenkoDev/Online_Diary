@@ -16,13 +16,9 @@ class TeacherService {
     }
 
     async teacher_edit_class(_id, updateObj) {
-        // const record = await class_model.findById(_id);
-        // if(!record) throw ApiError.BadRequest("wrond class_id");
-        // console.log(record);
         await class_model.findByIdAndUpdate(_id , {$set : updateObj}, function(err, doc) {
             if(err) throw ApiError.BadRequest("wrond class_id");
         });
-        // await class_model.updateOne({_id},{ $set: updateObj});
     }
 
     async teacher_get_classes(teacher_id) {

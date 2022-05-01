@@ -26,7 +26,6 @@ class TeacherController
     async teacher_delete_class(req, res,next) {
         try {
             const {class_id} = req.body;
-            console.log(class_id)
             const errors = validationResult(req);
             if(!errors.isEmpty()) {
                 return next(ApiError.BadRequest('wrong parameter type', errors.array())); 

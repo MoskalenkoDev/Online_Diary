@@ -1,7 +1,7 @@
 import * as ActionCreators from '../../../../Redux/Actions/actions_homework';
 import Axios from 'axios';
 
-import { edit_class, delete_class, get_classes_info } from '../../../../controllers/HomeworkController';
+import { edit_class, delete_class, get_classes_info } from '../../../../controllers/TeacherHomeworkController';
 
 
 export const TeacherEditClassPopup = ({

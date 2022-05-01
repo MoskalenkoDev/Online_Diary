@@ -9,8 +9,8 @@ const class_schema = new Schema({
     type: String,
     required : true
   },
-  new_students : {type: [String],default : []}, // array contains only string type
-  students: {type: [String],default : []}, // array contains only string type
+  new_students : {type: [Schema.Types.ObjectId],default : []}, // array contains only string type
+  students: {type: [Schema.Types.ObjectId],default : []}, // array contains only string type
   school_subjects : {type: [String],default : []},
 });
 

@@ -1,5 +1,4 @@
-.homework_wrapper
-{
+.homework_wrapper {
     display: flex;
     flex-direction: column;
     background: rgb(255, 255, 255);
@@ -10,133 +9,144 @@
     margin: 2em auto 2em;
 }
 
-.homework_header
-{
+.homework_header {
     display: flex;
     justify-content: space-between;
     border-bottom: 1px solid #bdbdbd;
-    & span 
-    {
+
+    & span {
         font-size: clamp(16px, 1.3vmax, 2vmax);
         color: #486c70;
         margin-top: clamp(5px, 0.5vmax, 0.55vmax);
     }
 }
 
-.homework_add_btn
-{
+.homework_add_btn {
     margin-bottom: 1.7vmax;
 }
 
-.homework_class_list_block
-{   
+.homework_class_list_block {
     width: 100%;
     margin: 1vmax auto 0px;
-    color: #024047; 
+    color: #024047;
 }
 
-.homework_class_list
-{
+.homework_class_list {
     display: flex;
     flex-direction: column;
-    & li 
-    {
+
+    & li {
         display: flex;
         justify-content: space-between;
         font-size: clamp(16px, 1.2vmax, 2vmax);
         background: #f2f4f5;
         border-radius: 0.5vmax;
         padding: clamp(12px, 0.9vmax, 2vmax);
-        &:not(:last-child) {margin-bottom: 1vmax;}
-        & span {margin: auto 0;}
+
+        &:not(:last-child) {
+            margin-bottom: 1vmax;
+        }
+
+        & span {
+            margin: auto 0;
+        }
     }
 }
 
-.homework_li_buttons
-{
+.homework_li_buttons {
     display: flex;
     margin-left: 2vmax;
-    & button:not(:last-child) {margin-right: clamp(4px, 0.5vmax , 0.5vmax)}
-    & textarea {display: none;}
+
+    & button:not(:last-child) {
+        margin-right: clamp(4px, 0.5vmax, 0.5vmax)
+    }
+
+    & textarea {
+        display: none;
+    }
 }
 
-.homework_grey_btn
-{
+.homework_grey_btn {
     display: flex;
     padding: 6px;
     background: #ced4da;
     transition: 0.3s ease background-color;
-    border-radius: clamp(8px,0.5vmax,1.5vw);
-    &::before
-    {
+    border-radius: clamp(8px, 0.5vmax, 1.5vw);
+
+    &::before {
         content: "";
         display: block;
         margin: auto;
-        width:clamp(16px, 1.6vmax, 2vmax);
-        height: clamp(16px,1.6vmax, 2vmax);
+        width: clamp(16px, 1.6vmax, 2vmax);
+        height: clamp(16px, 1.6vmax, 2vmax);
         background: white;
         mask-repeat: no-repeat;
         mask-position: center;
         mask-size: contain;
-       -webkit-mask-repeat: no-repeat;
+        -webkit-mask-repeat: no-repeat;
         mask-repeat: no-repeat;
-       -webkit-mask-position: center;
+        -webkit-mask-position: center;
     }
-    &:hover 
-    {
+
+    &:hover {
         background: #adb5bd;
     }
-    &:active 
-    {
+
+    &:active {
         background: #858d96;
     }
 }
 
-.green_btn
-{
+.green_btn {
     font-size: clamp(16px, 0.8vmax, 1vmax);
     border-radius: clamp(4px, 0.2vmax, 1.5vw);
     color: rgb(252, 252, 252);
     background-color: #208b3a;
-    padding: clamp(6px,0.5vmax,0.55vmax) clamp(12px, 0.7vmax,1.05vmax);
+    padding: clamp(6px, 0.5vmax, 0.55vmax) clamp(12px, 0.7vmax, 1.05vmax);
     transition: 0.3s background-color;
-    &:hover{background:#1a7431}
-    &:active{background:#155d27}
+
+    &:hover {
+        background: #1a7431
+    }
+
+    &:active {
+        background: #155d27
+    }
 }
 
 
-.homework_li_add_homework_btn 
-{
-    &::before
-    {
+.homework_li_add_homework_btn {
+    &::before {
         mask-image: url('../../images/plus.svg');
-       -webkit-mask-image: url('../../images/plus.svg');
+        -webkit-mask-image: url('../../images/plus.svg');
     }
+
     background: #a5adb4;
-    &:hover {background: #858d96;}
-    &:active {background: #6c757d;}
+
+    &:hover {
+        background: #858d96;
+    }
+
+    &:active {
+        background: #6c757d;
+    }
 }
 
-.homework_li_students_homework_btn
-{
-    &::before
-    {
+.homework_li_students_homework_btn {
+    &::before {
         mask-image: url('../../images/user.svg');
-       -webkit-mask-image: url('../../images/user.svg');
+        -webkit-mask-image: url('../../images/user.svg');
     }
 }
 
-.homework_li_edit_homework_btn
-{
-    &::before
-    {
+.homework_li_edit_homework_btn {
+    &::before {
         mask-image: url('../../images/edit.svg');
-       -webkit-mask-image: url('../../images/edit.svg');
+        -webkit-mask-image: url('../../images/edit.svg');
     }
 }
 
-.homework_popup_wrapper
-{
+.homework_popup_wrapper {
     display: flex;
     position: fixed;
     top: 0vh;
@@ -147,82 +157,95 @@
     z-index: 50;
     visibility: hidden;
     padding: 10px 0px;
-    overflow-y:scroll;
+    overflow-y: scroll;
     opacity: 0;
     transition: opacity 0.25s ease, visibility 0.25s ease;
     &.homework_popup_active // когда активен
-    {
-        visibility: visible; 
+
+        {
+        visibility: visible;
         opacity: 1;
     }
 }
 
-.homework_popup
-{
+.homework_popup {
     display: none;
     flex-direction: column;
     border-radius: clamp(4px, 0.2vmax, 1.5vw);
     background: white;
     margin: auto;
-    width: clamp(500px,27vmax,96vw);
+    width: clamp(500px, 27vmax, 96vw);
     overflow-y: hidden;
-    & span 
-    {
+
+    & span {
         text-align: center;
         font-size: clamp(16px, 0.7vw, 1vmax);
     }
-    &.add_class_popup.homework_add_class_popup {display: flex;}
-    &.edit_popup.homework_edit_popup{display: flex;}
-    &.teachers_and_students_editor_popup.homework_students_editor{display: flex; width: clamp(500px, 35vw, 62vw);}
+
+    &.add_class_popup.homework_add_class_popup {
+        display: flex;
+    }
+
+    &.edit_popup.homework_edit_popup {
+        display: flex;
+    }
+
+    &.teachers_and_students_editor_popup.homework_students_editor {
+        display: flex;
+        width: clamp(500px, 35vw, 62vw);
+    }
 }
 
-.homework_popup_content
-{
+.homework_popup_content {
     display: flex;
     flex-direction: column;
     padding: clamp(18px, 1vw, 23px);
-    & .profile_data_fields_block
-    {
+
+    & .profile_data_fields_block {
         margin-bottom: clamp(20px, 1.1vmax, 1.5vw);
     }
-    & .important_field
-    {
+
+    & .important_field {
         font-size: clamp(13px, 0.7vmax, 0.8vmax);
     }
 }
 
-.homework_popup_input_block
-{
+.homework_popup_input_block {
     display: flex;
     flex-direction: column;
 }
 
-.homework_popup_add_class_btn
-{
+.homework_popup_add_class_btn {
     margin: auto;
     font-size: clamp(16px, 0.8vmax, 1vmax);
     border-radius: clamp(4px, 0.2vmax, 1.5vw);
 }
 
-.homework_popup_buttons_wrapper
-{
+.homework_popup_buttons_wrapper {
     display: flex;
     justify-content: space-between;
-    & .homework_popup_add_class_btn{margin: 0;}
+
+    & .homework_popup_add_class_btn {
+        margin: 0;
+    }
 }
 
-.homework_popup_delete_class_btn
-{
+.homework_popup_delete_class_btn {
     margin-right: 0.5vmax;
     font-size: clamp(16px, 0.8vmax, 1vmax);
     border-radius: clamp(4px, 0.2vmax, 1.5vw);
     background-color: #e61503;
-    &:hover{background: #cc1100;}
-    &:active{background: #af060f;}
+
+    &:hover {
+        background: #cc1100;
+    }
+
+    &:active {
+        background: #af060f;
+    }
 }
 
-.popup_warning_span
-{
+.popup_warning_span {
     display: inline-block;
     font-size: clamp(16px, 0.8vmax, 1.3vmax) !important;
     color: red;
@@ -230,11 +253,14 @@
     visibility: hidden;
     opacity: 0;
     transition: 0.4s linear;
-    &.homework_popup_warning_active {visibility: visible; opacity: 1;}
+
+    &.homework_popup_warning_active {
+        visibility: visible;
+        opacity: 1;
+    }
 }
 
-.copy_invite_link_popup
-{
+.copy_invite_link_popup {
     position: fixed;
     display: flex;
     justify-content: center;
@@ -246,23 +272,26 @@
     opacity: 0;
     transition: 0.4s ease;
     z-index: 51;
-    & .copy_invite_link_popup_span_wrapper 
-    {
+
+    & .copy_invite_link_popup_span_wrapper {
         background: rgba(0, 0, 0, 0.7);
         padding: clamp(10px, 0.8vmax, 50px) clamp(25px, 1vmax, 50px);
         border-radius: 10px;
     }
-    &.active_invite_copy_link_popup {transform: translateX(-100%); opacity: 1;}
+
+    &.active_invite_copy_link_popup {
+        transform: translateX(-100%);
+        opacity: 1;
+    }
 }
 
-.homework_popup_menu
-{
+.homework_popup_menu {
     display: flex;
     justify-content: space-between;
     list-style: none;
     margin-bottom: 15px;
-    & li 
-    {
+
+    & li {
         display: flex;
         padding: clamp(15px, 0.8vmax, 50px) 10px;
         background-color: #f0f2f5;
@@ -272,8 +301,8 @@
         transition: 0.4s;
         user-select: none;
         font-size: clamp(16px, 0.7vmax, 1vmax);
-        &::before
-        {
+
+        &::before {
             content: "";
             display: block;
             background-color: white;
@@ -281,54 +310,52 @@
     }
 }
 
-.active_popup_menu_students_list .homework_popup_students_menu_students_list ,
-.active_popup_menu_requests_list .homework_popup_students_menu_requests_list ,
-.active_popup_menu_invite_link .homework_popup_students_menu_invite_link , 
+.active_popup_menu_students_list .homework_popup_students_menu_students_list,
+.active_popup_menu_requests_list .homework_popup_students_menu_requests_list,
+.active_popup_menu_invite_link .homework_popup_students_menu_invite_link,
 .active_popup_menu_teachers_list .homework_popup_teachers_menu_teacher_list,
 .active_popup_menu_teachers_requests_list .homework_popup_teachers_menu_requests_list,
-.active_popup_menu_teachers_join .homework_popup_teachers_menu_join
-{
+.active_popup_menu_teachers_join .homework_popup_teachers_menu_join {
     color: white;
     background-color: #0183da;
 }
 
 
 
-.homework_popup_menu_item_content
-{
+.homework_popup_menu_item_content {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     width: 100%;
     height: 300px;
+    overflow-y: scroll;
     background: #f0f2f5;
 }
 
-.homework_popup_menu_item_content_invite_link , .homework_popup_menu_item_content_join
-{
+.homework_popup_menu_item_content_invite_link,
+.homework_popup_menu_item_content_join {
     display: none;
-    width: 100%;
-    height: 100%;
-}
-.homework_popup_menu_item_content_invite_link.active_popup_menu_invite_link ,
-.homework_popup_menu_item_content_join.active_popup_menu_teachers_join
-{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    padding: 10px 0px;
+    margin: auto;
 }
 
-.homework_popup_menu_item_content_invite_link_input_wrapper, 
-.homework_popup_menu_item_content_join_input_wrapper
-{
+.homework_popup_menu_item_content_invite_link.active_popup_menu_invite_link,
+.homework_popup_menu_item_content_join.active_popup_menu_teachers_join {
     display: flex;
-    width: 80%;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    width: 100%;
+}
+
+.homework_popup_menu_item_content_invite_link_input_wrapper,
+.homework_popup_menu_item_content_join_input_wrapper {
+    display: flex;
+    width: 100%;
     margin-bottom: 18px;
-    & input 
-    {
+
+    & input {
         width: 100%;
-        margin-right: 4px;
+        margin-right: 9px;
         background: white;
         font-size: clamp(16px, 1.1vmax, 1.2vmax);
         color: #024047;
@@ -336,138 +363,166 @@
         border-radius: 0.2vmax;
         resize: none;
     }
-    & .invite_link_copy_btn 
-    {
-        background: rgb(255, 255, 255);
-        &::before
-        {
-            transition: 0.25s;
-            background:  #858d96;
-            mask-image: url('../../images/paper-clip.svg');
-            -webkit-mask-image: url('../../images/paper-clip.svg');
-        }
-        &:hover::before {background: #5d6369;}
-        &:active::before {background: #3a3d41;}
-    }
-}
-.homework_popup_menu_item_content_join_input_wrapper
-{
-    margin-bottom: 0px;
-    & input {margin-right: 9px;}
+
 }
 
-.homework_popup_menu_item_content_invite_link_inner_content , 
-.homework_popup_menu_item_content_join_inner_content
-{
+.homework_popup_menu_item_content_invite_link_inner_content,
+.homework_popup_menu_item_content_join_inner_content {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    padding: 10px;
-    width: 100%;
-    & span 
-    {
+    width: 80%;
+
+    & span {
         font-size: clamp(14px, 0.85vmax, 1.2vmax);
+    }
+
+    & span.hidden {
+        display: none;
     }
 }
 
-.homework_popup_menu_item_content_join_inner_content
-{
-    padding: 10px 0px 20px;
+.homework_popup_menu_item_content_join_inner_content .popup_warning_span {
+    font-size: clamp(14px, 0.85vmax, 1.2vmax) !important;
+    position: absolute;
+    bottom: -3.75vh;
+    left: 0px;
+    right: 0px;
 }
 
-.homework_popup_btn
-{
+.homework_popup_btn {
     font-size: clamp(16px, 0.8vmax, 1vmax);
     border-radius: clamp(4px, 0.2vmax, 1.5vw);
 }
 
-.homework_popup_menu_item_content_teacher_card
-{
-    display: grid;
+
+.homework_popup_menu_item_content_teacher_card {
     grid-template-columns: minmax(55px, 1fr) 4fr;
     grid-template-areas: "img_wrapper info_card" "request_btn request_btn";
     width: 80%;
     gap: 10px;
-    margin-bottom: 10px;
     border: 2px dashed #bdbdbd;
     padding: 10px;
-    overflow-y: scroll;
+    overflow-wrap: anywhere;
+    display: none;
+    position: relative;  
+
+    &.visible_card {display: grid;} 
+    &.visible_card .check_mark {display: none;}
+    &.visible_card.already_sent{user-select: none;}
+    &.visible_card.already_sent::before{
+        content: "";
+        width: 100%;
+        height: 100%;
+        z-index: 2;
+        background: repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.333) 0 20px, rgba(134, 134, 134, 0.333) 20px 60px);
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    &.visible_card.already_sent .check_mark {
+        display: block;
+        position: absolute;
+        width: clamp(25px, 4vmax, 10vmax);
+        height: clamp(25px, 4vmax, 10vmax);
+        fill: white;
+        background-color: #059605b2;
+        border-radius: 50%;
+        top: 0px;
+        bottom: 0px;
+        left: 0px;
+        right: 0px;
+        margin: auto;
+        z-index: 2;
+
+        & path {
+            width: 100%;
+            height: 100%;
+        }
+    }
+
 }
 
-.homework_popup_menu_item_content_teacher_card_img_wrapper
-{
+
+
+.homework_popup_menu_item_content_teacher_card_img_wrapper {
     grid-area: img_wrapper;
-    & img {width: 100%;}
+
+    & img {
+        width: 100%;
+    }
 }
 
-.homework_popup_menu_item_content_teacher_card_info_block
-{
+.homework_popup_menu_item_content_teacher_card_info_block {
     grid-area: info_card;
     display: flex;
     flex-direction: column;
     align-items: start;
-    & span 
-    {
+
+    & span {
         text-align: start;
         color: #024047;
         font-size: clamp(14px, 0.7vw, 1vmax);
     }
-    & .teacher_fio
-    {
+
+    & .teacher_fio {
         font-size: clamp(16px, 1.1vmax, 1.2vmax);
     }
-    & span:not(:last-child) {margin-bottom: 10px;}
+
+    & span:not(:last-child) {
+        margin-bottom: 10px;
+    }
 }
 
-.request_btn
-{
+.request_btn {
     grid-area: request_btn;
-    margin-left:auto;
+    margin-left: auto;
 }
 
 
 
 
-@media (max-width:530px)
-{
-    .homework_wrapper
-    {
+@media (max-width:530px) {
+    .homework_wrapper {
         width: 94vw;
         margin: 1.4em auto 1.4em;
     }
-    .homework_popup.teachers_and_students_editor_popup.homework_students_editor
-    {
-        width:94vw;
-        & .homework_popup_menu li 
-        {
+
+    .homework_popup.teachers_and_students_editor_popup.homework_students_editor {
+        width: 94vw;
+
+        & .homework_popup_menu li {
             font-size: clamp(14px, 2.9vw, 3vw);
         }
     }
-    .homework_popup
-    {
+
+    .homework_popup {
         width: 94vw;
-        & .important_field {display: none;}
-        & .profile_img_choose_popup_header span 
-        {
-            padding: clamp(19px , 1vmax, 1vmax) clamp(20px , 1vmax, 1vmax);
+
+        & .important_field {
+            display: none;
+        }
+
+        & .profile_img_choose_popup_header span {
+            padding: clamp(19px, 1vmax, 1vmax) clamp(20px, 1vmax, 1vmax);
         }
 
     }
 
-    .popup_warning_span
-    {
+    .popup_warning_span {
         font-size: clamp(14px, 3vw, 3vmax) !important;
     }
-    .homework_popup_buttons_wrapper .blue_btn {padding: clamp(7px, 1.1vw, 1.5vw) clamp(6px, 2.2vw, 2.5vw);}
-    .popup_info_span
-    {
+
+    .homework_popup_buttons_wrapper .blue_btn {
+        padding: clamp(7px, 1.1vw, 1.5vw) clamp(6px, 2.2vw, 2.5vw);
+    }
+
+    .popup_info_span {
         font-size: clamp(12px, 3vmin, 3.5vmin) !important;
     }
 
     .homework_popup_menu_item_content_teacher_card,
-    .homework_popup_menu_item_content_invite_link_input_wrapper, 
-    .homework_popup_menu_item_content_join_input_wrapper
-    {
+    .homework_popup_menu_item_content_join_inner_content {
         width: 90%;
     }
 

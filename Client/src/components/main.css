@@ -3,6 +3,8 @@
 	padding: 0;
 	margin: 0;
 	border: 0;
+	-ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;
 }
 *,*:before,*:after{
 	-moz-box-sizing: border-box;

@@ -1,13 +1,37 @@
-const argon2 = require('argon2');
+const student_service = require('../service/student_service');
+const ApiError = require('../exceptions/api_error');
+const {validationResult} = require('express-validator');
 
-const student_token_model = require("../models/student_token_model");
-const student_users_model = require("../models/student_users_model");
+class StudentController {
 
-const user_service = require('../service/user_service');
-const ApiErrors = require('../exceptions/api_error');
+    async search_teacher_by_id(req, res, next) {
+        try {
+            const {_id} = req.params;
+            const {id} = req.user;
+            const errors = validationResult(req);
+            if(!errors.isEmpty()) {
+               return next(ApiError.BadRequest('wrong parameter type', errors.array())); 
+            }
+            const classInfo = await student_service.search_teacher_by_id(_id, id);
+            return res.json(classInfo);
+        }
+        catch (e) {
+            next(e);
+        }
+    }
 
-class StudentController 
-{
+    async send_subscription_request(req, res, next) {
+        try {
+            const {id} = req.user; // student_id
+            const {class_id} = req.body;
+            await student_service.send_subscription_request(class_id, id);
+            return res.sendStatus(200);
+        }
+        catch (e) {
+            console.log(e);
+            next(e);
+        }
+    }
 
 }
 
