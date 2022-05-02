@@ -478,10 +478,98 @@
     grid-area: request_btn;
     margin-left: auto;
 }
+///////////////////////////////////////////////////////////////////////////////////////////////////////
 
+.homework_popup_menu_item_content_requests_to_teachers { display: none;}
+.homework_popup_menu_item_content_requests_to_teachers.active_popup_menu_teachers_requests_list {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    padding: 10px;
+}
 
+.homework_popup_menu_item_content_requests_to_teacher_cards_list {
+    display: flex;
+    margin: 0px auto;
+    flex-direction: column;
+    width: 90%;
+    height: 100%;
+    align-items: center;
+    overflow-x: hidden;
+}
 
+.compact_teacher_card {
+    display: flex;
+    justify-content: space-between;
+    // height: 33.333%;
+    width: 100%;
+    background: rgb(255, 255, 255);
+    padding: clamp(5px, 0.5vmax, 2vmax);
+    border-radius: 0.5vmax;
+    & .homework_popup_delete_class_btn.blue_btn {
+        margin-right: 0px;
+    }
+}
 
+.compact_teacher_card:not(:last-child) {
+    margin-bottom: 0.8vmax;
+}
+
+.compact_teacher_card_inner_avatar_and_info_wrapper {
+    display: flex;
+    & img {
+        margin-right: 10px;
+        min-height: 45px;
+        max-height: 4.3vmax;
+    }
+}
+
+.compact_teacher_card_inner_info {
+    display: flex;
+    flex-direction: column;
+
+    & span {
+        text-align: start;
+        color: #024047;
+        font-size: clamp(12px, 0.7vw, 1vmax);
+    }
+
+    & .teacher_fio {
+        font-size: clamp(14px, 1.1vmax, 1.2vmax);
+    }
+
+    & span:not(:last-child) {
+        margin-bottom: 10px;
+    }
+}
+
+.compact_teacher_card_buttons_wrapper {
+    display: flex;
+    align-items: center;
+    margin:auto 0.5vmax;
+    & .deny_btn {
+        padding: clamp(5px, 0.3vmax, 2vmax);
+    }
+}
+
+.deny_btn::before {
+    content: "";
+    display: block;
+    margin: auto;
+    width: clamp(16px, 1.3vmax, 2vmax);
+    height: clamp(16px, 1.3vmax, 2vmax);
+    background: white;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-image: url('../../images/x-svgrepo-com.svg');
+    -webkit-mask-image: url('../../images/x-svgrepo-com.svg');
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
 @media (max-width:530px) {
     .homework_wrapper {
         width: 94vw;
@@ -526,4 +614,7 @@
         width: 90%;
     }
 
+    .homework_popup_menu_item_content_requests_to_teacher_cards_list {
+        width: 100%;
+    }
 }

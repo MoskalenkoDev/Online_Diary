@@ -28,4 +28,7 @@ export default class HomeworkService {
         return $api.post(`/student/diary_menu/homework/send_subscription_request`, {class_id});
     }
 
+    static async get_sent_requests_to_teachers() {
+        return $api.get(`/student/diary_menu/homework/get_sent_requests_to_teachers`);
+    }
 }

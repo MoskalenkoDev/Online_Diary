@@ -12,7 +12,7 @@ module.exports = class TeacherInfo {
     class_id;
     contain_student;
 
-    constructor(teacher, classInfo, contain_student){
+    constructor(teacher, classInfo, contain_student = false){
         this.name = teacher.name;
         this.surname = teacher.surname;
         this.lastName = teacher.lastName;

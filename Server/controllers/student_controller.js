@@ -33,6 +33,18 @@ class StudentController {
         }
     }
 
+    async get_sent_requests_to_teachers(req, res, next) {
+        try {
+            const {id} = req.user; // student_id
+            let classList = await student_service.get_sent_requests_to_teachers(id);
+            return res.json(classList);
+        }
+        catch (e) {
+            console.log(e);
+            next(e);
+        }
+    }
+
 }
 
 module.exports = new StudentController();

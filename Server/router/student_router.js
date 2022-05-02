@@ -15,4 +15,9 @@ router.post("/diary_menu/homework/send_subscription_request",
     student_controller.send_subscription_request
 )
 
+router.get('/diary_menu/homework/get_sent_requests_to_teachers',
+    auth_middleware,
+    student_controller.get_sent_requests_to_teachers
+);
+
 module.exports = router;

@@ -74,3 +74,27 @@ export async function send_subscription_request(class_id, dispatch, lang) {
     }
 
 }
+
+export async function get_sent_requests_to_teachers() {
+
+    try {
+       let classList =  await HomeworkService.get_sent_requests_to_teachers();
+       console.log(classList);
+       return classList.data;
+    }
+    catch (e) {
+
+        switch (e.response.status) {
+            case 500: {
+                console.log(e);
+                break;
+            }
+
+            case 400: {
+                console.log(e);
+                break;
+            }
+        }
+    }
+
+}

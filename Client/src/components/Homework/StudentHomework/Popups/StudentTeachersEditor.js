@@ -1,6 +1,7 @@
 import React, {useEffect , useRef, useState} from 'react';
 import * as ActionCreators from '../../../../Redux/Actions/actions_homework';
 import { AddTeacherCard } from './StudentTeachersEditorComponents/AddTeacherCard';
+import { SentOrAcceptedTeacherCard } from './StudentTeachersEditorComponents/SentOrAcceptedTeacherCard'
 
 export const StudentTeachersEditor = ({state,onHidePopup, homework_popup_active_type}) =>
 {
@@ -54,6 +55,7 @@ export const StudentTeachersEditor = ({state,onHidePopup, homework_popup_active_
 
                     <AddTeacherCard state = {state} lang = {lang}/>
 
+                    <SentOrAcceptedTeacherCard state = {state} lang = {lang}/>
 
 
                 </div>

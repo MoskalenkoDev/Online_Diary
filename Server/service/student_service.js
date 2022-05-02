@@ -32,6 +32,20 @@ class StudentService {
         await classInfo.save();
     }
 
+    async get_sent_requests_to_teachers(student_id) {
+        const classList = await student_in_classes.findOne({student_id}).lean();
+        let teachersInfoArr = [];
+        for(let class_id of classList.requests_to_join) {
+            const classInfo = await class_model.findById(class_id).lean();
+            const teacherInfo = await teacher_users_model.findById(classInfo.teacher_id).lean();
+            let result_obj = new TeacherInfo(teacherInfo, classInfo);
+            delete result_obj.contain_student;
+            teachersInfoArr.push(result_obj);
+        }
+        console.log(teachersInfoArr);
+        return teachersInfoArr;
+    }
+
 }
 
 module.exports = new StudentService();
