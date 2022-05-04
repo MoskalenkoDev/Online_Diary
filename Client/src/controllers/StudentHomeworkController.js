@@ -79,7 +79,6 @@ export async function get_sent_requests_to_teachers() {
 
     try {
        let classList =  await HomeworkService.get_sent_requests_to_teachers();
-       console.log(classList);
        return classList.data;
     }
     catch (e) {
@@ -97,4 +96,75 @@ export async function get_sent_requests_to_teachers() {
         }
     }
 
+}
+
+export async function get_accepted_teachers() {
+
+    try {
+       let classList =  await HomeworkService.get_accepted_teachers();
+       return classList.data;
+    }
+    catch (e) {
+
+        switch (e.response.status) {
+            case 500: {
+                console.log(e);
+                break;
+            }
+
+            case 400: {
+                console.log(e);
+                break;
+            }
+        }
+    }
+
+}
+
+export async function delete_sent_request_to_teacher_item(class_id) {
+
+    try {
+       await HomeworkService.delete_sent_request_to_teacher_item(class_id);
+       return true;
+    }
+    catch (e) {
+
+        switch (e.response.status) {
+            case 500: {
+                console.log(e);
+                break;
+            }
+
+            case 400: {
+                console.log(e);
+                break;
+            }
+        }
+    }
+
+    return false;
+}
+
+export async function unsubscribe_from_teacher(class_id) {
+
+    try {
+       await HomeworkService.unsubscribe_from_teacher(class_id);
+       return true;
+    }
+    catch (e) {
+
+        switch (e.response.status) {
+            case 500: {
+                console.log(e);
+                break;
+            }
+
+            case 400: {
+                console.log(e);
+                break;
+            }
+        }
+    }
+
+    return false;
 }

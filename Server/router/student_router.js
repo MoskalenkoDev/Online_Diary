@@ -20,4 +20,19 @@ router.get('/diary_menu/homework/get_sent_requests_to_teachers',
     student_controller.get_sent_requests_to_teachers
 );
 
+router.delete('/diary_menu/homework/delete_sent_request_to_teacher_item',
+    auth_middleware,
+    student_controller.delete_sent_request_to_teacher_item
+);
+
+router.get('/diary_menu/homework/get_accepted_teachers',
+    auth_middleware,
+    student_controller.get_accepted_teachers
+);
+
+router.delete('/diary_menu/homework/unsubscribe_from_teacher',
+    auth_middleware,
+    student_controller.unsubscribe_from_teacher
+);
+
 module.exports = router;

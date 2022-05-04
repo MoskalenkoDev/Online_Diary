@@ -1,57 +1,35 @@
 import React, {useEffect ,useRef} from 'react';
 import * as ActionCreators from '../../../../Redux/Actions/actions_homework';
 import Axios from 'axios';
-
+import {TeacherCopyClassInviteLink} from './TeacherStudentsEditorComponents/TeacherCopyClassInviteLink';
+import {RequestsToJoinClass} from './TeacherStudentsEditorComponents/RequestsToJoinClass';
+import {StudentSubscribers} from './TeacherStudentsEditorComponents/StudentSubscribers';
 
 export const TeacherStudentsEditor= ({state,invite_link,homework_popup_active_type,onHidePopup,setHomework_copy_invite_link_popup_class}) =>
 {
     let lang = state.lang.language;
-    let langObj =
-    {
-        ua:
-        {
+    let langObj = {
+        ua: {
             popupHeader: "Студенти",
             menuStudents: "Студенти",
             menuRequests : "Запити",
             menuInvite : "Посилання",
-            copyBtnText: "Копіювати",
-            inviteLinkDescription: "Це посилання для реєстрації на ваш курс. Відправте його своїм учням.",
         },
-        ru:
-        {
+        ru: {
             popupHeader: "Студенты",
             menuStudents: "Студенты",
             menuRequests : "Запросы",
             menuInvite : "Ссылка",
-            copyBtnText: "Копировать",
-            inviteLinkDescription: "Это ссылка для регистрации на ваш курс.Скиньте ее своим ученикам.",
         },
-        en: 
-        {
+        en: {
             popupHeader: "Students",
             menuStudents: "Students",
             menuRequests : "Requests",
             menuInvite : "Invite link",
-            copyBtnText: "Copy",
-            inviteLinkDescription: "This is a link to an invitation to your course.Send this to your students.",
         }
     };
 
-    let timer_copy_popup = useRef(null);
-
-    let onCopyInviteLink = () =>
-    {
-        window.clearTimeout(timer_copy_popup.current);
-        navigator.clipboard.writeText(invite_link);
-        setHomework_copy_invite_link_popup_class("active_invite_copy_link_popup");
-        timer_copy_popup.current = setTimeout(() =>
-        {
-            setHomework_copy_invite_link_popup_class("");
-        },2000);
-    }
-
-    let onMenuItemClick = (active_class) =>
-    {
+    let onMenuItemClick = (active_class) => {
         state.dispatch(ActionCreators.change_homework_popup_active_menu_item(active_class));
     }
 
@@ -72,19 +50,15 @@ export const TeacherStudentsEditor= ({state,invite_link,homework_popup_active_ty
                 
                 <div className="homework_popup_menu_item_content">
 
-                    <div className = {"homework_popup_menu_item_content_invite_link " + state.homework_popup_active_menu_item}>
+                    <TeacherCopyClassInviteLink 
+                        state = {state} 
+                        invite_link = {invite_link} 
+                        setHomework_copy_invite_link_popup_class = {setHomework_copy_invite_link_popup_class}
+                    />
 
-                        <div className="homework_popup_menu_item_content_invite_link_inner_content">
+                    <RequestsToJoinClass state = {state} class_id = {invite_link} lang = {lang}/>
 
-                            <div className="homework_popup_menu_item_content_invite_link_input_wrapper">
-                                <input type="text" value = {invite_link} readOnly/>
-                                <button className = "blue_btn homework_popup_btn" onClick = {onCopyInviteLink}>{langObj[lang].copyBtnText}</button>
-                            </div>
-                            <span>{langObj[lang].inviteLinkDescription}</span>
-
-                        </div>
-
-                    </div>
+                    <StudentSubscribers state = {state} class_id = {invite_link} lang = {lang}/>
 
                 </div>
             </div>

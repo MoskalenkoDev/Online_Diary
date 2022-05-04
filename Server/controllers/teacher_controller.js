@@ -64,6 +64,76 @@ class TeacherController
             next(e);
         }
     }
+
+    async get_student_requests_to_join(req, res, next) {
+        try {
+            const {class_id} = req.params;
+            const studentsInfoList = await teacher_service.get_student_requests_to_join(class_id);
+            return res.json(studentsInfoList);
+        }
+        catch (e) {
+            next(e);
+        }
+    }
+
+    async submit_student_request_to_join(req, res, next) {
+        try {
+            const {student_id, class_id} = req.body;
+            const errors = validationResult(req);
+            if(!errors.isEmpty()) {
+                return next(ApiError.BadRequest('wrong parameter type', errors.array())); 
+            }
+            await teacher_service.submit_student_request_to_join(student_id, class_id);
+            return res.sendStatus(200, 'OK');
+        }
+        catch (e) {
+            next(e);
+        }
+    }
+
+    async deny_student_request_to_join(req, res, next) {
+        try {
+            const {student_id, class_id} = req.body;
+            const errors = validationResult(req);
+            if(!errors.isEmpty()) {
+                return next(ApiError.BadRequest('wrong parameter type', errors.array())); 
+            }
+            await teacher_service.deny_student_request_to_join(student_id, class_id);
+            return res.sendStatus(200, 'OK');
+        }
+        catch (e) {
+            next(e);
+        }
+    }
+    
+
+    async get_student_subscribers(req, res, next) {
+        try {
+            const {class_id} = req.params;
+            const studentsInfoList = await teacher_service.get_student_subscribers(class_id);
+            return res.json(studentsInfoList);
+        }
+        catch (e) {
+            next(e);
+        }
+    }
+
+
+    async kick_student(req, res, next) {
+        try {
+            const {student_id, class_id} = req.body;
+            const errors = validationResult(req);
+            if(!errors.isEmpty()) {
+                return next(ApiError.BadRequest('wrong parameter type', errors.array())); 
+            }
+            await teacher_service.kick_student(student_id, class_id);
+            return res.sendStatus(200, 'OK');
+        }
+        catch (e) {
+            next(e);
+        }
+    }
+
 }
 
 module.exports = new TeacherController();

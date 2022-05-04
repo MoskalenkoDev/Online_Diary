@@ -40,10 +40,37 @@ class StudentService {
             const teacherInfo = await teacher_users_model.findById(classInfo.teacher_id).lean();
             let result_obj = new TeacherInfo(teacherInfo, classInfo);
             delete result_obj.contain_student;
+            delete result_obj.phoneNumbers;
+            result_obj.school_subjects = result_obj.school_subjects.join(", ")
+            delete result_obj.school;
             teachersInfoArr.push(result_obj);
         }
-        console.log(teachersInfoArr);
         return teachersInfoArr;
+    }
+
+    async delete_sent_request_to_teacher_item(class_id, student_id) {
+        await class_model.findByIdAndUpdate(class_id, {$pull : {"new_students": student_id}});
+        await student_in_classes.findOneAndUpdate({"student_id" : student_id}, {$pull : {"requests_to_join": class_id}});
+    }
+
+    async get_accepted_teachers(student_id) {
+        const classList = await student_in_classes.findOne({student_id}).lean();
+        let teachersInfoArr = [];
+        for(let class_id of classList.classes) {
+            const classInfo = await class_model.findById(class_id).lean();
+            const teacherInfo = await teacher_users_model.findById(classInfo.teacher_id).lean();
+            let result_obj = new TeacherInfo(teacherInfo, classInfo);
+            delete result_obj.contain_student;
+            result_obj.school_subjects = result_obj.school_subjects.join(", ")
+            delete result_obj.school;
+            teachersInfoArr.push(result_obj);
+        }
+        return teachersInfoArr;
+    }
+
+    async unsubscribe_from_teacher(class_id, student_id) {
+        await class_model.findByIdAndUpdate(class_id, {$pull : {"students": student_id}});
+        await student_in_classes.findOneAndUpdate({"student_id" : student_id}, {$pull : {"classes": class_id}});
     }
 
 }

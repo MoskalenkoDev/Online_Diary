@@ -18,6 +18,26 @@ export default class HomeworkService {
         return $api.delete(`/teacher/diary_menu/homework/delete_class`, {data : {class_id}});
     }
 
+    static async get_student_requests_to_join(class_id) {
+        return $api.get(`/teacher/diary_menu/homework/get_student_requests_to_join/${class_id}`);
+    }
+
+    static async submit_student_request_to_join(student_id, class_id) {
+        return $api.put(`/teacher/diary_menu/homework/submit_student_request_to_join`, {student_id, class_id});
+    }
+
+    static async deny_student_request_to_join(student_id, class_id) {
+        return $api.delete(`/teacher/diary_menu/homework/deny_student_request_to_join`, {data : {student_id, class_id}});
+    }
+    
+    static async get_student_subscribers(class_id) {
+        return $api.get(`/teacher/diary_menu/homework/get_student_subscribers/${class_id}`);
+    }
+
+    static async kick_student(student_id, class_id) {
+        return $api.delete(`/teacher/diary_menu/homework/kick_student`, {data : {student_id, class_id}});
+    }
+
     //////////////////////////////////////////StudentHomeworkController///////////////////////////////////////////////////
 
     static async search_teacher_by_id(_id) {
@@ -31,4 +51,17 @@ export default class HomeworkService {
     static async get_sent_requests_to_teachers() {
         return $api.get(`/student/diary_menu/homework/get_sent_requests_to_teachers`);
     }
+
+    static async delete_sent_request_to_teacher_item(class_id) {
+        return $api.delete(`/student/diary_menu/homework/delete_sent_request_to_teacher_item`, {data : {class_id}});
+    }
+    
+    static async get_accepted_teachers() {
+        return $api.get(`/student/diary_menu/homework/get_accepted_teachers`);
+    }
+
+    static async unsubscribe_from_teacher(class_id) {
+        return $api.delete(`/student/diary_menu/homework/unsubscribe_from_teacher`, {data : {class_id}});
+    }
+
 }

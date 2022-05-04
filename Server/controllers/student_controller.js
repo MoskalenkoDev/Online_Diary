@@ -45,6 +45,43 @@ class StudentController {
         }
     }
 
+    async delete_sent_request_to_teacher_item(req, res,next) {
+        try {
+            const {class_id} = req.body;
+            const {id} = req.user; // student_id
+            await student_service.delete_sent_request_to_teacher_item(class_id, id);
+            return res.sendStatus(200, 'OK');
+        }
+        catch(e) {
+            next(e);
+        }    
+    }
+
+    
+    async get_accepted_teachers(req, res, next) {
+        try {
+            const {id} = req.user; // student_id
+            let classList = await student_service.get_accepted_teachers(id);
+            return res.json(classList);
+        }
+        catch (e) {
+            console.log(e);
+            next(e);
+        }
+    }
+
+    async unsubscribe_from_teacher(req, res,next) {
+        try {
+            const {class_id} = req.body;
+            const {id} = req.user; // student_id
+            await student_service.unsubscribe_from_teacher(class_id, id);
+            return res.sendStatus(200, 'OK');
+        }
+        catch(e) {
+            next(e);
+        }    
+    }
+
 }
 
 module.exports = new StudentController();

@@ -465,7 +465,7 @@
         font-size: clamp(14px, 0.7vw, 1vmax);
     }
 
-    & .teacher_fio {
+    & .user_fio {
         font-size: clamp(16px, 1.1vmax, 1.2vmax);
     }
 
@@ -480,15 +480,23 @@
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
-.homework_popup_menu_item_content_requests_to_teachers { display: none;}
-.homework_popup_menu_item_content_requests_to_teachers.active_popup_menu_teachers_requests_list {
+.homework_popup_menu_item_content_requests_to_teachers,
+.homework_popup_menu_item_content_requests_to_join_class,
+.homework_popup_menu_item_content_student_subscribers,
+.homework_popup_menu_item_content_accepted_teachers { 
+    display: none;
+}
+.homework_popup_menu_item_content_requests_to_teachers.active_popup_menu_teachers_requests_list,
+.homework_popup_menu_item_content_requests_to_join_class.active_popup_menu_requests_list, 
+.homework_popup_menu_item_content_student_subscribers.active_popup_menu_students_list,
+.homework_popup_menu_item_content_accepted_teachers.active_popup_menu_teachers_list{
     display: flex;
     height: 100%;
     width: 100%;
     padding: 10px;
 }
 
-.homework_popup_menu_item_content_requests_to_teacher_cards_list {
+.homework_popup_menu_item_content_compact_cards_wrapper{
     display: flex;
     margin: 0px auto;
     flex-direction: column;
@@ -496,35 +504,41 @@
     height: 100%;
     align-items: center;
     overflow-x: hidden;
+
+    & .empty_list_message {
+        font-size: clamp(14px, 1vmax, 1.2vmax);
+        margin: auto;
+        color: #9b9b9b;
+        padding: 5px;
+        border: 2px dashed #9b9b9b;
+        display: none;
+        &.visible { display: inline-block;}
+    }
 }
 
-.compact_teacher_card {
+.compact_user_card {
     display: flex;
     justify-content: space-between;
-    // height: 33.333%;
     width: 100%;
     background: rgb(255, 255, 255);
     padding: clamp(5px, 0.5vmax, 2vmax);
     border-radius: 0.5vmax;
-    & .homework_popup_delete_class_btn.blue_btn {
-        margin-right: 0px;
-    }
 }
 
-.compact_teacher_card:not(:last-child) {
+.compact_user_card:not(:last-child) {
     margin-bottom: 0.8vmax;
 }
 
-.compact_teacher_card_inner_avatar_and_info_wrapper {
+.compact_user_card_inner_avatar_and_info_wrapper {
     display: flex;
     & img {
         margin-right: 10px;
         min-height: 45px;
-        max-height: 4.3vmax;
+        max-height: 3.3vmax;
     }
 }
 
-.compact_teacher_card_inner_info {
+.compact_user_card_inner_info {
     display: flex;
     flex-direction: column;
 
@@ -534,7 +548,7 @@
         font-size: clamp(12px, 0.7vw, 1vmax);
     }
 
-    & .teacher_fio {
+    & .user_fio {
         font-size: clamp(14px, 1.1vmax, 1.2vmax);
     }
 
@@ -543,11 +557,12 @@
     }
 }
 
-.compact_teacher_card_buttons_wrapper {
+.compact_user_card_buttons_wrapper {
     display: flex;
     align-items: center;
-    margin:auto 0.5vmax;
-    & .deny_btn {
+    & .deny_btn,
+    & .submit_btn {
+        margin:auto 0.15vmax;
         padding: clamp(5px, 0.3vmax, 2vmax);
     }
 }
@@ -567,6 +582,23 @@
     -webkit-mask-position: center;
     mask-image: url('../../images/x-svgrepo-com.svg');
     -webkit-mask-image: url('../../images/x-svgrepo-com.svg');
+}
+
+.submit_btn::before {
+    content: "";
+    display: block;
+    margin: auto;
+    width: clamp(16px, 1.3vmax, 2vmax);
+    height: clamp(16px, 1.3vmax, 2vmax);
+    background: white;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-image: url('../../images/check-mark.svg');
+    -webkit-mask-image: url('../../images/check-mark.svg');
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -614,7 +646,7 @@
         width: 90%;
     }
 
-    .homework_popup_menu_item_content_requests_to_teacher_cards_list {
+    .homework_popup_menu_item_content_compact_cards_wrapper { // homework_popup_menu_item_content_requests_to_teacher_cards_list
         width: 100%;
     }
 }

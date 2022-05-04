@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState , useEffect, useRef} from "react";
 import { search_teacher_by_id , send_subscription_request} from '../../../../../controllers/StudentHomeworkController';
 
 export const AddTeacherCard = ({ state, lang }) => {
@@ -63,6 +63,16 @@ export const AddTeacherCard = ({ state, lang }) => {
         if(isOk) setIsSent(true);
     }
 
+    let prevActiveMenuItemRef = useRef();
+
+    useEffect(async() => {
+        if(prevActiveMenuItemRef.current == "active_popup_menu_teachers_join" && state.homework_popup_active_menu_item !== "active_popup_menu_teachers_join") {
+            setVisibleCardClass("");
+            setAddTeacherLinkState("");
+        }
+        prevActiveMenuItemRef.current = state.homework_popup_active_menu_item;
+    },[state.homework_popup_active_menu_item]);
+
     return (
         <div className={"homework_popup_menu_item_content_join " + state.homework_popup_active_menu_item}>
 
@@ -81,7 +91,7 @@ export const AddTeacherCard = ({ state, lang }) => {
                     <img src= {teacherAvatar} alt="not found" />
                 </div>
                 <div className="homework_popup_menu_item_content_teacher_card_info_block">
-                    <span className="teacher_fio">{surname} {name} {lastName}</span>
+                    <span className="user_fio">{surname} {name} {lastName}</span>
                     <span className="teacher_school">{langObj[lang].school} - {school}</span>
                     <span className="teacher_school">{langObj[lang].schoolSubjects} - {schoolSubjects}</span>
                 </div>
