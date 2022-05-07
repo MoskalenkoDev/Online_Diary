@@ -5,7 +5,7 @@ import {
   ACTION_DELETE_HOMEWORK_REQUESTS_TO_TEACHERS_LI_LIST_ITEM, ACTION_CHANGE_HOMEWORK_STUDENT_REQUESTS_TO_JOIN_LI_LIST,
   ACTION_DELETE_HOMEWORK_STUDENT_REQUESTS_TO_JOIN_LI_LIST_ITEM, ACTION_CHANGE_HOMEWORK_STUDENTS_IN_CLASS_LI_LIST,
   ACTION_DELETE_HOMEWORK_STUDENTS_IN_CLASS_LI_LIST_ITEM, ACTION_CHANGE_HOMEWORK_ACCEPTED_TEACHERS_LI_LIST,
-  ACTION_DELETE_HOMEWORK_ACCEPTED_TEACHERS_LI_LIST_ITEM
+  ACTION_DELETE_HOMEWORK_ACCEPTED_TEACHERS_LI_LIST_ITEM, ACTION_CLEANUP_HOMEWORK_LI_LIST, ACTION_CLEAN_HOMEWORK_TEACHERS_LI_LISTS
 } from './types';
 
 const initialState =
@@ -23,6 +23,39 @@ const initialState =
   homework_students_in_class_li_list: [] // the list of teachers accepted request
 };
 
+const changeLiList = (goalList, newList ,key = null) => {
+  
+  let updatedList = [];
+
+  if(!key) { // якщо ми не видаляємо конкретний елемент
+    goalList.forEach((li)=> { // провіряє чи є всі елементи попереднього списку в новому, якщо ні, то позначає відсутні як deleted
+      let foundLi = newList.find(val => val.key === li.key);
+      if(foundLi) updatedList.push(foundLi);
+      else {
+        let deletedLi = {...li, props : {...li.props, className: "compact_user_card deleted" }};
+        updatedList.push(deletedLi); // ми добавили відсутньому елементу клас deleted
+      }
+    });
+
+    newList.forEach((li)=> { // всі елементи нового списку, які не присутні в попередньому - будуть добавлені в updatedList
+      let foundLi = updatedList.find(val => val.key === li.key);
+      if(!foundLi) updatedList.push(li);
+    });
+  }
+  else { // якщо ми хочемо видалити конкретний елемент списку
+    updatedList = goalList.map(li => {
+      if(li.key === key) {
+        return {...li, props : {...li.props, className: "compact_user_card deleted" }};
+      }
+      return li;
+    })
+  }
+  return updatedList;
+}
+
+const deleteLiItem = (goalList) => {
+  return goalList.filter(li => !li.props.className.split(" ").includes("deleted"));
+}
 
 // Pure Functions
 export const homeworkReducer = (state = initialState, action) => {
@@ -43,32 +76,34 @@ export const homeworkReducer = (state = initialState, action) => {
       return { ...state, homework_classes_li_list: action.payload }
 
     case ACTION_CHANGE_HOMEWORK_REQUESTS_TO_TEACHERS_LI_LIST:
-      return { ...state, homework_requests_to_teachers_li_list: action.payload }
+      return { ...state, homework_requests_to_teachers_li_list: changeLiList(state.homework_requests_to_teachers_li_list , action.payload)}
 
     case ACTION_DELETE_HOMEWORK_REQUESTS_TO_TEACHERS_LI_LIST_ITEM: {
-      let newList = state.homework_requests_to_teachers_li_list.filter(obj => (obj.key !== action.payload)); // i hope it works correct
-      return {...state, homework_requests_to_teachers_li_list : newList}
+      return {...state, homework_requests_to_teachers_li_list : changeLiList(state.homework_requests_to_teachers_li_list, null, action.payload)}
     }
     case ACTION_CHANGE_HOMEWORK_STUDENT_REQUESTS_TO_JOIN_LI_LIST: {
-      return {...state, homework_student_requests_to_join_li_list: action.payload}
+      return {...state, homework_student_requests_to_join_li_list: changeLiList(state.homework_student_requests_to_join_li_list, action.payload) }
     }
     case ACTION_DELETE_HOMEWORK_STUDENT_REQUESTS_TO_JOIN_LI_LIST_ITEM: {
-      let newList = state.homework_student_requests_to_join_li_list.filter(obj => (obj.key !== action.payload)); // i hope it works correct
-      return {...state, homework_student_requests_to_join_li_list : newList}
+      return {...state, homework_student_requests_to_join_li_list : changeLiList(state.homework_student_requests_to_join_li_list, null, action.payload)}
     }
     case ACTION_CHANGE_HOMEWORK_STUDENTS_IN_CLASS_LI_LIST: {
-      return {...state, homework_students_in_class_li_list: action.payload}
+      return {...state, homework_students_in_class_li_list: changeLiList(state.homework_students_in_class_li_list, action.payload)}
     }
     case ACTION_DELETE_HOMEWORK_STUDENTS_IN_CLASS_LI_LIST_ITEM: {
-      let newList = state.homework_students_in_class_li_list.filter(obj => (obj.key !== action.payload)); // i hope it works correct
-      return {...state, homework_students_in_class_li_list : newList}
+      return {...state, homework_students_in_class_li_list : changeLiList(state.homework_students_in_class_li_list, null, action.payload)}
     }
     case ACTION_CHANGE_HOMEWORK_ACCEPTED_TEACHERS_LI_LIST: {
-      return {...state, homework_accepted_teachers_li_list: action.payload}
+      return {...state, homework_accepted_teachers_li_list: changeLiList(state.homework_accepted_teachers_li_list, action.payload)}
     }
     case ACTION_DELETE_HOMEWORK_ACCEPTED_TEACHERS_LI_LIST_ITEM: {
-      let newList = state.homework_accepted_teachers_li_list.filter(obj => (obj.key !== action.payload)); // i hope it works correct
-      return {...state, homework_accepted_teachers_li_list : newList}
+      return {...state, homework_accepted_teachers_li_list : changeLiList(state.homework_accepted_teachers_li_list, null, action.payload)}
+    }
+    case ACTION_CLEANUP_HOMEWORK_LI_LIST:{
+      return {...state,  [action.payload] : deleteLiItem(state[action.payload])}
+    }
+    case ACTION_CLEAN_HOMEWORK_TEACHERS_LI_LISTS: {
+      return {...state, homework_student_requests_to_join_li_list: [], homework_students_in_class_li_list: []}
     }
     default: return state
   }

@@ -37,6 +37,7 @@ export const StudentTeachersEditor = ({state,onHidePopup, homework_popup_active_
     let onMenuItemClick = (active_class) => {
         state.dispatch(ActionCreators.change_homework_popup_active_menu_item(active_class));
     }
+    let prevActiveMenuItem = useRef();
 
     return (
         <div className= {"homework_popup teachers_and_students_editor_popup " + homework_popup_active_type}>
@@ -56,9 +57,9 @@ export const StudentTeachersEditor = ({state,onHidePopup, homework_popup_active_
 
                     <AddTeacherCard state = {state} lang = {lang}/>
 
-                    <SentRequestsToTeachers state = {state} lang = {lang}/>
+                    <SentRequestsToTeachers state = {state} lang = {lang} prevActiveMenuItem = {prevActiveMenuItem}/>
 
-                    <AcceptedTeachers state = {state} lang = {lang}/>
+                    <AcceptedTeachers state = {state} lang = {lang} prevActiveMenuItem = {prevActiveMenuItem}/>
                 </div>
             </div>
 

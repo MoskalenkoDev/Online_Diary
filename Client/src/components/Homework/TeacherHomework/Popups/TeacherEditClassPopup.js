@@ -8,7 +8,7 @@ export const TeacherEditClassPopup = ({
     state,
     school_subjects,
     new_class_title,
-    edit_obj_id,
+    current_class_id,
     homework_popup_active_type,
     onHidePopup,
     onPopupClassTitleChange,
@@ -74,7 +74,7 @@ export const TeacherEditClassPopup = ({
         }
         else 
         {
-            await edit_class(edit_obj_id, new_class_title, final_school_subject_arr); 
+            await edit_class(current_class_id, new_class_title, final_school_subject_arr); 
             await get_classes_info(li_creator);
             onHidePopup();
         }
@@ -83,7 +83,7 @@ export const TeacherEditClassPopup = ({
 
     let onDeleteClass = async() =>
     {
-        await delete_class(edit_obj_id);
+        await delete_class(current_class_id);
         await get_classes_info(li_creator);
         onHidePopup();
     }
@@ -121,7 +121,7 @@ export const TeacherEditClassPopup = ({
                 <span className= {"popup_warning_span " + state.popup_warning_class}>{state.homework_warning_title}</span>
                 <div className="homework_popup_buttons_wrapper">
                     <button className= {"homework_popup_delete_class_btn blue_btn"} onClick = {onDeleteClass}>{langObj[lang].deleteClassBtn}</button>
-                    <button className= {"homework_popup_add_class_btn blue_btn"} onClick = {onSaveChanges}>{langObj[lang].saveChangesBtn}</button>
+                    <button className= {"homework_peaky_btn blue_btn"} onClick = {onSaveChanges}>{langObj[lang].saveChangesBtn}</button>
                 </div>
 
             </div>

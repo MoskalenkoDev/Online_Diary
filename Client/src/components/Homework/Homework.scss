@@ -194,6 +194,11 @@
         display: flex;
         width: clamp(500px, 35vw, 62vw);
     }
+
+    &.add_homework_popup.homework_add_homework {
+        display: flex;
+        width: clamp(500px, 35vw, 62vw);
+    }
 }
 
 .homework_popup_content {
@@ -215,7 +220,7 @@
     flex-direction: column;
 }
 
-.homework_popup_add_class_btn {
+.homework_peaky_btn {
     margin: auto;
     font-size: clamp(16px, 0.8vmax, 1vmax);
     border-radius: clamp(4px, 0.2vmax, 1.5vw);
@@ -225,7 +230,7 @@
     display: flex;
     justify-content: space-between;
 
-    & .homework_popup_add_class_btn {
+    & .homework_peaky_btn {
         margin: 0;
     }
 }
@@ -406,8 +411,11 @@
     display: none;
     position: relative;  
 
-    &.visible_card {display: grid;} 
-    &.visible_card .check_mark {display: none;}
+    &.visible_card {
+        display: grid;
+        animation: user-card-animation 0.8s ease 0s 1 normal both;
+    } 
+    &.visible_card .check_mark {display: none;animation: user-card-animation 0.4s ease 0s 1 normal both;}
     &.visible_card.already_sent{user-select: none;}
     &.visible_card.already_sent::before{
         content: "";
@@ -418,6 +426,8 @@
         position: absolute;
         top: 0;
         left: 0;
+        opacity: 0;
+        animation: user-card-animation 0.4s ease 0s 1 normal both;
     }
 
     &.visible_card.already_sent .check_mark {
@@ -502,17 +512,27 @@
     flex-direction: column;
     width: 90%;
     height: 100%;
+    position: relative;
     align-items: center;
     overflow-x: hidden;
-
     & .empty_list_message {
         font-size: clamp(14px, 1vmax, 1.2vmax);
         margin: auto;
+        position: absolute;
+        width: fit-content;
+        height: fit-content;
+        top: 0px;
+        left: 0px;
+        bottom: 0px;
+        right: 0px;
         color: #9b9b9b;
         padding: 5px;
         border: 2px dashed #9b9b9b;
         display: none;
-        &.visible { display: inline-block;}
+        &.visible {
+            animation: user-card-animation 0.4s ease 0.15s 1 normal both;
+            display: inline-block;
+        }
     }
 }
 
@@ -521,11 +541,44 @@
     justify-content: space-between;
     width: 100%;
     background: rgb(255, 255, 255);
-    padding: clamp(5px, 0.5vmax, 2vmax);
     border-radius: 0.5vmax;
+    overflow:hidden;
+    max-height: 140px;
+    & .compact_user_card_inner_content_wrapper {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        padding: clamp(5px, 0.5vmax, 2vmax);
+    }
+    animation: user-card-animation 0.4s ease 0s 1 normal both;
+    &.deleted {
+        animation: user-card-deleted-animation 0.4s cubic-bezier( 0, 1, 1, 1 ) 0s 1 normal both;
+    }
 }
 
-.compact_user_card:not(:last-child) {
+@keyframes user-card-animation {
+    0% {
+        opacity: 0;
+        visibility: hidden;
+    }
+    100% {
+        opacity: 1;
+        visibility: visible;
+    }
+}
+
+@keyframes user-card-deleted-animation {
+    0% {
+        max-height: 140px;
+    }
+    100% {
+        margin-bottom: 0px;
+        opacity: 0.5;
+        max-height: 0px;
+    }
+}
+
+.compact_user_card:not(:last-of-type) {
     margin-bottom: 0.8vmax;
 }
 
@@ -534,6 +587,7 @@
     & img {
         margin-right: 10px;
         min-height: 45px;
+        height: 3.3vmax;
         max-height: 3.3vmax;
     }
 }
@@ -541,7 +595,7 @@
 .compact_user_card_inner_info {
     display: flex;
     flex-direction: column;
-
+    
     & span {
         text-align: start;
         color: #024047;
@@ -601,6 +655,112 @@
     -webkit-mask-image: url('../../images/check-mark.svg');
 }
 
+.gray_btn {
+
+    background: #a5adb4;
+
+    &:hover {
+        background: #858d96;
+    }
+
+    &:active {
+        background: #6c757d;
+    }
+}
+
+.homework_popup_data_wrapper{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2vmax;
+}
+
+.homework_choose_data {
+    display: flex;
+    & .homework_choose_data_title {
+        color: #486c70;
+        margin: auto 5px;
+    }
+}
+
+.subject_drop_down {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+
+    & .subject_drop_down_btn {
+        display: flex;
+        border-radius: 0.2vmax 0.2vmax 0px 0px;
+        background: #f3f3f3;
+        border: 1px solid #b6b6b6;
+
+        &::after {
+            content: "";
+            display: block;
+            margin: auto;
+            margin-right: 5px;
+            width: clamp(14px, 1vmax, 16px);
+            height: clamp(14px, 1vmax, 16px);
+            background: rgb(90, 90, 90);
+            mask-repeat: no-repeat;
+            mask-position: center;
+            -webkit-mask-size: contain;
+            mask-size: contain;
+            -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+            -webkit-mask-position: center;
+            mask-image: url('../../images/drop-down.svg');
+            -webkit-mask-image: url('../../images/drop-down.svg');
+        }
+
+        & .subject_drop_down_header_selected {
+            padding: 5px;
+        }
+    }
+
+    .drop_down_li_list {
+        width: 100%;
+        position: absolute;
+        top: 100%;
+        & li {
+            overflow: hidden;
+            padding: 5px;
+            background: #f3f3f3;
+            border-bottom: 1px solid #b6b6b6;
+            border-right: 1px solid #b6b6b6;
+            border-left: 1px solid #b6b6b6;
+            text-overflow: ellipsis;
+        }
+
+        & li:last-child {
+            border-radius: 0px 0vmax 0.2vmax 0.2vmax;
+        }
+        
+    }
+
+
+
+}
+
+.homework_popup_create_homework_message 
+{
+    width: 100%;
+    min-height: 230px;
+    height: 12vmax;
+
+    & textarea {
+        padding: 10px;
+        min-width: 100%;
+        min-height: 100%;
+        max-width: 100%;
+        max-height: 100%;
+        font-size: clamp(16px, 0.9vmax, 1vmax);
+        color: #024047;
+        padding: clamp(8px, 0.4vmax, 0.55vmax);
+        border-radius: 0.2vmax;    
+        border: 1px solid #ccc;
+        resize: none;
+    }
+}
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 @media (max-width:530px) {
     .homework_wrapper {

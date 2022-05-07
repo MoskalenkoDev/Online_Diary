@@ -33,6 +33,8 @@ export const TeacherStudentsEditor= ({state,invite_link,homework_popup_active_ty
         state.dispatch(ActionCreators.change_homework_popup_active_menu_item(active_class));
     }
 
+    let prevActiveMenuItem = useRef();
+
     return (
         <div className= {"homework_popup teachers_and_students_editor_popup " + homework_popup_active_type}>
 
@@ -56,9 +58,9 @@ export const TeacherStudentsEditor= ({state,invite_link,homework_popup_active_ty
                         setHomework_copy_invite_link_popup_class = {setHomework_copy_invite_link_popup_class}
                     />
 
-                    <RequestsToJoinClass state = {state} class_id = {invite_link} lang = {lang}/>
+                    <RequestsToJoinClass state = {state} class_id = {invite_link} lang = {lang} prevActiveMenuItem = {prevActiveMenuItem}/>
 
-                    <StudentSubscribers state = {state} class_id = {invite_link} lang = {lang}/>
+                    <StudentSubscribers state = {state} class_id = {invite_link} lang = {lang} prevActiveMenuItem = {prevActiveMenuItem}/>
 
                 </div>
             </div>

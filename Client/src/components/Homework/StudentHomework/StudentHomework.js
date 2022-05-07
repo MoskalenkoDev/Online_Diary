@@ -43,6 +43,7 @@ export const StudentHomework = ({ state }) => {
             if (state.homework_popup_active_menu_item !== "active_popup_menu_teachers_list") {
                 state.dispatch(ActionCreators.change_homework_popup_active_menu_item("active_popup_menu_teachers_list"));
             }
+            state.dispatch(ActionCreators.cleanup_homework_li_list("homework_accepted_teachers_li_list"));
         }, 250);
 
     }

@@ -98,7 +98,7 @@ export const TeacherAddClassPopup = ({
                 </div>
 
                 <span className={"popup_warning_span " + state.popup_warning_class}>{langObj[lang].warningTitle}</span>
-                <button className={"homework_popup_add_class_btn blue_btn"} onClick={onPopupSubmit}>{langObj[lang].addClassTitle}</button>
+                <button className={"homework_peaky_btn blue_btn"} onClick={onPopupSubmit}>{langObj[lang].addClassTitle}</button>
 
             </div>
 

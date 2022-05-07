@@ -5,7 +5,7 @@ import {
   ACTION_DELETE_HOMEWORK_REQUESTS_TO_TEACHERS_LI_LIST_ITEM, ACTION_CHANGE_HOMEWORK_STUDENT_REQUESTS_TO_JOIN_LI_LIST,
   ACTION_DELETE_HOMEWORK_STUDENT_REQUESTS_TO_JOIN_LI_LIST_ITEM, ACTION_CHANGE_HOMEWORK_STUDENTS_IN_CLASS_LI_LIST,
   ACTION_DELETE_HOMEWORK_STUDENTS_IN_CLASS_LI_LIST_ITEM, ACTION_CHANGE_HOMEWORK_ACCEPTED_TEACHERS_LI_LIST,
-  ACTION_DELETE_HOMEWORK_ACCEPTED_TEACHERS_LI_LIST_ITEM
+  ACTION_DELETE_HOMEWORK_ACCEPTED_TEACHERS_LI_LIST_ITEM, ACTION_CLEANUP_HOMEWORK_LI_LIST, ACTION_CLEAN_HOMEWORK_TEACHERS_LI_LISTS
 } from '../types';
 
 export function change_homework_show_popup_class(isShowClass) {
@@ -96,5 +96,18 @@ export function delete_homework_accepted_teachers_li_list_item(class_id) {
   return {
     type: ACTION_DELETE_HOMEWORK_ACCEPTED_TEACHERS_LI_LIST_ITEM, // )))
     payload: class_id
+  }
+}
+
+export function cleanup_homework_li_list(list_name) {
+  return {
+    type: ACTION_CLEANUP_HOMEWORK_LI_LIST, // )))
+    payload: list_name
+  }
+}
+
+export function clean_homework_teachers_li_lists() {
+  return {
+    type: ACTION_CLEAN_HOMEWORK_TEACHERS_LI_LISTS, // )))
   }
 }
