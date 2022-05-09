@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import * as ActionCreators from '../../../../Redux/Actions/actions_homework';
 
-export const TeacherAddHomework = ({ state, onHidePopup, homework_popup_active_type }) => {
+export const TeacherAddHomework = ({ state, onHidePopup, homework_popup_active_type, school_subjects, current_class_id}) => {
 
 
     let lang = state.lang.language;
@@ -17,7 +17,7 @@ export const TeacherAddHomework = ({ state, onHidePopup, homework_popup_active_t
             editBtnTitle: "Редагувати",
             denyBtnTitle: "Відміна",
             deleteHomeworkBtnTitle: "Видалити запис",
-            homeworkInputPlaceholder: "Введіть домашнє завдання"
+            homeworkInputPlaceholder: "Введіть домашнє завдання..."
         },
         ru: {
             popupHeader: "Добавление домашнего задания",
@@ -28,22 +28,53 @@ export const TeacherAddHomework = ({ state, onHidePopup, homework_popup_active_t
             addHomeworkBtnTitle: "Сохранить",
             editBtnTitle: "Редактировать",
             denyBtnTitle: "Отменить",
-            deleteHomeworkBtnTitle: "Видалити запис",
-            homeworkInputPlaceholder: "Введіть домашнє завдання"
+            deleteHomeworkBtnTitle: "Удалить запись",
+            homeworkInputPlaceholder: "Введите домашнее задание..."
         },
         en: {
-            popupHeader: "Додавання домашнього завдання",
-            dataTitle: "Оберіть дату",
+            popupHeader: "Adding homework",
+            dataTitle: "Choose data",
             requiredField: "*Required field",
-            subjectsBtnTitle: "Предмет",
+            subjectsBtnTitle: "Subject",
             warningTitle: "All fields must be filled!",
             addHomeworkBtnTitle: "Save",
             editBtnTitle: "Edit",
             denyBtnTitle: "Cancel",
-            deleteHomeworkBtnTitle: "Видалити запис",
-            homeworkInputPlaceholder: "Введіть домашнє завдання"
+            deleteHomeworkBtnTitle: "Delete",
+            homeworkInputPlaceholder: "Enter homework text..."
         }
     };
+
+    const [is_active_drop_down, setIs_active_drop_down] = useState(false); // active_drop_down
+    const [subjects_li_list, setSubjects_li_list] = useState([]);
+    const [chosen_subject, setChosen_subject] = useState(null);
+    const selected_li = useRef();
+
+    const onChooseSubject = (e) => {
+        if(selected_li.current) selected_li.current.className = "";
+        e.target.className = "selected_li";
+        setChosen_subject(e.target.innerText);
+        setIs_active_drop_down("");
+        selected_li.current = e.target;
+    }
+
+    useEffect(()=> {
+        if(school_subjects) {
+            const our_li_list = school_subjects.map((subject, index) => {
+                return(<li key={index}>{subject}</li>)
+            })
+            setSubjects_li_list(our_li_list);
+        }
+        return () => {
+            setIs_active_drop_down(false);
+            setSubjects_li_list([]);
+            setChosen_subject(null);
+            if(selected_li.current) {
+                selected_li.current.className = "";
+                selected_li.current = null;
+            }
+        }
+    },[current_class_id]);
 
     return (
         <div className={"homework_popup add_homework_popup " + homework_popup_active_type}>
@@ -59,33 +90,31 @@ export const TeacherAddHomework = ({ state, onHidePopup, homework_popup_active_t
 
                     <div className="homework_popup_data_wrapper">
 
-                        <div className="homework_choose_data">
+                        {/* <div className="homework_choose_data"> */}
 
-                            <div className="subject_drop_down">
+                            <div className= {"subject_drop_down " + (is_active_drop_down ? "active_drop_down" : "")}>
 
-                                <button className='subject_drop_down_btn'>
-                                    <span className='subject_drop_down_header_selected'>Виберіть предмет</span>
+                                <button className='subject_drop_down_btn' onClick={() => setIs_active_drop_down(!is_active_drop_down)}>
+                                    <span className='subject_drop_down_header_selected'>{chosen_subject || langObj[lang].subjectsBtnTitle}</span>
                                 </button>
 
-                                <ul className='drop_down_li_list '>
-                                    <li>Хімія</li>
-                                    <li>Фізика</li>
-                                    <li>Математика</li>
+                                <ul className= 'drop_down_li_list' onClick={(e) => onChooseSubject(e)}>
+                                    {subjects_li_list}
                                 </ul>
 
                             </div> 
 
-                            <span className='homework_choose_data_title'>{langObj[lang].subjectsBtnTitle}</span>
-                        </div>
+                            {/* <span className='homework_choose_data_title'>{langObj[lang].subjectsBtnTitle}</span> */}
+                        {/* </div> */}
 
-                        <div className="homework_choose_data">
+                        {/* <div className="homework_choose_data"> */}
                             <input type="date" />
-                            <span className='homework_choose_data_title'>{langObj[lang].dataTitle}</span>
-                        </div>
+                            {/* <span className='homework_choose_data_title'>{langObj[lang].dataTitle}</span> */}
+                        {/* </div> */}
                     </div>
 
                     <div className="homework_popup_create_homework_message">
-                        <textarea placeholder='Текст домашнього завдання...'></textarea>
+                        <textarea placeholder= {langObj[lang].homeworkInputPlaceholder}></textarea>
                     </div>
 
                 </div>

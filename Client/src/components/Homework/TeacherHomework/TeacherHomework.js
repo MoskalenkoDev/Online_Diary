@@ -169,11 +169,13 @@ export const TeacherHomework = ({state}) =>
                     homework_popup_active_type = {homework_popup_active_type}
                     invite_link = {invite_link}
                 />
-                <TeacherAddHomework 
+                {homework_popup_active_type === "homework_add_homework"? <TeacherAddHomework 
                     state = {state} 
                     onHidePopup = {onHidePopup} 
                     homework_popup_active_type = {homework_popup_active_type}
-                />
+                    school_subjects = {school_subjects}
+                    current_class_id = {current_class_id}
+                /> : null}
             </div>
 
             <div className="homework_class_list_block">

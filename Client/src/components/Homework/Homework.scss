@@ -671,28 +671,34 @@
 .homework_popup_data_wrapper{
     display: flex;
     justify-content: space-between;
-    margin-bottom: 2vmax;
+    margin-bottom: 1vmax;
 }
 
-.homework_choose_data {
-    display: flex;
-    & .homework_choose_data_title {
-        color: #486c70;
-        margin: auto 5px;
-    }
-}
+// .homework_choose_data {
+//     display: flex;
+//     & .homework_choose_data_title {
+//         color: #486c70;
+//         margin: auto 5px;
+//     }
+// }
 
 .subject_drop_down {
     display: flex;
     flex-direction: column;
     position: relative;
-
+    
     & .subject_drop_down_btn {
         display: flex;
-        border-radius: 0.2vmax 0.2vmax 0px 0px;
+        border-radius: 0.2vmax;
         background: #f3f3f3;
         border: 1px solid #b6b6b6;
-
+        color: #024047;
+        white-space: nowrap;
+        width: clamp(110px, 7vmax, 7vmax);
+        &:hover {
+            background: #e4e4e4;
+            transition: 0.4s ease all;
+        }
         &::after {
             content: "";
             display: block;
@@ -700,7 +706,7 @@
             margin-right: 5px;
             width: clamp(14px, 1vmax, 16px);
             height: clamp(14px, 1vmax, 16px);
-            background: rgb(90, 90, 90);
+            background: #024047;
             mask-repeat: no-repeat;
             mask-position: center;
             -webkit-mask-size: contain;
@@ -710,10 +716,13 @@
             -webkit-mask-position: center;
             mask-image: url('../../images/drop-down.svg');
             -webkit-mask-image: url('../../images/drop-down.svg');
+            transition: all 0.2s ease;
         }
 
         & .subject_drop_down_header_selected {
+            overflow: hidden;
             padding: 5px;
+            text-overflow: ellipsis;
         }
     }
 
@@ -721,25 +730,58 @@
         width: 100%;
         position: absolute;
         top: 100%;
+        overflow-y: scroll;
+        max-height: 0px;
+        visibility: hidden;
+        opacity: 0;
+        font-size: clamp(16px, 0.7vw, 1vmax);
+        color: #024047;
+        transition: opacity ease-in 0.2s, visibility ease-in 0.2s, max-height ease-in 0.2s;
         & li {
             overflow: hidden;
             padding: 5px;
             background: #f3f3f3;
             border-bottom: 1px solid #b6b6b6;
-            border-right: 1px solid #b6b6b6;
-            border-left: 1px solid #b6b6b6;
             text-overflow: ellipsis;
+            cursor: pointer;
+            &:hover {
+                background: #b6b6b6;
+                transition: 0.4s ease all;
+            }
         }
 
-        & li:last-child {
-            border-radius: 0px 0vmax 0.2vmax 0.2vmax;
+        & li.selected_li {
+            background: #b6b6b6;
         }
-        
+        & li:last-child {
+            border-bottom: none;
+        }
     }
 
+    &.active_drop_down {
 
+        & .subject_drop_down_btn {
+           border-radius: 0.2vmax 0.2vmax 0px 0px; 
+           &::after {
+               transform: rotateX(180deg);
+           }
+        }
+    
+        & .drop_down_li_list {
+            border-right: 1px solid #b6b6b6;
+            border-left: 1px solid #b6b6b6;
+            border-bottom: 1px solid #b6b6b6;
+            border-radius: 0px 0vmax 0.2vmax 0.2vmax;
+            max-height: 150px;
+            visibility: visible;
+            opacity: 1;
+        }
+
+
+    }
 
 }
+
 
 .homework_popup_create_homework_message 
 {
