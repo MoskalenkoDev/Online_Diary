@@ -682,11 +682,16 @@
 //     }
 // }
 
+#add_homework_popup_date_picker {
+    
+}
+
 .subject_drop_down {
     display: flex;
     flex-direction: column;
     position: relative;
-    
+    height: fit-content;
+
     & .subject_drop_down_btn {
         display: flex;
         border-radius: 0.2vmax;
