@@ -63,7 +63,7 @@ export const TeacherHomework = ({state}) =>
     {
         window.clearTimeout(timer.current);
         state.dispatch(ActionCreators.change_homework_show_popup_class(""));
-        window.setTimeout(()=>
+        setTimeout(()=>
         {
             state.dispatch(ActionCreators.change_homework_popup_warning_title_class(""));
             setNew_class_title("");

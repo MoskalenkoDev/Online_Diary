@@ -24,7 +24,9 @@
     padding: 6px 7px 3px;
     color: #024047;
 }
-
+.DateInput__small {
+    width: 91px;
+}
 .SingleDatePickerInput__withBorder {
     border-radius: 0.2vmax;
     border: 1px solid #b6b6b6;
@@ -34,4 +36,20 @@
 .SingleDatePicker_picker {
     text-transform: capitalize;
     top: 46px !important;
+}
+
+.SingleDatePickerInput__showClearDate {
+    padding-right: 25px;
+}
+
+.SingleDatePickerInput_clearDate_svg {
+    transition: fill 0.2s ease ;
+}
+
+.SingleDatePickerInput_clearDate {
+    margin: -1px 0px 0px 0px;
+    &:hover, &:focus { background: transparent;}
+    &:hover .SingleDatePickerInput_clearDate_svg {
+        fill: #606268;
+    }
 }

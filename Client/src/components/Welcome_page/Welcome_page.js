@@ -5,26 +5,23 @@ import {Link} from 'react-router-dom';
 import {WrappedLanguages} from '../Languages/Languages';
 export default class Welcome_page extends Component
 {
-  langObj = 
-  {
-    ua: 
-    {
+  langObj = {
+
+    ua: {
       whatIsItTitle :"Що таке онлайн щоденник?",
       whatIsItAbout : `Онлайн щоденник - це зручний спосіб контролю своїх оцінок і домашнього завдання.\n`+
                       `Вчителі можуть додавати домашнє завдання своїм класам, ставити оцінки учням і підраховувати річні оцінки.\n`+
                       `А учні - зручно дізнаватися домашнє завдання і переглядати свої оцінки.\n`,
       login_btn_title : "Вхід"
     },
-    ru:
-    {
+    ru: {
       whatIsItTitle : "Что такое онлайн дневник?",
       whatIsItAbout : `Онлайн дневник - это удобный способ контроля своих оценок и домашнего задания.\n` +
                       `Учителя могут добавлять домашнее задание своим классам, ставить оценки ученикам и подсчитывать годовые оценки.\n` +
                       `А ученики -  удобно узнавать домашнее задание и просматривать свои оценки.\n`,
       login_btn_title : "Вход"
     },
-    en:
-    {
+    en: {
       whatIsItTitle : "What is an online diary?",
       whatIsItAbout: `An online diary is a convenient way to keep track of your grades and homework.\n` +
                      `Teachers can add homework to their classes, grade students, and calculate annual grades.\n` +

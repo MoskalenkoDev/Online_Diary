@@ -160,9 +160,7 @@
     overflow-y: scroll;
     opacity: 0;
     transition: opacity 0.25s ease, visibility 0.25s ease;
-    &.homework_popup_active // когда активен
-
-        {
+    &.homework_popup_active { // когда активен
         visibility: visible;
         opacity: 1;
     }
@@ -190,6 +188,10 @@
         display: flex;
     }
 
+    &.warning_copy_homework_popup {
+        display: flex;
+    }
+    
     &.teachers_and_students_editor_popup.homework_students_editor {
         display: flex;
         width: clamp(500px, 35vw, 62vw);
@@ -742,24 +744,50 @@
         font-size: clamp(16px, 0.7vw, 1vmax);
         color: #024047;
         transition: opacity ease-in 0.2s, visibility ease-in 0.2s, max-height ease-in 0.2s;
+
         & li {
             overflow: hidden;
             padding: 5px;
             background: #f3f3f3;
-            border-bottom: 1px solid #b6b6b6;
+            border-right: 1px solid #b6b6b6;
+            border-left: 1px solid #b6b6b6;
+            border-top: 1px solid #b6b6b6;
             text-overflow: ellipsis;
             cursor: pointer;
             &:hover {
                 background: #b6b6b6;
                 transition: 0.4s ease all;
             }
+            &:first-child { border-top: 0px;}
+            &:last-child { border-radius: 0px 0vmax 0.2vmax 0.2vmax; }
+            &:last-of-type:not(.deleted_subject) {border-bottom: 1px solid #b6b6b6;}
+        }
+
+        & li.highlighted {
+            background: #fff185;
+            &:hover {background: #ffd53e;}
+        }
+        
+        & li.deleted_subject {
+            border-right: 1px solid red;
+            border-left: 1px solid red;
+            border-bottom: 1px solid red;
+        }
+
+        & li.deleted_subject {
+            border-top: 1px solid red;
+        }
+
+        & li.deleted_subject ~ li.deleted_subject {
+            border-top: 0px;
         }
 
         & li.selected_li {
             background: #b6b6b6;
         }
-        & li:last-child {
-            border-bottom: none;
+
+        & li.selected_li.highlighted {
+            background: #ffd53e;
         }
     }
 
@@ -773,10 +801,6 @@
         }
     
         & .drop_down_li_list {
-            border-right: 1px solid #b6b6b6;
-            border-left: 1px solid #b6b6b6;
-            border-bottom: 1px solid #b6b6b6;
-            border-radius: 0px 0vmax 0.2vmax 0.2vmax;
             max-height: 150px;
             visibility: visible;
             opacity: 1;
