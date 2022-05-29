@@ -87,18 +87,21 @@ export const TeacherAddHomework = ({ state, onHidePopup, homework_popup_active_t
     ]
 
     const onChooseSubject = (e) => {
-        if (selected_li.current) selected_li.current.className = selected_li.current.className.replace(" selected_li", "") ;
-        e.target.className += " selected_li";
-        setChosen_subject(e.target.innerText);
-        setIs_active_drop_down(false);
-        selected_li.current = e.target;
+        if(e.target.className.includes("highlighted")) onShowWarningPopup();
+        else {
+            if (selected_li.current) selected_li.current.className = selected_li.current.className.replace(" selected_li", "") ;
+            e.target.className += " selected_li";
+            setChosen_subject(e.target.innerText);
+            setIs_active_drop_down(false);
+            selected_li.current = e.target;
+        }
     }
 
     let createDeletedLiList = (deletedSubjects, isDeletedAndHighlighted = false) => {
 
-        const deleted_li_list = deletedSubjects.map((item, index) => {
+        const deleted_li_list = deletedSubjects.map((subject, index) => {
 
-            return (<li key={"deleted_"+ index} className = {"deleted_subject " + (isDeletedAndHighlighted? "highlighted" : "")}>{item.subject}</li>)
+            return (<li key={"deleted_"+ index} className = {"deleted_subject " + (isDeletedAndHighlighted? "highlighted" : "")}>{subject}</li>)
         })
         return deleted_li_list;
     }
@@ -114,28 +117,38 @@ export const TeacherAddHomework = ({ state, onHidePopup, homework_popup_active_t
         return our_li_list;
     }
 
-    // тепер будемо підсвічувати ті предмети, що співпадають з днем, але тільки для наявних
-    const createLiList = () => { // мені треба щоб якщо є вибраний день, то воно підсвічувало лішки жовтим. Якщо день не вибрано - не підсвічувало.
+    // окей , з того що зробити треба це : 
+    // 1. Заборонити вибирати дні окрім завданих видалених предметів.  ХХХ
+    // 2. коли вибираю підсвічений предмет показувати попап
+    // 3. коли вибираю підсвічений день, то показувати попап
+    // 4. Прибрати кнопку Edit допоки не буде вибраний режим редагування
+    // 5. Забороняти ввод домашки в інпут ми не будемо бо сенсу нема
+    // 6. Якщо ми на сторінці заданої домашки то інпут домашки буде заблокований і буде присутня кнопка Edit. Зміна предмету або дня буде нас просто переміщати між домашками.
+    //    якщо ж ми нажали на кнопку Edit то ми можемо змінювати предмет та дату та можемо зберегти зміни.
+    //    В режимі перегляду завданої домашки - в нас відсутня кнопка зберегти.
+    //    Поки дз, дата та інпут не будуть заповнені то в звичайному режимі при нажиманні на зберегти буде висвічуватися попередження.
+    //    Якщо в режимі редагування вибрати предмет який буде конфліктувати з іншим заданим завданням - то в нас просто з'явиться той же попап. Пофіг-потім вчитель сам видалить дз
+    //    Якщо ми в режимі перегляду заданої домашки і хочемо переміститися в день або предмет де також задана домашка - нам не потрібно показувати попап
+    const createLiList = () => { 
 
         let our_li_list = [];
-        let deletedSubjects = [];
+        let deletedSubjects = []; // містить лише предмети
 
         if(homeworkInfofromDB.length) { // визначили видалені предмети, які мають попасти в список
             homeworkInfofromDB.forEach(item => {
-               if(!deletedSubjects.some(val => val.subject === item.subject) && !school_subjects.includes(item.subject)) deletedSubjects.push(item);
+               if(!deletedSubjects.some(subject => subject === item.subject) && !school_subjects.includes(item.subject)) deletedSubjects.push(item.subject);
             }) 
         }
         if(date) {
             let formatDate = moment(date).format('DD.MM.YYYY');
             let homeworkOnDayArr = homeworkInfofromDB.filter(item => (item.date === formatDate)); // вибирає всі записи, які мають конкретний день.
-            let deletedHighlightedSubjects = homeworkOnDayArr.filter(val => deletedSubjects.some(item => (item.subject === val.subject) ));
+            let deletedHighlightedSubjects = [];
+            homeworkOnDayArr.forEach(val => { if(deletedSubjects.some(subject => (subject === val.subject))) deletedHighlightedSubjects.push(val.subject)} );
+            console.log(deletedHighlightedSubjects);
             our_li_list.push(...createLiveLiList(homeworkOnDayArr)); // добавляю спочатку звичайні предмети
             our_li_list.push(...createDeletedLiList(deletedHighlightedSubjects, true)); // добавляю видалені предмети
-
         }
         else {
-            // якщо день не вибраний, то мені просто потрібно створити список лішок, який складатиметься з school_subjects та homeworkInfofromDB (видалені). 
-            // Видалені підсвітити червоним навколо.
             our_li_list.push(...createLiveLiList()); // добавляю спочатку звичайні предмети
             our_li_list.push(...createDeletedLiList(deletedSubjects)); // добавляю видалені предмети
         }
@@ -173,20 +186,27 @@ export const TeacherAddHomework = ({ state, onHidePopup, homework_popup_active_t
         if(current_class_id) createLiList();
     },[date,current_class_id])
 
+    // по суті я хочу щоб якщо предмет не вибраний, або вибраний не був із видалених - то воно показує все що треба.
+    // якщо вибраний видалений предмет - то заборонити вибирати усі окрім підсвічених днів
+    // підсвічувати дні тільки коли вибраний якийсь предмет ХХХ
     const outsideRangeSelector = (day) => {
         let diff = moment(day).diff(moment(), 'M');
+        // тут треба перевірити чи є вибраний предмет - та чи є він одним із видалених
+        if(chosen_subject && !school_subjects.includes(chosen_subject) && !isDayHighlighted(day)) return true;
         if (diff < -2) return true;
         return false;
     }
 
     const isDayHighlighted = CalendarDate => {
         let isHighlighted = false;
-        homeworkInfofromDB.forEach(({date}) => {
+        if(!chosen_subject) return false; // якщо предмет не вибраний то нічо не підсвічуємо
+        homeworkInfofromDB.forEach(({date, subject}) => {
             date = moment(date, 'DD.MM.YYYY');
             const isDayOfMonthMatch = date.date() === CalendarDate.date();
             const isMonthMatch = date.month() === CalendarDate.month();
             const isYearMatch = date.year() === CalendarDate.year();
-            if (isDayOfMonthMatch && isMonthMatch && isYearMatch) {
+            const isMatchSubject = chosen_subject === subject;
+            if (isDayOfMonthMatch && isMonthMatch && isYearMatch && isMatchSubject) {
                 isHighlighted = true;
             }
         });
@@ -195,7 +215,7 @@ export const TeacherAddHomework = ({ state, onHidePopup, homework_popup_active_t
 
     const onDateChange = (date) => {
         if(date && isDayHighlighted(date) && chosen_subject) {
-            alert("STICK YOUR FINGER IN MY ASS");
+            onShowWarningPopup();
             setFocusedInput(false);
         }
         else setDate(date);
@@ -272,7 +292,7 @@ export const TeacherAddHomework = ({ state, onHidePopup, homework_popup_active_t
                             // enableOutsideDays 
                             // showClearDate   
                             // initialVisibleMonth={() => moment().subtract(2, 'months')}                          // start showing from adjusted month 
-                            // isDayBlocked = {(day) => true}                                                      // block all days, but only from availibles 
+                            // isDayBlocked = {(day) => !isDayHighlighted(day)}                                                      // block all days, but only from availibles 
                             hideKeyboardShortcutsPanel
 
                         />
@@ -285,14 +305,14 @@ export const TeacherAddHomework = ({ state, onHidePopup, homework_popup_active_t
 
                 </div>
 
-                {/* <div className={"homework_popup_wrapper " + state.homework_popup_class}>
+                <div className={"homework_warning_copy_popup_wrapper " + (isOpenWarningPopup? "homework_popup_active": "")}>
                     <TeacherAddHomeworkWarningCopyHomeworkText 
-                        homeworkDate = {date}
+                        homeworkDate = {moment(date).format('DD.MM.YYYY')}
                         homeworkSubject = {chosen_subject}
                         onHidePopup = {onHideWarningPopup}
                         onSubmitCopyAndChangeDay = {onSubmitCopyAndChangeDay}
                     />
-                </div> */}
+                </div>
 
                 <span className={"popup_warning_span " + state.popup_warning_class}>{langObj[lang].warningTitle}</span>
 
