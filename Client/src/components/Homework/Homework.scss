@@ -201,6 +201,9 @@
         display: flex;
         width: clamp(500px, 35vw, 62vw);
     }
+    &.add_homework_popup .popup_warning_span {
+        margin-bottom: clamp(10px, 0.6vmax, 1.5vw); 
+    }
 }
 
 .warning_copy_homework_popup .homework_popup_input_block {
@@ -221,11 +224,14 @@
     & .important_field {
         font-size: clamp(13px, 0.7vmax, 0.8vmax);
     }
+
+
 }
 
 .homework_popup_input_block {
     display: flex;
     flex-direction: column;
+    margin-bottom: clamp(10px, 0.6vmax, 1.5vw); 
 }
 
 .homework_peaky_btn {
@@ -280,7 +286,9 @@
     opacity: 0;
     transition: 0.4s ease;
     z-index: 51;
-
+    white-space: nowrap;
+    text-align: center;
+    
     & .copy_invite_link_popup_span_wrapper {
         background: rgba(0, 0, 0, 0.7);
         padding: clamp(10px, 0.8vmax, 50px) clamp(25px, 1vmax, 50px);

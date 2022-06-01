@@ -5,7 +5,7 @@ import {TeacherCopyClassInviteLink} from './TeacherStudentsEditorComponents/Teac
 import {RequestsToJoinClass} from './TeacherStudentsEditorComponents/RequestsToJoinClass';
 import {StudentSubscribers} from './TeacherStudentsEditorComponents/StudentSubscribers';
 
-export const TeacherStudentsEditor= ({state,invite_link,homework_popup_active_type,onHidePopup,setHomework_copy_invite_link_popup_class}) =>
+export const TeacherStudentsEditor= ({state,invite_link,homework_popup_active_type,onHidePopup,showSuccessMessage}) =>
 {
     let lang = state.lang.language;
     let langObj = {
@@ -55,7 +55,7 @@ export const TeacherStudentsEditor= ({state,invite_link,homework_popup_active_ty
                     <TeacherCopyClassInviteLink 
                         state = {state} 
                         invite_link = {invite_link} 
-                        setHomework_copy_invite_link_popup_class = {setHomework_copy_invite_link_popup_class}
+                        showSuccessMessage = {showSuccessMessage}
                     />
 
                     <RequestsToJoinClass state = {state} class_id = {invite_link} lang = {lang} prevActiveMenuItem = {prevActiveMenuItem}/>

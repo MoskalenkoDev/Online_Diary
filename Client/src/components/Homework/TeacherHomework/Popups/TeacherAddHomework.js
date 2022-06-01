@@ -8,7 +8,15 @@ import 'moment/locale/uk';
 import {TeacherAddHomeworkWarningCopyHomeworkText} from './TeacherAddHomeworkWarningCopyHomeworkText';
 import * as ActionCreators from '../../../../Redux/Actions/actions_homework';
 
-export const TeacherAddHomework = ({ state, onHidePopup, homework_popup_active_type, school_subjects, current_class_id }) => {
+export const TeacherAddHomework = ({ 
+        state, 
+        onHidePopup, 
+        homework_popup_active_type, 
+        school_subjects, 
+        current_class_id, 
+        timer, 
+        showSuccessMessage
+    }) => {
 
 
     let lang = state.lang.language;
@@ -24,7 +32,10 @@ export const TeacherAddHomework = ({ state, onHidePopup, homework_popup_active_t
             editBtnTitle: "Редагувати",
             denyBtnTitle: "Відміна",
             deleteHomeworkBtnTitle: "Видалити",
-            homeworkInputPlaceholder: "Введіть домашнє завдання..."
+            homeworkInputPlaceholder: "Введіть домашнє завдання...",
+            successAddedMessage: "Завдання додано",
+            successEditedMessage: "Завдання редаговано",
+            successDeletedMessage: "Завдання видалено",
         },
         ru: {
             popupHeader: "Добавление домашнего задания",
@@ -36,7 +47,10 @@ export const TeacherAddHomework = ({ state, onHidePopup, homework_popup_active_t
             editBtnTitle: "Редактировать",
             denyBtnTitle: "Отменить",
             deleteHomeworkBtnTitle: "Удалить",
-            homeworkInputPlaceholder: "Введите домашнее задание..."
+            homeworkInputPlaceholder: "Введите домашнее задание...",
+            successAddedMessage: "Задание добавлено",
+            successEditedMessage: "Задание редактировано",
+            successDeletedMessage: "Задание удалено",
         },
         en: {
             popupHeader: "Adding homework",
@@ -48,7 +62,10 @@ export const TeacherAddHomework = ({ state, onHidePopup, homework_popup_active_t
             editBtnTitle: "Edit",
             denyBtnTitle: "Cancel",
             deleteHomeworkBtnTitle: "Delete",
-            homeworkInputPlaceholder: "Enter homework text..."
+            homeworkInputPlaceholder: "Enter homework text...",
+            successAddedMessage: "Homework added",
+            successEditedMessage: "Homework edited",
+            successDeletedMessage: "Homework deleted",
         }
     };
 
@@ -62,30 +79,30 @@ export const TeacherAddHomework = ({ state, onHidePopup, homework_popup_active_t
     const [homeworkMode, setHomeworkMode] = useState("plain_mode"); // буде три мода : звичайний мод (plain_mode), мод редагування заданої домашки (edit_mode), 
     const [isOpenWarningPopup, setIsOpenWarningPopup] = useState(false);                 // мод перегляду домашки (watch_mode)
     const [activeRecord, setActiveRecord] = useState();
-    const selected_li = useRef();
+    const selected_li = useRef(null);
 
     const homeworkInfofromDB = [
         {
             _id: "123456",
-            date : '10.05.2022',
+            date : '10.06.2022',
             subject: 'Хімія',
             homework: "Сторінка 52, вправа 140-145"
         },
         {
             _id: "234567",
-            date : '10.05.2022',
+            date : '10.06.2022',
             subject: 'Фізкультура',
             homework: "Сторінка 112, вправа 240-245"
         },
         {
             _id: "345678",
-            date : '27.05.2022',
+            date : '27.06.2022',
             subject: 'Хімія',
             homework: "Сторінка 152, вправа 540-545"
         }, 
         {
             _id: "456789",
-            date : '27.05.2022',
+            date : '27.06.2022',
             subject: 'Астрологія',
             homework: "Сторінка 84, прочитати все що тільки можна"
         }
@@ -104,8 +121,9 @@ export const TeacherAddHomework = ({ state, onHidePopup, homework_popup_active_t
         else setChosen_subject("");
     }
     
-    const changeRecordWithoutPopup = (new_date = date, subject = chosen_subject) => {
+    const changeRecordWithoutPopup = (selected_li, new_date = date, subject = chosen_subject) => {
         const record = homeworkInfofromDB.find(val => val.subject === subject && compareDate(new_date, val.date)); 
+        record.selected_li = selected_li;
         setActiveRecord(record);
         setHomeworkText(record.homework);
     }
@@ -115,7 +133,7 @@ export const TeacherAddHomework = ({ state, onHidePopup, homework_popup_active_t
         if(e.target.className.includes("highlighted")) {
 
             if(homeworkMode === "watch_mode") {  // хочу щоб просто не виводився попап, но все спрацювало
-                changeRecordWithoutPopup(date,e.target.innerText);
+                changeRecordWithoutPopup(e.target, date,e.target.innerText);
             }
             else if (homeworkMode === "plain_mode") {
                 // я хочу перевірити чи тест пустий чи ні. Якщо пустий то переключусь спокійно. Якщо ні - то попап
@@ -126,19 +144,20 @@ export const TeacherAddHomework = ({ state, onHidePopup, homework_popup_active_t
                 }
                 else {
                     setHomeworkMode("watch_mode");
-                    changeRecordWithoutPopup(date,e.target.innerText);
+                    clearTimer();
+                    changeRecordWithoutPopup(e.target,date,e.target.innerText);
                 }
             }
-            // else {
-            //     if(homeworkText) {
-            //         onShowWarningPopup();
-            //         prevSelectedLi.current = selected_li.current;
-            //         cancelChanges.current = () => goSubjectBack();
-            //     }
-            //     else {
-            //         changeRecordWithoutPopup(date,e.target.innerText);
-            //     }
-            // }
+
+            else if(homeworkMode === "edit_mode") {
+                if(homeworkText) {
+                    if(!compareDate(activeRecord.date, date) || !(e.target.innerText === activeRecord.subject)) {
+                        onShowWarningPopup();
+                        prevSelectedLi.current = selected_li.current;
+                        cancelChanges.current = () => goSubjectBack();
+                    } 
+                }
+            }
         }
         else {
             if(homeworkMode === "watch_mode") {setHomeworkMode("plain_mode");setHomeworkText("");}
@@ -154,7 +173,7 @@ export const TeacherAddHomework = ({ state, onHidePopup, homework_popup_active_t
 
         const deleted_li_list = deletedSubjects.map((subject, index) => {
 
-            return (<li key={"deleted_"+ index} className = {"deleted_subject " + (isDeletedAndHighlighted? "highlighted" : "")}>{subject}</li>)
+            return (<li key={"deleted_"+ index} className = {"deleted_subject " + (isDeletedAndHighlighted? "highlighted" : "") + (chosen_subject === subject? " selected_li": "")}>{subject}</li>)
         })
         return deleted_li_list;
     }
@@ -164,7 +183,7 @@ export const TeacherAddHomework = ({ state, onHidePopup, homework_popup_active_t
         if (school_subjects) { // просто створює список зі звичайних предметів
             our_li_list = school_subjects.map((subject, index) => {
                 let isSubjectHighlighted = highlightedSubjects.some(val => val.subject === subject);
-                return (<li key={index} className = {isSubjectHighlighted? "highlighted" : ""}>{subject}</li>)
+                return (<li key={index} className = {(isSubjectHighlighted? "highlighted" : "") + (chosen_subject === subject? " selected_li": "") }>{subject}</li>)
             })
         }
         return our_li_list;
@@ -281,19 +300,29 @@ export const TeacherAddHomework = ({ state, onHidePopup, homework_popup_active_t
         if(homeworkMode === "watch_mode") { // тепер я можу перемикатися між заданими домашками (якщо в режимі watch_mode) і не буде висвічуватись ворнінг попап
             if(!isNewDateHighlighted) {setHomeworkMode("plain_mode");setHomeworkText("");} 
             else {
-                changeRecordWithoutPopup(new_date);
+                changeRecordWithoutPopup(selected_li.current,new_date);
             }
             return;
         }
-        if(homeworkMode === "plain_mode") {
+        if(homeworkMode === "plain_mode" ) {
             if(isNewDateHighlighted) {
-                if(!homeworkText) {setHomeworkMode("watch_mode");changeRecordWithoutPopup(new_date);}
+                if(!homeworkText) {setHomeworkMode("watch_mode");changeRecordWithoutPopup(selected_li.current,new_date); clearTimer();}
                 else {
                     onShowWarningPopup();
                     cancelChanges.current = () => setDate(date);
                 }
             } 
 
+        }
+        else if(homeworkMode === "edit_mode") {
+            if(isNewDateHighlighted) {
+                if(homeworkText) {
+                    if(compareDate(activeRecord.date, new_date) && chosen_subject === activeRecord.subject) return; // хочу перевірити чи збігається вибраний день та предмет з activeRecord. Якщо да, дозволити змінити без зміни режима та попапів
+                    onShowWarningPopup();
+                    cancelChanges.current = () => setDate(date);
+                }
+
+            } 
         }
     }
 
@@ -303,7 +332,7 @@ export const TeacherAddHomework = ({ state, onHidePopup, homework_popup_active_t
 
     const onSubmitCopyAndChangeDay = () => {
         navigator.clipboard.writeText(homeworkText);
-        changeRecordWithoutPopup();
+        changeRecordWithoutPopup(selected_li.current);
         setIsOpenWarningPopup(false);
         setHomeworkMode("watch_mode");
     } 
@@ -317,23 +346,47 @@ export const TeacherAddHomework = ({ state, onHidePopup, homework_popup_active_t
         cancelChanges.current();
     }
 
+
+
     const onSaveClick = () => {
-        homeworkMode === "plain_mode"? 
-            console.log("Просто зберігаємо в бд") :
-            console.log("Замінюємо старий запис новим")
-        onHidePopup();
+        if (!chosen_subject || !homeworkText || !date) { // проверяем не пустые ли обязательные поля в попапе
+            window.clearTimeout(timer.current);
+            state.dispatch(ActionCreators.change_homework_popup_warning_title_class("homework_popup_warning_active"));
+            timer.current = window.setTimeout(() => { clearTimer() }, 4000);
+        }
+        else {
+            if(homeworkMode === "plain_mode") {
+                console.log("Просто зберігаємо в бд");
+                showSuccessMessage(langObj[lang].successAddedMessage);
+            }
+            else {
+                console.log("Замінюємо старий запис новим");
+                showSuccessMessage(langObj[lang].successEditedMessage);
+            }
+            onHidePopup();
+        }
+        
     }
 
     const onDeleteClick = () => {
         console.log("Видаляємо запис з бд");
+        showSuccessMessage(langObj[lang].successDeletedMessage);
         onHidePopup();
+    }
+
+    const clearTimer = () => {
+        window.clearTimeout(timer.current);
+        state.dispatch(ActionCreators.change_homework_popup_warning_title_class(""));
     }
 
     const onEditOrCancelClick = () => {
         let isEditMode = homeworkMode === "edit_mode"? true : false;
+        if(isEditMode) clearTimer();
         setHomeworkMode(isEditMode ? "watch_mode": "edit_mode"); // треба якось відкотити текст, дату та назву предмета назад (думка така що коли ми попадаємо на перегляд цього предмету то в стейті зберігатиметься айдішнік)
         setHomeworkText(activeRecord.homework);     // по id ми також можемо орієнтуватися який запис конкретно ми змінюємо - просто відправляємо нові дані і айдішнік на бекенд
         setChosen_subject(activeRecord.subject);
+        if (activeRecord.selected_li) selected_li.current.className = selected_li.current.className.replace(" selected_li", "") ; 
+        activeRecord.selected_li.className += " selected_li";  // просто вибирає предмет і відповідає за зміну активної лішки 
         setDate(moment(activeRecord.date, 'DD.MM.YYYY'));
     }
 

@@ -1,32 +1,29 @@
 import {useRef} from 'react';
 
-export const TeacherCopyClassInviteLink = ({state, invite_link, setHomework_copy_invite_link_popup_class}) => {
+export const TeacherCopyClassInviteLink = ({state, invite_link, showSuccessMessage}) => {
 
     let lang = state.lang.language;
     let langObj = {
         ua: {
             copyBtnText: "Копіювати",
             inviteLinkDescription: "Це посилання для реєстрації на ваш курс. Відправте його своїм учням.",
+            popupTitleCopied: "Скопійовано"
         },
         ru: {
             copyBtnText: "Копировать",
             inviteLinkDescription: "Это ссылка для регистрации на ваш курс.Скиньте ее своим ученикам.",
+            popupTitleCopied: "Скопировано"
         },
         en: {
             copyBtnText: "Copy",
             inviteLinkDescription: "This is a link to an invitation to your course.Send this to your students.",
+            popupTitleCopied: "Copied"
         }
     }
 
-    let timer_copy_popup = useRef(null);
-
     let onCopyInviteLink = () => {
-        window.clearTimeout(timer_copy_popup.current);
         navigator.clipboard.writeText(invite_link);
-        setHomework_copy_invite_link_popup_class("active_invite_copy_link_popup");
-        timer_copy_popup.current = setTimeout(() => {
-            setHomework_copy_invite_link_popup_class("");
-        },2000);
+        showSuccessMessage(langObj[lang].popupTitleCopied)
     }
 
     return(

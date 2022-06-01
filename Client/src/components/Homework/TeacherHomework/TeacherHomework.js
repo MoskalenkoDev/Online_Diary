@@ -2,7 +2,7 @@ import React, {useEffect ,useRef, useState} from 'react';
 import * as ActionCreators from '../../../Redux/Actions/actions_homework';
 import {TeacherAddClassPopup} from './Popups/TeacherAddClassPopup';
 import {TeacherEditClassPopup} from './Popups/TeacherEditClassPopup';
-import {TeacherCopyInviteLink} from './Popups/TeacherCopyInviteLink';
+import {TeacherSuccessMessagePopup} from './Popups/TeacherSuccessMessagePopup';
 import {TeacherStudentsEditor} from './Popups/TeacherStudentsEditor';
 import {TeacherAddHomework} from './Popups/TeacherAddHomework'; 
 
@@ -17,19 +17,19 @@ export const TeacherHomework = ({state}) =>
         {
             yourClasses: "Ваші класи",
             addClassBtn: "Додати клас",
-            alertWarningTitle: "Спочатку заповніть дані в профілі!"
+            alertWarningTitle: "Спочатку заповніть дані в профілі!",
         },
         ru:
         {
             yourClasses: "Ваши классы",
             addClassBtn: "Добавить класс",
-            alertWarningTitle: "Сначало заполните данные в профиле!"
+            alertWarningTitle: "Сначало заполните данные в профиле!",
         },
         en:
         {
             yourClasses: "Your classes",
             addClassBtn: "Add class",
-            alertWarningTitle: "First fill in the data in the profile!"
+            alertWarningTitle: "First fill in the data in the profile!",
         }
     }
     
@@ -38,7 +38,8 @@ export const TeacherHomework = ({state}) =>
     const [new_class_title, setNew_class_title] = useState("");
     const [current_class_id, setCurrent_class_id] = useState(""); // _id обьекта в бд который мы изменяем или удаляем
     const [homework_popup_active_type, setHomework_popup_active_type] = useState("homework_add_class_popup"); // "homework_edit_popup" , "homework_students_editor", "homework_add_homework"
-    const [homework_copy_invite_link_popup_class, setHomework_copy_invite_link_popup_class] = useState(""); // активный класс - active_invite_copy_link_popup
+    const [teacher_success_message_popup_class, setTeacher_success_message_popup_class] = useState(""); // активный класс - active_invite_copy_link_popup
+    const [teacher_success_message_popup_message_text, setTeacher_success_message_popup_message_text] = useState();
 
     let onEditBtnClick = (li_info) =>
     {   
@@ -74,6 +75,17 @@ export const TeacherHomework = ({state}) =>
             }
             state.dispatch(ActionCreators.cleanup_homework_li_list("homework_students_in_class_li_list"));
         },250);
+    }
+
+    let timer_copy_popup = useRef(null);
+
+    let showSuccessMessage = (message) => {
+        clearTimeout(timer_copy_popup.current);
+        setTeacher_success_message_popup_message_text(message);
+        setTeacher_success_message_popup_class("active_invite_copy_link_popup");
+        timer_copy_popup.current = setTimeout(() => {
+            setTeacher_success_message_popup_class("");
+        },2000);
     }
 
     let onShowAddClassPopup = () =>
@@ -165,17 +177,19 @@ export const TeacherHomework = ({state}) =>
                 <TeacherStudentsEditor
                     state = {state} 
                     onHidePopup = {onHidePopup} 
-                    setHomework_copy_invite_link_popup_class = {setHomework_copy_invite_link_popup_class}
+                    showSuccessMessage = {showSuccessMessage}
                     homework_popup_active_type = {homework_popup_active_type}
                     invite_link = {invite_link}
                 />
-                {homework_popup_active_type === "homework_add_homework"? <TeacherAddHomework 
+                {homework_popup_active_type === "homework_add_homework"&& <TeacherAddHomework 
                     state = {state} 
                     onHidePopup = {onHidePopup} 
                     homework_popup_active_type = {homework_popup_active_type}
                     school_subjects = {school_subjects}
                     current_class_id = {current_class_id}
-                /> : null}
+                    timer = {timer}
+                    showSuccessMessage = {showSuccessMessage}
+                />}
             </div>
 
             <div className="homework_class_list_block">
@@ -184,7 +198,11 @@ export const TeacherHomework = ({state}) =>
                 </ul>
             </div>
 
-            <TeacherCopyInviteLink state = {state} homework_copy_invite_link_popup_class = {homework_copy_invite_link_popup_class}/>
+            <TeacherSuccessMessagePopup 
+                state = {state} 
+                teacher_success_message_popup_class = {teacher_success_message_popup_class} 
+                message_text = {teacher_success_message_popup_message_text}
+            />
             
         </div>  
     );
