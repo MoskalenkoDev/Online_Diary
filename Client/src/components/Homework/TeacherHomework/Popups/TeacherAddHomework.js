@@ -6,6 +6,7 @@ import moment from 'moment';
 import 'moment/locale/ru';
 import 'moment/locale/uk';
 import {TeacherAddHomeworkWarningCopyHomeworkText} from './TeacherAddHomeworkWarningCopyHomeworkText';
+import {add_homework,edit_homework,delete_homework,get_homework_tasks} from '../../../../controllers/TeacherHomeworkController';
 import * as ActionCreators from '../../../../Redux/Actions/actions_homework';
 
 export const TeacherAddHomework = ({ 
@@ -34,7 +35,7 @@ export const TeacherAddHomework = ({
             deleteHomeworkBtnTitle: "Видалити",
             homeworkInputPlaceholder: "Введіть домашнє завдання...",
             successAddedMessage: "Завдання додано",
-            successEditedMessage: "Завдання редаговано",
+            successEditedMessage: "Завдання відредаговано",
             successDeletedMessage: "Завдання видалено",
         },
         ru: {
@@ -49,7 +50,7 @@ export const TeacherAddHomework = ({
             deleteHomeworkBtnTitle: "Удалить",
             homeworkInputPlaceholder: "Введите домашнее задание...",
             successAddedMessage: "Задание добавлено",
-            successEditedMessage: "Задание редактировано",
+            successEditedMessage: "Задание отредактировано",
             successDeletedMessage: "Задание удалено",
         },
         en: {
@@ -90,8 +91,8 @@ export const TeacherAddHomework = ({
         },
         {
             _id: "234567",
-            date : '10.06.2022',
-            subject: 'Фізкультура',
+            date : '09.06.2022',
+            subject: 'Спорт-сила',
             homework: "Сторінка 112, вправа 240-245"
         },
         {
@@ -107,6 +108,11 @@ export const TeacherAddHomework = ({
             homework: "Сторінка 84, прочитати все що тільки можна"
         }
     ]
+
+    // const getHomeworks = async () => {
+    //     const homeworkInfofromDB = await get_homework_tasks(current_class_id, start_date, end_date);
+    //     setReceivedHomeworkInfo(homeworkInfofromDB);
+    // }
 
     let cancelChanges = useRef();
     let prevSelectedLi = useRef(); 
@@ -188,19 +194,7 @@ export const TeacherAddHomework = ({
         }
         return our_li_list;
     }
-
-    // окей , з того що зробити треба це : 
-    // 1. Заборонити вибирати дні окрім завданих видалених предметів.  ХХХ
-    // 2. коли вибираю підсвічений предмет показувати попап
-    // 3. коли вибираю підсвічений день, то показувати попап
-    // 4. Прибрати кнопку Edit допоки не буде вибраний режим редагування
-    // 5. Забороняти ввод домашки в інпут ми не будемо бо сенсу нема
-    // 6. Якщо ми на сторінці заданої домашки то інпут домашки буде заблокований і буде присутня кнопка Edit. Зміна предмету або дня буде нас просто переміщати між домашками.
-    //    якщо ж ми нажали на кнопку Edit то ми можемо змінювати предмет та дату та можемо зберегти зміни.
-    //    В режимі перегляду завданої домашки - в нас відсутня кнопка зберегти.
-    //    Поки дз, дата та інпут не будуть заповнені то в звичайному режимі при нажиманні на зберегти буде висвічуватися попередження.
-    //    Якщо в режимі редагування вибрати предмет який буде конфліктувати з іншим заданим завданням - то в нас просто з'явиться той же попап. Пофіг-потім вчитель сам видалить дз
-    //    Якщо ми в режимі перегляду заданої домашки і хочемо переміститися в день або предмет де також задана домашка - нам не потрібно показувати попап
+    
     const createLiList = () => { 
 
         let our_li_list = [];
@@ -348,29 +342,30 @@ export const TeacherAddHomework = ({
 
 
 
-    const onSaveClick = () => {
-        if (!chosen_subject || !homeworkText || !date) { // проверяем не пустые ли обязательные поля в попапе
+    const onSaveClick = async() => {
+        if (!chosen_subject || !homeworkText.trim() || !date) { // проверяем не пустые ли обязательные поля в попапе
             window.clearTimeout(timer.current);
             state.dispatch(ActionCreators.change_homework_popup_warning_title_class("homework_popup_warning_active"));
             timer.current = window.setTimeout(() => { clearTimer() }, 4000);
         }
         else {
             if(homeworkMode === "plain_mode") {
-                console.log("Просто зберігаємо в бд");
-                showSuccessMessage(langObj[lang].successAddedMessage);
+                const result = await add_homework(current_class_id,chosen_subject,homeworkText,date);
+                if(result) showSuccessMessage(langObj[lang].successAddedMessage);
+                else alert("Something went wrong");
             }
             else {
-                console.log("Замінюємо старий запис новим");
-                showSuccessMessage(langObj[lang].successEditedMessage);
+                const result = await edit_homework(activeRecord._id,chosen_subject,homeworkText,date);
+                if(result) showSuccessMessage(langObj[lang].successEditedMessage);
             }
             onHidePopup();
         }
         
     }
 
-    const onDeleteClick = () => {
-        console.log("Видаляємо запис з бд");
-        showSuccessMessage(langObj[lang].successDeletedMessage);
+    const onDeleteClick = async () => {
+        const result = await delete_homework(activeRecord._id);
+        if(result) showSuccessMessage(langObj[lang].successDeletedMessage);
         onHidePopup();
     }
 
@@ -388,6 +383,17 @@ export const TeacherAddHomework = ({
         if (activeRecord.selected_li) selected_li.current.className = selected_li.current.className.replace(" selected_li", "") ; 
         activeRecord.selected_li.className += " selected_li";  // просто вибирає предмет і відповідає за зміну активної лішки 
         setDate(moment(activeRecord.date, 'DD.MM.YYYY'));
+    }
+
+    let currentOpenMonthCounter = useRef(0);
+    let onNextMonthClick = (e) => {  
+        // по суті я можу дізнатися який зараз місяць я переглядаю ось в цих функціях
+        // точніше кажучи тут я лише можу отримати в івенті нинішній місяць. Проте мені треба лічильник, який буде вираховувати мінімальну дату в залежності від 
+        // кількості місяців які я пролистав відносно нинішнього. Лічильник буде один. І формула така : 
+        currentOpenMonthCounter.current += 1;
+    }
+    let onPrevMonthClick = (e) => {
+        currentOpenMonthCounter.current -= 1;
     }
 
     moment.locale(lang === "ua" ? "uk" : lang);
@@ -436,6 +442,8 @@ export const TeacherAddHomework = ({
                             displayFormat="DD.MM.YYYY"
                             readOnly
                             showClearDate
+                            onNextMonthClick={onNextMonthClick}
+                            onPrevMonthClick = {onPrevMonthClick}
                             // isDayHighlighted={(day) => {console.log(day); return true;}} 
                             // monthFormat="YYYY[年]MMMM"
                             // monthFormat = "MMMM YYYY"

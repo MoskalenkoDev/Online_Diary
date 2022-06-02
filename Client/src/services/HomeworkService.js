@@ -38,6 +38,23 @@ export default class HomeworkService {
         return $api.delete(`/teacher/diary_menu/homework/kick_student`, {data : {student_id, class_id}});
     }
 
+    
+    static async get_teacher_homework_tasks(class_id, start_date, end_date) {
+        return $api.post(`/teacher/diary_menu/homework/get_homework_tasks`, {class_id, start_date, end_date});
+    }
+
+    static async add_homework(class_id, subject, homeworkText, date) { ///
+        return $api.post(`/teacher/diary_menu/homework/add_homework`, {class_id,subject, homeworkText, date});
+    }
+
+    static async edit_homework(record_id ,subject, homeworkText, date) { ///
+        return $api.put(`/teacher/diary_menu/homework/edit_homework`, {record_id ,subject, homeworkText, date});
+    }
+
+    static async delete_homework(record_id) {
+        return $api.delete(`/teacher/diary_menu/homework/delete_homework`, {data : {record_id}});
+    }
+
     //////////////////////////////////////////StudentHomeworkController///////////////////////////////////////////////////
 
     static async search_teacher_by_id(_id) {

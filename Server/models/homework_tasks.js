@@ -15,7 +15,7 @@ const homework_tasks = new Schema({
         required: true
     },
     date: {
-        type: Date,
+        type: Schema.Types.Date,
         required: true
     }
 });

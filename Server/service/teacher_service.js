@@ -1,8 +1,10 @@
 const class_model = require("../models/class_model");
 const student_users_model = require("../models/student_users_model");
 const student_in_classes = require("../models/student_in_classes");
+const homework_tasks = require("../models/homework_tasks");
 const ApiError = require('../exceptions/api_error');
 const StudentInfo = require("../dtos/student_info_dto");
+const HomeworkTasks = require("../dtos/homework_tasks_dto");
 class TeacherService {
 
     async add_new_class(teacher_id, title, school_subjects) {
@@ -77,6 +79,37 @@ class TeacherService {
         await student_in_classes.findOneAndUpdate({student_id}, {$pull: {"classes" : class_id}});
     }
 
+
+    async get_homework_tasks(class_id, start_date, end_date) {
+
+        let new_homework_tasks = [];
+        let homework_tasks = await homework_tasks.find({class_id, date :{$gte:ISODate(start_date),$lt:ISODate(end_date)}}).lean();
+        homework_tasks.forEach(record => {
+            const newTask = new HomeworkTasks(record);
+            new_homework_tasks.push(newTask);
+        });
+        return new_homework_tasks;
+    }
+
+    async add_homework(class_id, school_subject, task, date) {
+        let homeworkTaskModel = new homework_tasks({class_id, school_subject, task, date});
+        await homeworkTaskModel.save();
+    }
+
+    async edit_homework(record_id, subject, homeworkText, date) {
+        let updateObj = {
+            school_subject: subject,
+            task: homeworkText,
+            date
+        };
+        await homework_tasks.findByIdAndUpdate(record_id , {$set : updateObj}, function(err, doc) {
+            if(err) throw ApiError.BadRequest("wrond record_id");
+        });
+    }
+
+    async delete_homework(record_id) {
+        await homework_tasks.findByIdAndDelete(record_id);
+    }
 }
 
 module.exports = new TeacherService();

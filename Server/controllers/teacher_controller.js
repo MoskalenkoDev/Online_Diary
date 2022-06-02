@@ -134,6 +134,65 @@ class TeacherController
         }
     }
 
+    async get_homework_tasks(req, res, next) {
+        try {
+            const {class_id, start_date, end_date} = req.body;
+            const errors = validationResult(req);
+            if(!errors.isEmpty()) {
+               return next(ApiError.BadRequest('wrong parameter type', errors.array())); 
+            }
+            const homework_tasks = await teacher_service.get_homework_tasks(class_id, start_date, end_date);
+            return res.json(homework_tasks);
+        }
+        catch (e) {
+            next(e);
+        }
+    }
+
+    async add_homework(req , res,next) {
+        try {
+            const {class_id, subject, homeworkText, date} = req.body;
+            const errors = validationResult(req);
+            if(!errors.isEmpty()) {
+               return next(ApiError.BadRequest('wrong parameter type', errors.array())); 
+            }
+            await teacher_service.add_homework(class_id, subject, homeworkText, date);
+            return res.sendStatus(200, 'OK');
+        }
+        catch(e) {
+            next(e);
+        }
+    }
+
+    async edit_homework(req , res,next) {
+        try {
+            const {record_id, subject, homeworkText, date} = req.body;
+            const errors = validationResult(req);
+            if(!errors.isEmpty()) {
+               return next(ApiError.BadRequest('wrong parameter type', errors.array())); 
+            }
+            await teacher_service.edit_homework(record_id, subject, homeworkText, date);
+            return res.sendStatus(200, 'OK');
+        }
+        catch(e) {
+            next(e);
+        }
+    }
+
+    async delete_homework(req, res, next) {
+        try {
+            const {record_id} = req.body;
+            const errors = validationResult(req);
+            if(!errors.isEmpty()) {
+                return next(ApiError.BadRequest('wrong parameter type', errors.array())); 
+            }
+            await teacher_service.delete_homework(record_id);
+            return res.sendStatus(200, 'OK');
+        }
+        catch (e) {
+            next(e);
+        }
+    }
 }
 
 module.exports = new TeacherController();
