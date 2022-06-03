@@ -137,10 +137,12 @@ class TeacherController
     async get_homework_tasks(req, res, next) {
         try {
             const {class_id, start_date, end_date} = req.body;
+            
             const errors = validationResult(req);
             if(!errors.isEmpty()) {
                return next(ApiError.BadRequest('wrong parameter type', errors.array())); 
             }
+            console.log(class_id, start_date, end_date);
             const homework_tasks = await teacher_service.get_homework_tasks(class_id, start_date, end_date);
             return res.json(homework_tasks);
         }

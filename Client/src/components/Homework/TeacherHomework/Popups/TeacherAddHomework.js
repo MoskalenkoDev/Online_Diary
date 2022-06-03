@@ -77,45 +77,24 @@ export const TeacherAddHomework = ({
     const [focusedInput, setFocusedInput] = useState(null);
     const [homeworkText, setHomeworkText] = useState("");
     const [receivedHomeworkInfo,setReceivedHomeworkInfo] = useState([]);
+    const [start_date, setStart_date] = useState(0);
+    const [end_date, setEnd_date] = useState(0);
     const [homeworkMode, setHomeworkMode] = useState("plain_mode"); // буде три мода : звичайний мод (plain_mode), мод редагування заданої домашки (edit_mode), 
     const [isOpenWarningPopup, setIsOpenWarningPopup] = useState(false);                 // мод перегляду домашки (watch_mode)
     const [activeRecord, setActiveRecord] = useState();
     const selected_li = useRef(null);
 
-    const homeworkInfofromDB = [
-        {
-            _id: "123456",
-            date : '10.06.2022',
-            subject: 'Хімія',
-            homework: "Сторінка 52, вправа 140-145"
-        },
-        {
-            _id: "234567",
-            date : '09.06.2022',
-            subject: 'Спорт-сила',
-            homework: "Сторінка 112, вправа 240-245"
-        },
-        {
-            _id: "345678",
-            date : '27.06.2022',
-            subject: 'Хімія',
-            homework: "Сторінка 152, вправа 540-545"
-        }, 
-        {
-            _id: "456789",
-            date : '27.06.2022',
-            subject: 'Астрологія',
-            homework: "Сторінка 84, прочитати все що тільки можна"
-        }
-    ]
+    const getHomeworks = async (start_date, end_date) => {
+        const homeworkInfofromDB = await get_homework_tasks(current_class_id, start_date, end_date);
+        let newReceivedHomeworkInfo = [ ...receivedHomeworkInfo, ...homeworkInfofromDB.data];
+        setReceivedHomeworkInfo(newReceivedHomeworkInfo);
+    }
+    
 
-    // const getHomeworks = async () => {
-    //     const homeworkInfofromDB = await get_homework_tasks(current_class_id, start_date, end_date);
-    //     setReceivedHomeworkInfo(homeworkInfofromDB);
-    // }
 
     let cancelChanges = useRef();
     let prevSelectedLi = useRef(); 
+    let currentOpenMonthCounter = useRef(0);
 
     const goSubjectBack = () => {
         if (selected_li.current) selected_li.current.className = selected_li.current.className.replace(" selected_li", "");
@@ -128,7 +107,7 @@ export const TeacherAddHomework = ({
     }
     
     const changeRecordWithoutPopup = (selected_li, new_date = date, subject = chosen_subject) => {
-        const record = homeworkInfofromDB.find(val => val.subject === subject && compareDate(new_date, val.date)); 
+        const record = receivedHomeworkInfo.find(val => val.subject === subject && compareDate(new_date, val.date)); 
         record.selected_li = selected_li;
         setActiveRecord(record);
         setHomeworkText(record.homework);
@@ -200,14 +179,13 @@ export const TeacherAddHomework = ({
         let our_li_list = [];
         let deletedSubjects = []; // містить лише предмети
 
-        if(homeworkInfofromDB.length) { // визначили видалені предмети, які мають попасти в список
-            homeworkInfofromDB.forEach(item => {
+        if(receivedHomeworkInfo.length) { // визначили видалені предмети, які мають попасти в список
+            receivedHomeworkInfo.forEach(item => {
                if(!deletedSubjects.some(subject => subject === item.subject) && !school_subjects.includes(item.subject)) deletedSubjects.push(item.subject);
             }) 
         }
         if(date) {
-            let formatDate = moment(date).format('DD.MM.YYYY');
-            let homeworkOnDayArr = homeworkInfofromDB.filter(item => (item.date === formatDate)); // вибирає всі записи, які мають конкретний день.
+            let homeworkOnDayArr = receivedHomeworkInfo.filter(item => (item.date === date)); // вибирає всі записи, які мають конкретний день.
             let deletedHighlightedSubjects = [];
             homeworkOnDayArr.forEach(val => { if(deletedSubjects.some(subject => (subject === val.subject))) deletedHighlightedSubjects.push(val.subject)} );
             our_li_list.push(...createLiveLiList(homeworkOnDayArr)); // добавляю спочатку звичайні предмети
@@ -244,26 +222,38 @@ export const TeacherAddHomework = ({
                 selected_li.current = null;
                 prevSelectedLi.current = null;
                 cancelChanges.current = null;
+                setReceivedHomeworkInfo([]);
+                currentOpenMonthCounter.current = 0;
+                setEnd_date(0);
+                setStart_date(0);
             }
         }
 
     }, [current_class_id]);
 
-    useEffect(() => {
-        if(current_class_id) createLiList();
+    useEffect(async () => {
+        if(current_class_id) {
+            createLiList();
+            let new_start_day = moment().subtract(2, 'M').startOf('M');
+            let new_end_date = moment().add(2, 'M').endOf('M');
+            setStart_date(-2);
+            setEnd_date(2);
+            await getHomeworks(new_start_day,new_end_date);
+        } 
     },[date,current_class_id])
 
     const outsideRangeSelector = (day) => {
-        let diff = moment(day).diff(moment(), 'M');
+        let diff = moment(day).diff(moment().startOf('M'), 'M');
+        let isHighlighted = isDayHighlighted(day);
         // тут треба перевірити чи є вибраний предмет - та чи є він одним із видалених
-        if(chosen_subject && !school_subjects.includes(chosen_subject) && !isDayHighlighted(day)) return true;
-        if (diff < -2) return true;
+        if(chosen_subject && !school_subjects.includes(chosen_subject) && !isHighlighted) return true; // якщо предмет вибраний, він є видаленим і день не підсвічений
+        if (diff <= -2 && !isHighlighted) return true;
         return false;
     }
 
-    const compareDate = (date ,CalendarDate) => { 
-        if(typeof date === 'string') date = moment(date, 'DD.MM.YYYY');
-        if(typeof CalendarDate === 'string') CalendarDate = moment(CalendarDate, 'DD.MM.YYYY')
+    const compareDate = (date,CalendarDate) => { 
+        if(typeof date === 'string') date = moment(date);
+        if(typeof CalendarDate === 'string') CalendarDate = moment(CalendarDate);
         const isDayOfMonthMatch = date.date() === CalendarDate.date();
         const isMonthMatch = date.month() === CalendarDate.month();
         const isYearMatch = date.year() === CalendarDate.year();
@@ -274,7 +264,7 @@ export const TeacherAddHomework = ({
     const isDayHighlighted = CalendarDate => {
         let isHighlighted = false;
         if(!chosen_subject) return false; // якщо предмет не вибраний то нічо не підсвічуємо
-        homeworkInfofromDB.forEach(({date, subject}) => {
+        receivedHomeworkInfo.forEach(({date, subject}) => {
             const isDatesEquals = compareDate(date, CalendarDate);
             const isMatchSubject = chosen_subject === subject;
             if (isDatesEquals && isMatchSubject) {
@@ -340,8 +330,6 @@ export const TeacherAddHomework = ({
         cancelChanges.current();
     }
 
-
-
     const onSaveClick = async() => {
         if (!chosen_subject || !homeworkText.trim() || !date) { // проверяем не пустые ли обязательные поля в попапе
             window.clearTimeout(timer.current);
@@ -350,7 +338,7 @@ export const TeacherAddHomework = ({
         }
         else {
             if(homeworkMode === "plain_mode") {
-                const result = await add_homework(current_class_id,chosen_subject,homeworkText,date);
+                const result = await add_homework(current_class_id,chosen_subject,homeworkText,date); 
                 if(result) showSuccessMessage(langObj[lang].successAddedMessage);
                 else alert("Something went wrong");
             }
@@ -382,18 +370,31 @@ export const TeacherAddHomework = ({
         setChosen_subject(activeRecord.subject);
         if (activeRecord.selected_li) selected_li.current.className = selected_li.current.className.replace(" selected_li", "") ; 
         activeRecord.selected_li.className += " selected_li";  // просто вибирає предмет і відповідає за зміну активної лішки 
-        setDate(moment(activeRecord.date, 'DD.MM.YYYY'));
+        setDate(moment(activeRecord.date));
     }
 
-    let currentOpenMonthCounter = useRef(0);
-    let onNextMonthClick = (e) => {  
-        // по суті я можу дізнатися який зараз місяць я переглядаю ось в цих функціях
-        // точніше кажучи тут я лише можу отримати в івенті нинішній місяць. Проте мені треба лічильник, який буде вираховувати мінімальну дату в залежності від 
-        // кількості місяців які я пролистав відносно нинішнього. Лічильник буде один. І формула така : 
-        currentOpenMonthCounter.current += 1;
+    const onCalendarClose = () => {
+        currentOpenMonthCounter.current = 0;
     }
-    let onPrevMonthClick = (e) => {
+
+    let onNextMonthClick = async () => {  
+        currentOpenMonthCounter.current += 1;
+        if(currentOpenMonthCounter.current === end_date) {
+
+            let old_end_date = moment().add(end_date + 1, 'M').startOf('M');
+            let new_end_date = moment(old_end_date).add(2, 'M').endOf('M');
+            await getHomeworks(old_end_date, new_end_date);
+            setEnd_date(end_date + 3);
+        }
+    }
+    let onPrevMonthClick = async () => {
         currentOpenMonthCounter.current -= 1;
+        if(currentOpenMonthCounter.current === start_date) {
+            let old_start_day = moment().subtract(-(start_date) + 1, 'M').endOf('M');
+            let new_start_day = moment(old_start_day).subtract(2, 'M').startOf('M');
+            await getHomeworks(new_start_day, old_start_day );
+            setStart_date(start_date - 3);
+        }
     }
 
     moment.locale(lang === "ua" ? "uk" : lang);
@@ -444,6 +445,7 @@ export const TeacherAddHomework = ({
                             showClearDate
                             onNextMonthClick={onNextMonthClick}
                             onPrevMonthClick = {onPrevMonthClick}
+                            onClose = {onCalendarClose}
                             // isDayHighlighted={(day) => {console.log(day); return true;}} 
                             // monthFormat="YYYY[年]MMMM"
                             // monthFormat = "MMMM YYYY"
@@ -477,7 +479,7 @@ export const TeacherAddHomework = ({
                 <div className="homework_popup_buttons_wrapper">
                     {
                         homeworkMode !== "plain_mode" && 
-                        <button style={{marginRight : "auto"}} className={"gray_btn blue_btn homework_peaky_btn"} onClick= {onEditOrCancelClick}>
+                        <button style={{marginRight : "auto"}} className={"gray_btn blue_btn homework_peaky_btn"} onClick= {onEditOrCancelClick} disabled = {(moment(date).diff(moment(), 'M') <= -2)}>
                             {homeworkMode === "watch_mode" ? langObj[lang].editBtnTitle : langObj[lang].denyBtnTitle}
                         </button>
                     } 

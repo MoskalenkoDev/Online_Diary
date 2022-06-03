@@ -81,10 +81,9 @@ class TeacherService {
 
 
     async get_homework_tasks(class_id, start_date, end_date) {
-
         let new_homework_tasks = [];
-        let homework_tasks = await homework_tasks.find({class_id, date :{$gte:ISODate(start_date),$lt:ISODate(end_date)}}).lean();
-        homework_tasks.forEach(record => {
+        let  homeworks = await homework_tasks.find({class_id, date :{$gte: start_date ,$lt:end_date}}).lean(); //   ;
+        homeworks.forEach(record => {
             const newTask = new HomeworkTasks(record);
             new_homework_tasks.push(newTask);
         });
