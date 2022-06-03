@@ -185,7 +185,7 @@ export const TeacherAddHomework = ({
             }) 
         }
         if(date) {
-            let homeworkOnDayArr = receivedHomeworkInfo.filter(item => (item.date === date)); // вибирає всі записи, які мають конкретний день.
+            let homeworkOnDayArr = receivedHomeworkInfo.filter(item => (compareDate(item.date, date))); // вибирає всі записи, які мають конкретний день.
             let deletedHighlightedSubjects = [];
             homeworkOnDayArr.forEach(val => { if(deletedSubjects.some(subject => (subject === val.subject))) deletedHighlightedSubjects.push(val.subject)} );
             our_li_list.push(...createLiveLiList(homeworkOnDayArr)); // добавляю спочатку звичайні предмети
@@ -233,14 +233,17 @@ export const TeacherAddHomework = ({
 
     useEffect(async () => {
         if(current_class_id) {
-            createLiList();
             let new_start_day = moment().subtract(2, 'M').startOf('M');
             let new_end_date = moment().add(2, 'M').endOf('M');
             setStart_date(-2);
             setEnd_date(2);
             await getHomeworks(new_start_day,new_end_date);
         } 
-    },[date,current_class_id])
+    },[current_class_id])
+
+    useEffect(() => {
+        if(current_class_id) createLiList();
+    },[receivedHomeworkInfo, date])
 
     const outsideRangeSelector = (day) => {
         let diff = moment(day).diff(moment().startOf('M'), 'M');
