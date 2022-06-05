@@ -383,7 +383,6 @@ export const TeacherAddHomework = ({
     let onNextMonthClick = async () => {  
         currentOpenMonthCounter.current += 1;
         if(currentOpenMonthCounter.current === end_date) {
-
             let old_end_date = moment().add(end_date + 1, 'M').startOf('M');
             let new_end_date = moment(old_end_date).add(2, 'M').endOf('M');
             await getHomeworks(old_end_date, new_end_date);

@@ -25,13 +25,13 @@
     margin-bottom: 1.7vmax;
 }
 
-.homework_class_list_block {
+.homework_class_list_block, .homework_week_days_list_wrapper {
     width: 100%;
     margin: 1vmax auto 0px;
     color: #024047;
 }
 
-.homework_class_list {
+.homework_class_list{
     display: flex;
     flex-direction: column;
 
@@ -52,6 +52,61 @@
         }
     }
 }
+
+.homework_week_days_list{
+    display: flex;
+    flex-direction: column;
+
+    & .drop_down_with_title {
+        display: flex;
+        flex-direction: column;
+
+        &.open_drop_down > .drop_down_with_title_title {
+            border-radius: 0.5vmax 0.5vmax 0px 0px;
+            transition: 0s;
+        }
+
+        &.open_drop_down > .drop_down_with_title_padding_wrapper {
+            height: auto;
+        }
+
+        & .drop_down_with_title_title {
+            display: flex;
+            justify-content: space-between;
+            font-size: clamp(16px, 1.1vmax, 2vmax);
+            background: #f2f4f5;
+            border-radius: 0.5vmax;
+            padding: clamp(12px, 0.9vmax, 2vmax);
+            transition: 0.5s border-radius ease-in;
+        }
+
+        &:not(:last-child) {
+            margin-bottom: 10px;
+        }
+
+        .drop_down_with_title_padding_wrapper {
+            height: 0px;
+            overflow-y: hidden;
+            border-radius: 0px 0px 0.5vmax 0.5vmax;
+            transition: 0.5s height ease-in;
+        }
+
+        & .drop_down_with_title_content_wrapper, & .homework_task_wpapper {
+            padding: 10px;
+            background: #dfdfdf;
+        }
+
+        & .homework_task_wpapper {
+            background: white;
+            font-size: clamp(16px, 1vmax, 1.2vmax);
+        }
+    }
+
+    & > .drop_down_with_title {
+        height: 100%;
+    }
+}
+
 
 .homework_li_buttons {
     display: flex;
@@ -155,6 +210,7 @@
     height: 100vh;
     background: rgba(0, 0, 0, 0.788);
     z-index: 50;
+    pointer-events: none;
     visibility: hidden;
     padding: 10px 0px;
     overflow-y: scroll;
@@ -163,6 +219,7 @@
     &.homework_popup_active { // когда активен
         visibility: visible;
         opacity: 1;
+        pointer-events: all;
     }
 }
 

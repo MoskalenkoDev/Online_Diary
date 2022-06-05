@@ -32,6 +32,7 @@ export const StudentHomework = ({ state }) => {
 
     useEffect(() => {
         state.dispatch(ActionCreators.change_homework_popup_active_menu_item("active_popup_menu_teachers_list")); // Ставим активным первый пункт меню
+        // window.addEventListener('resize', (e) => {console.log(e)});
     }, []);
 
     let timer = useRef(null);
@@ -56,6 +57,27 @@ export const StudentHomework = ({ state }) => {
         else alert(langObj[lang].alertWarningTitle);
     }
 
+    const onWeekDaysListClisk = (e) => {
+        let isOpen = !e?.nativeEvent?.path[4]?.className.includes("open_drop_down") && e?.nativeEvent?.path[2]?.className === "drop_down_with_title_content_wrapper";
+        if(e.nativeEvent.path[0].className !== "drop_down_with_title_title" || isOpen) return;
+        let elem = e.nativeEvent.path[1]; // the clicked element
+        let children_height = e.nativeEvent.path[1].children[1].children[0].offsetHeight;
+        let new_children_height = e.nativeEvent.path[1].children[1].offsetHeight > 0 ? "0px" : `${children_height}px`;
+
+        if(!e.nativeEvent.target.parentNode.className.includes("open_drop_down") && new_children_height === "0px") return;
+
+        elem.children[1].style.height = new_children_height; // it is assign the height of inner content
+        if(e?.nativeEvent?.path[2]?.className === "drop_down_with_title_content_wrapper") {
+            let main_parent = e.nativeEvent.path[3];
+            let new_parent_height = +main_parent.style.height.replace("px","") + (new_children_height === "0px" ? -children_height : children_height);
+            main_parent.style.height = `${new_parent_height}px`;
+        }  // this is our wrapper we are styling
+        
+        elem.className = elem.className.includes("open_drop_down") ?
+            elem.className.replace("open_drop_down", "") :
+            elem.className + "open_drop_down";
+    }
+
     return (
         <div className="homework_wrapper">
 
@@ -70,6 +92,80 @@ export const StudentHomework = ({ state }) => {
                     onHidePopup={onHidePopup}
                     homework_popup_active_type={homework_popup_active_type}
                 />
+            </div>
+
+            <div className="homework_week_days_list_wrapper">
+
+                <ul className="homework_week_days_list" onClick={onWeekDaysListClisk}>
+
+                    <li className='drop_down_with_title '>
+                        <span className='drop_down_with_title_title'>Понеділок</span>
+
+                        <div className="drop_down_with_title_padding_wrapper">
+                            <ul className="drop_down_with_title_content_wrapper">
+
+                                <li className='drop_down_with_title '>
+                                    <span className='drop_down_with_title_title'>Хімія</span>
+
+                                    <div className="drop_down_with_title_padding_wrapper">
+                                        <div className='homework_task_wpapper'>
+                                            <span>Домашня робота : вправа 133 сторінка 56-57, зробити якомога більше вправ та скинути на пошту мені.</span>
+                                        </div>
+                                    </div>
+
+                                </li>
+
+                                <li className='drop_down_with_title '>
+                                    <span className='drop_down_with_title_title'>English</span>
+                                    <div className="drop_down_with_title_padding_wrapper">
+                                        <div className='homework_task_wpapper'>
+                                            <span>Домашня робота : вправа 133 сторінка 56-57, зробити якомога більше вправ та скинути на пошту мені.</span>
+                                        </div>
+                                    </div>
+
+
+                                </li>
+
+                            </ul>
+                        </div>
+
+                    </li>
+
+                    <li className='drop_down_with_title '>
+                        <span className='drop_down_with_title_title'>Понеділок</span>
+
+                        <div className="drop_down_with_title_padding_wrapper">
+                            <ul className="drop_down_with_title_content_wrapper">
+
+                                <li className='drop_down_with_title '>
+                                    <span className='drop_down_with_title_title'>Хімія</span>
+
+                                    <div className="drop_down_with_title_padding_wrapper">
+                                        <div className='homework_task_wpapper'>
+                                            <span>Домашня робота : вправа 133 сторінка 56-57, зробити якомога більше вправ та скинути на пошту мені.</span>
+                                        </div>
+                                    </div>
+
+                                </li>
+
+                                <li className='drop_down_with_title '>
+                                    <span className='drop_down_with_title_title'>English</span>
+                                    <div className="drop_down_with_title_padding_wrapper">
+                                        <div className='homework_task_wpapper'>
+                                            <span>Домашня робота : вправа 133 сторінка 56-57, зробити якомога більше вправ та скинути на пошту мені.</span>
+                                        </div>
+                                    </div>
+
+
+                                </li>
+
+                            </ul>
+                        </div>
+
+                    </li>
+
+                </ul>
+
             </div>
 
         </div>
