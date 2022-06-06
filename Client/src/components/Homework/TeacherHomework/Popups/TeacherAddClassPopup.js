@@ -15,7 +15,7 @@ export const TeacherAddClassPopup = ({
     li_creator,
     timer
 }) => {
-    
+
     let lang = state.lang.language;
     let langObj =
     {
@@ -79,22 +79,26 @@ export const TeacherAddClassPopup = ({
 
                 <div className="homework_popup_input_block">
 
-                    <div className="profile_data_fields_block">
-                        <div className="profile_data_span_wrapper">
-                            <span>{langObj[lang].classTitle}</span>
-                            <span className="important_field">{langObj[lang].requiredField}</span>
-                        </div>
-                        <input type="text" onChange={onPopupClassTitleChange} value={new_class_title} />
-                    </div>
+                    <div className="profile_data_fields_blocks_wrapper">
 
-                    <div className="profile_data_fields_block">
-                        <div className="profile_data_span_wrapper">
-                            <span>{langObj[lang].subjectField}</span>
-                            <span className="important_field">{langObj[lang].requiredField}</span>
+                        <div className="profile_data_fields_block">
+                            <div className="profile_data_span_wrapper">
+                                <span>{langObj[lang].classTitle}</span>
+                                <span className="important_field">{langObj[lang].requiredField}</span>
+                            </div>
+                            <input type="text" onChange={onPopupClassTitleChange} value={new_class_title} />
                         </div>
-                        <input type="text" onChange={onPopupSchoolSubjectsChange} value={school_subjects} />
-                    </div>
 
+                        <div className="profile_data_fields_block">
+                            <div className="profile_data_span_wrapper">
+                                <span>{langObj[lang].subjectField}</span>
+                                <span className="important_field">{langObj[lang].requiredField}</span>
+                            </div>
+                            <input type="text" onChange={onPopupSchoolSubjectsChange} value={school_subjects} />
+                        </div>
+
+                    </div>
+                    
                 </div>
 
                 <span className={"popup_warning_span " + state.popup_warning_class}>{langObj[lang].warningTitle}</span>

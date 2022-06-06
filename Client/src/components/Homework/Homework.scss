@@ -53,6 +53,11 @@
     }
 }
 
+#date_picker_wrapper {
+    width: fit-content;
+    margin: 1vmax auto 0px;
+}
+
 .homework_week_days_list{
     display: flex;
     flex-direction: column;
@@ -60,10 +65,15 @@
     & .drop_down_with_title {
         display: flex;
         flex-direction: column;
+        
+
 
         &.open_drop_down > .drop_down_with_title_title {
             border-radius: 0.5vmax 0.5vmax 0px 0px;
             transition: 0s;
+            &::after {
+                transform: translateY(-50%) rotateX(180deg);
+            }
         }
 
         &.open_drop_down > .drop_down_with_title_padding_wrapper {
@@ -77,7 +87,32 @@
             background: #f2f4f5;
             border-radius: 0.5vmax;
             padding: clamp(12px, 0.9vmax, 2vmax);
-            transition: 0.5s border-radius ease-in;
+            transition: 0.2s border-radius ease-out;
+            transition-delay: 0.3s;
+            position: relative;
+            &::after {
+                content: "";
+                display: block;
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                right: 13px;
+                margin: auto;
+                margin-right: 5px;
+                width: clamp(20px, 1vmax, 16px);
+                height: clamp(20px, 1vmax, 16px);
+                background: #797979;
+                mask-repeat: no-repeat;
+                mask-position: center;
+                -webkit-mask-size: contain;
+                mask-size: contain;
+                -webkit-mask-repeat: no-repeat;
+                mask-repeat: no-repeat;
+                -webkit-mask-position: center;
+                mask-image: url('../../images/drop-down.svg');
+                -webkit-mask-image: url('../../images/drop-down.svg');
+                transition: all 0.2s ease;
+            }
         }
 
         &:not(:last-child) {
@@ -88,7 +123,7 @@
             height: 0px;
             overflow-y: hidden;
             border-radius: 0px 0px 0.5vmax 0.5vmax;
-            transition: 0.5s height ease-in;
+            transition: 0.4s height ease-out;
         }
 
         & .drop_down_with_title_content_wrapper, & .homework_task_wpapper {
@@ -238,6 +273,7 @@
     }
 
     &.add_class_popup.homework_add_class_popup {
+        & .homework_peaky_btn { margin: 0px auto;}
         display: flex;
     }
 
@@ -274,15 +310,9 @@
     flex-direction: column;
     padding: clamp(18px, 1vw, 23px);
 
-    & .profile_data_fields_block {
-        margin-bottom: clamp(20px, 1.1vmax, 1.5vw);
-    }
-
     & .important_field {
         font-size: clamp(13px, 0.7vmax, 0.8vmax);
     }
-
-
 }
 
 .homework_popup_input_block {
@@ -294,6 +324,7 @@
 .homework_peaky_btn {
     font-size: clamp(16px, 0.8vmax, 1vmax);
     border-radius: clamp(4px, 0.2vmax, 1.5vw);
+    width: fit-content;
 }
 
 .homework_popup_buttons_wrapper {
@@ -320,7 +351,8 @@
     display: inline-block;
     font-size: clamp(16px, 0.8vmax, 1.3vmax) !important;
     color: red;
-    margin-bottom: clamp(20px, 1.1vmax, 1.5vw);
+    // margin-bottom: clamp(20px, 1.1vmax, 1.5vw);
+    margin-bottom: clamp(10px, 0.6vmax, 1.5vw);
     visibility: hidden;
     opacity: 0;
     transition: 0.4s linear;

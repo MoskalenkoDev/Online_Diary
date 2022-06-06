@@ -197,7 +197,7 @@ export const Image_Picker = ({input_data}) =>
                 <img src= {avar_src}  alt=""/>
             </div>
             
-            <button id = "avatar_change_btn" onClick = {onShowPopup}>{langObj[lang].changeImgBtn}</button> 
+            <button id = "avatar_change_btn" className='light_gray_btn' onClick = {onShowPopup}>{langObj[lang].changeImgBtn}</button> 
 
         </div>
 

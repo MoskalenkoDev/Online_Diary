@@ -79,13 +79,10 @@
     margin-bottom: clamp(14px,1vmax,1vmax);
 }
 
-#avatar_change_btn
-{
-    display: flex;
-    font-size: clamp(12px,0.8vmax,1vmax);
-    color: #024047;
+.light_gray_btn {
     background-color: #f2f4f5;
-    padding: clamp(6px,0.3vmax,0.55vmax) clamp(12px, 0.5vmax,1.05vmax);
+    color: #024047;
+    display: flex;
     border: 1px solid #bdbdbd;
     border-radius: 3px;
     transition: background-color 0.3s ease;
@@ -93,6 +90,12 @@
     user-select: none;
     &:hover{background-color: #ebebeb;}
     &:active{background-color: #dfdfdf;}
+}
+
+#avatar_change_btn
+{
+    font-size: clamp(12px,0.8vmax,1vmax);
+    padding: clamp(6px,0.3vmax,0.55vmax) clamp(12px, 0.5vmax,1.05vmax);
     & input {display: none;}
     margin-bottom: clamp(19px,2vmax,2vmax);
 }
@@ -285,7 +288,7 @@
 {
     display: flex;
     flex-direction: column;
-    margin-bottom: clamp(20px,1.5vmax,1.5vmax);
+    
 
     & input , textarea
     {
@@ -296,6 +299,14 @@
         border-radius: 0.2vmax;
         resize: none;
     }
+}
+
+.profile_data_fields_blocks_wrapper {
+
+    & .profile_data_fields_block:not(:last-of-type) {
+        margin-bottom: clamp(20px,1.5vmax,1.5vmax);
+    }
+
 }
 
 .profile_data_span_wrapper
@@ -325,13 +336,14 @@
 {
     min-height: 15px;
     display: flex;
+    margin: clamp(12px,0.6vmax,0.6vmax) auto 0px;
     & span
     {
         display: inline-block;
         font-size: clamp(15px,1vmax,1.3vmax);
         text-align: center;
         color: rgb(5, 150, 5);
-        margin: 0px auto clamp(8px,0.5vmax,0.5vmax);
+        
 
         visibility: hidden;
         opacity: 0;
