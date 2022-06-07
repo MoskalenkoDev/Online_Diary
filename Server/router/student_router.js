@@ -35,4 +35,11 @@ router.delete('/diary_menu/homework/unsubscribe_from_teacher',
     student_controller.unsubscribe_from_teacher
 );
 
+router.post("/diary_menu/homework/get_homework_tasks",
+    body("start_date").isString(),
+    body("end_date").isString(),
+    auth_middleware,
+    student_controller.get_homework_tasks
+);
+
 module.exports = router;

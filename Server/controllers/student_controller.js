@@ -82,6 +82,22 @@ class StudentController {
         }    
     }
 
+    async get_homework_tasks(req, res, next) {
+        try {
+            const {start_date, end_date} = req.body;
+            const {id} = req.user; // student_id
+            const errors = validationResult(req);
+            if(!errors.isEmpty()) {
+               return next(ApiError.BadRequest('wrong parameter type', errors.array())); 
+            }
+            // console.log(start_date, end_date);
+            const homework_tasks = await student_service.get_homework_tasks(id, start_date, end_date);
+            return res.json(homework_tasks);
+        }
+        catch (e) {
+            next(e);
+        }
+    }
 }
 
 module.exports = new StudentController();

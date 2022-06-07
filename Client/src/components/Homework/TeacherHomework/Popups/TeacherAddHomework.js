@@ -89,8 +89,6 @@ export const TeacherAddHomework = ({
         let newReceivedHomeworkInfo = [ ...receivedHomeworkInfo, ...homeworkInfofromDB.data];
         setReceivedHomeworkInfo(newReceivedHomeworkInfo);
     }
-    
-
 
     let cancelChanges = useRef();
     let prevSelectedLi = useRef(); 

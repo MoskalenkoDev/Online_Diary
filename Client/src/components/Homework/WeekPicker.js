@@ -6,33 +6,32 @@ import moment from 'moment';
 import 'moment/locale/ru';
 import 'moment/locale/uk';
 
-export const WeekPicker = ({ start_date, setStartDate, end_date, setEndDate, lang }) => {
+export const WeekPicker = ({ start_date, setStartDate, end_date, setEndDate, hoveredDays, setHoveredDays, lang }) => {
 
     const langObj = {
         ua: {
             dataTitle: "Дата",
             prevWeek: "Минулий тиждень",
-            thisWeek: "Цей тиждень",
+            thisWeek: "Поточний тиждень",
             nextWeek: "Наступний тиждень",
         },
         ru: {
             dataTitle: "Дата",
             prevWeek: "Прошлая неделя",
-            thisWeek: "Эта неделя",
+            thisWeek: "Текущая неделя",
             nextWeek: "Следующая неделя"
         },
         en: {
             dataTitle: "Date",
-            prevWeek: "Previous week",
-            thisWeek: "This week",
-            nextWeek: "Next week"
+            prevWeek: "Рrеviou🇸 ᴡее𝗄",
+            thisWeek: "Currеnt ᴡее𝗄", // T𝗁i🇸 ᴡее𝗄
+            nextWeek: "Νехt ᴡее𝗄"
         }
     };
 
     const currentMoment = moment();
 
     const [focusedInput, setFocusedInput] = useState(null);
-    const [hoveredDays, setHoveredDays] = useState();
 
     const isDayHighlighted = date => {
         let isHighlighted = false;
@@ -111,6 +110,7 @@ export const WeekPicker = ({ start_date, setStartDate, end_date, setEndDate, lan
         setStartDate(startDate);
         let endDate = new_date.clone().endOf("isoWeek");
         setEndDate(endDate);
+        setFocusedInput(false);
     }
 
     const onPrevWeekClick = () => {
@@ -137,11 +137,16 @@ export const WeekPicker = ({ start_date, setStartDate, end_date, setEndDate, lan
 
     const displayFormat = () => {
         const displayDateFormat = `${moment(start_date).format("DD.MM.YYYY")} - ${moment(end_date).format("DD.MM.YYYY")}`;
-        return displayDateFormat;
+        let momentStartDay = moment(start_date).clone();
+        let momentCurrentIsoWeek = currentMoment.startOf('isoWeek');
+        if(momentStartDay.isSame(momentCurrentIsoWeek, 'day')) return langObj[lang].thisWeek;
+        else if(momentStartDay.isSame(momentCurrentIsoWeek.clone().subtract(1, 'week'))) return langObj[lang].prevWeek;
+        else if(momentStartDay.isSame(momentCurrentIsoWeek.clone().add(1, 'week'))) return langObj[lang].nextWeek;
+        return displayDateFormat;  
     }
 
     moment.locale(lang === "ua" ? "uk" : lang);
-
+    
     return (
         <Fragment>
             <button className='date_picker_prev_week_btn light_gray_btn' onClick={onPrevWeekClick}></button>

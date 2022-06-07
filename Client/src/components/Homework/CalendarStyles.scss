@@ -27,6 +27,7 @@
     line-height: 16px;
     padding: 6px 7px 3px;
     color: #024047;
+    text-align: center;
 }
 
 .date_picker_long_input .DateInput__small {
@@ -80,6 +81,13 @@
         }
     }
 
+    & .DateInput svg[role="presentation"] {
+        left: 82.5px;
+    }
+
+    & .SingleDatePicker_picker {
+        left: -33px !important;
+    }
 }
 
 .DateInput__small {

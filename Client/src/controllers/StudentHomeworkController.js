@@ -168,3 +168,20 @@ export async function unsubscribe_from_teacher(class_id) {
 
     return false;
 }
+
+export async function get_homework_tasks(start_date, end_date) {
+
+    try {
+        let tasks = await HomeworkService.get_student_homework_tasks(start_date, end_date);
+        return tasks.data;
+    }
+    catch (e) {
+        
+        switch (e.response.status) {
+            case 500: {
+                console.log(e.response)
+                break;
+            }
+        }
+    }
+}

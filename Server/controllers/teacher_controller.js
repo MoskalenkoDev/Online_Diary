@@ -142,7 +142,6 @@ class TeacherController
             if(!errors.isEmpty()) {
                return next(ApiError.BadRequest('wrong parameter type', errors.array())); 
             }
-            console.log(class_id, start_date, end_date);
             const homework_tasks = await teacher_service.get_homework_tasks(class_id, start_date, end_date);
             return res.json(homework_tasks);
         }

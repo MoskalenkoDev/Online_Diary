@@ -81,4 +81,8 @@ export default class HomeworkService {
         return $api.delete(`/student/diary_menu/homework/unsubscribe_from_teacher`, {data : {class_id}});
     }
 
+    static async get_student_homework_tasks(start_date, end_date) {
+        return $api.post(`/student/diary_menu/homework/get_homework_tasks`, {start_date, end_date});
+    }
+
 }

@@ -3,7 +3,8 @@ const TeacherInfo = require('../dtos/teacher_info_dto');
 const teacher_users_model = require('../models/teacher_users_model');
 const student_in_classes = require('../models/student_in_classes');
 const ApiError = require('../exceptions/api_error');
-
+const homework_tasks = require("../models/homework_tasks");
+const HomeworkTasks = require("../dtos/homework_tasks_dto");
 class StudentService {
 
     async search_teacher_by_id(_id, student_id) {
@@ -73,6 +74,17 @@ class StudentService {
         await student_in_classes.findOneAndUpdate({"student_id" : student_id}, {$pull : {"classes": class_id}});
     }
 
+    async get_homework_tasks(student_id, start_date, end_date) {
+        let new_homework_tasks = [];
+        let studentClasses = await student_in_classes.findOne({student_id});
+        let homeworks = await homework_tasks.find({"class_id": {$in: studentClasses.classes}, date :{$gte: start_date ,$lt:end_date}}); // 
+        console.log(homeworks);
+        homeworks.forEach(record => {
+            const newTask = new HomeworkTasks(record);
+            new_homework_tasks.push(newTask);
+        });
+        return new_homework_tasks;
+    }
 }
 
 module.exports = new StudentService();

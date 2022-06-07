@@ -7,6 +7,7 @@ import 'moment/locale/ru';
 import 'moment/locale/uk';
 
 import { StudentTeachersEditor } from './Popups/StudentTeachersEditor';
+import { get_homework_tasks } from '../../../controllers/StudentHomeworkController';
 
 export const StudentHomework = ({ state }) => {
     let lang = state.lang.language;
@@ -61,33 +62,9 @@ export const StudentHomework = ({ state }) => {
 
     const [start_date, setStartDate] = useState(null);
     const [end_date, setEndDate] = useState(null);
-
-    const homeworkInfofromDB = [
-        {
-            _id: "123456",
-            date: '10.06.2022',
-            subject: 'Хімія',
-            homework: "Сторінка 52, вправа 140-145"
-        },
-        {
-            _id: "234567",
-            date: '09.06.2022',
-            subject: 'Спорт-сила',
-            homework: "Сторінка 112, вправа 240-245"
-        },
-        {
-            _id: "345678",
-            date: '27.06.2022',
-            subject: 'Хімія',
-            homework: "Сторінка 152, вправа 540-545"
-        },
-        {
-            _id: "456789",
-            date: '27.06.2022',
-            subject: 'Астрологія',
-            homework: "Сторінка 84, прочитати все що тільки можна"
-        }
-    ]
+    const [hoveredDays, setHoveredDays] = useState();
+    const [receivedHomeworkInfo, setReceivedHomeworkInfo] = useState([]);
+    const [week_list, setWeek_list] = useState([]);
 
     const [homework_popup_active_type, setHomework_popup_active_type] = useState("homework_add_class_popup");
 
@@ -96,41 +73,59 @@ export const StudentHomework = ({ state }) => {
         // window.addEventListener('resize', (e) => {console.log(e)});
     }, []);
 
+    const getHomeworks = async (start_date, end_date) => {
+        const homeworkInfofromDB = await get_homework_tasks(start_date, end_date);
+        let newReceivedHomeworkInfo = [...receivedHomeworkInfo, ...homeworkInfofromDB];
+        setReceivedHomeworkInfo(newReceivedHomeworkInfo);
+        createDropDownLiList(newReceivedHomeworkInfo);
+    }
 
-    // треба якось отримані дані розбивати по дням тижня, бо не понятно мені як на конкретний день тижня вибирати дз. 
-    // може я на стороні сервера зможу дані нормально прислати. Може просто окрім дати присилати ще й окремим полем англійську скорочену інтерпретацію дня тижня.
-    // тоді я зможу поміняти в langObj ключі та значення так, щоб зручно було фільтрувати.
-    // в окремий стейт запишу активні дані, на цей тиждень. По ним сформую новий список відносно днів тижня.
+    useEffect(async () => {
+        if (start_date) {
+            await getHomeworks(start_date, end_date);
+        }
+    }, [start_date])
 
-    // const createDropDownLiList = () => {
+    const createSubjectsList = (weekHomeworks) => {
+        let subjectsList = [];
+        weekHomeworks.forEach((record) => {
+            subjectsList.push(
+                <li className='drop_down_with_title '>
+                    <span className='drop_down_with_title_title'>{record.subject}</span>
 
-    //     langObj[lang].weekDays.forEach(()=> {
+                    <div className="drop_down_with_title_padding_wrapper">
+                        <div className='homework_task_wpapper'>
+                            <span>{record.homework}</span>
+                        </div>
+                    </div>
 
-    //     });
-    //     return (
-    //         <li className='drop_down_with_title '>
-    //             <span className='drop_down_with_title_title'>Понеділок</span>
+                </li>
+            );
+        });
+        return subjectsList;
+    };
 
-    //             <div className="drop_down_with_title_padding_wrapper">
-    //                 <ul className="drop_down_with_title_content_wrapper">
+    const createDropDownLiList = (receivedHomeworkInfo) => {
+        let weekLiList = [];
+        hoveredDays.forEach((hoveredDay, index) => {
+            let weekHomeworks = receivedHomeworkInfo.filter((homeworkDay) => moment(hoveredDay).isSame(moment(homeworkDay.date), 'day')); // якщо isSame працює лише на день, 
+            //не враховуючи місяць та рік, то зробимо перевірку як ото було з isHighlighted().
+            console.log(weekHomeworks);
+            weekLiList.push((
+                <li className='drop_down_with_title '>
+                    <span className='drop_down_with_title_title'>{langObj[lang].weekDays[index]}</span>
 
-    //                     <li className='drop_down_with_title '>
-    //                         <span className='drop_down_with_title_title'>Хімія</span>
+                    <div className="drop_down_with_title_padding_wrapper">
+                        <ul className="drop_down_with_title_content_wrapper">
+                            {createSubjectsList(weekHomeworks)}
+                        </ul>
+                    </div>
 
-    //                         <div className="drop_down_with_title_padding_wrapper">
-    //                             <div className='homework_task_wpapper'>
-    //                                 <span>Домашня робота : вправа 133 сторінка 56-57, зробити якомога більше вправ та скинути на пошту мені.</span>
-    //                             </div>
-    //                         </div>
-
-    //                     </li>
-
-    //                 </ul>
-    //             </div>
-
-    //         </li>
-    //     );
-    // }
+                </li>
+            ));
+        });
+        setWeek_list(weekLiList);
+    }
 
     let timer = useRef(null);
     let onHidePopup = () => {
@@ -191,42 +186,22 @@ export const StudentHomework = ({ state }) => {
                 />
             </div>
 
-            <div id='date_picker_wrapper'  className='date_picker_long_input'> 
-                <WeekPicker 
-                    start_date={start_date} 
-                    setStartDate = {setStartDate} 
-                    end_date = {end_date}
-                    setEndDate = {setEndDate}
-                    lang = {lang}
+            <div id='date_picker_wrapper' className='date_picker_long_input'>
+                <WeekPicker
+                    start_date={start_date}
+                    setStartDate={setStartDate}
+                    end_date={end_date}
+                    setEndDate={setEndDate}
+                    hoveredDays={hoveredDays}
+                    setHoveredDays={setHoveredDays}
+                    lang={lang}
                 />
-            </div> 
+            </div>
 
             <div className="homework_week_days_list_wrapper">
 
                 <ul className="homework_week_days_list" onClick={onWeekDaysListClisk}>
-
-                    <li className='drop_down_with_title '>
-                        <span className='drop_down_with_title_title'>Понеділок</span>
-
-                        <div className="drop_down_with_title_padding_wrapper">
-                            <ul className="drop_down_with_title_content_wrapper">
-
-                                <li className='drop_down_with_title '>
-                                    <span className='drop_down_with_title_title'>Хімія</span>
-
-                                    <div className="drop_down_with_title_padding_wrapper">
-                                        <div className='homework_task_wpapper'>
-                                            <span>Домашня робота : вправа 133 сторінка 56-57, зробити якомога більше вправ та скинути на пошту мені.</span>
-                                        </div>
-                                    </div>
-
-                                </li>
-
-                            </ul>
-                        </div>
-
-                    </li>                    
-
+                    {week_list}
                 </ul>
 
             </div>
