@@ -6,7 +6,7 @@ import moment from 'moment';
 import 'moment/locale/ru';
 import 'moment/locale/uk';
 
-export const WeekPicker = ({ start_date, setStartDate, end_date, setEndDate, hoveredDays, setHoveredDays, lang }) => {
+export const WeekPicker = ({ start_date, setStartDate, end_date, setEndDate, hoveredDays, setHoveredDays, getHomeworks, lang }) => {
 
     const langObj = {
         ua: {
@@ -32,6 +32,9 @@ export const WeekPicker = ({ start_date, setStartDate, end_date, setEndDate, hov
     const currentMoment = moment();
 
     const [focusedInput, setFocusedInput] = useState(null);
+    const calculatedStartMounth = useRef(0); // our start week number position from which we have got data from DB
+    const calculatedEndMounth = useRef(0); // our end week number position from which we have got data from DB
+    const currentOpenMounth = useRef(0);
 
     const isDayHighlighted = date => {
         let isHighlighted = false;
@@ -99,11 +102,31 @@ export const WeekPicker = ({ start_date, setStartDate, end_date, setEndDate, hov
         }
     };
 
-    useEffect(() => {
+    useEffect(async () => {
         onDateHovered(currentMoment);
-        setStartDate(currentMoment.clone().startOf("isoweek"));
-        setEndDate(currentMoment.clone().endOf("isoweek"));
+        let startDate = currentMoment.clone().startOf("isoweek");
+        setStartDate(startDate);
+        let endDate = currentMoment.clone().endOf("isoweek");
+        setEndDate(endDate);
+        calculatedStartMounth.current = -2;
+        calculatedEndMounth.current = 2;
+        // await getHomeworks();
     }, []);
+
+    useEffect(()=> {
+        if(start_date) {
+            let start_diff = start_date.clone().startOf('M').diff(currentMoment.clone().startOf('M'), 'M');
+            let end_diff = end_date.clone().endOf('M').diff(currentMoment.clone().endOf('M'), 'M');
+            if(start_diff < 0 ) {
+                currentOpenMounth.current = start_diff;
+                if(start_diff -1 === calculatedStartMounth.current) onPrevMonthClick(false);
+            } 
+            else if(end_diff > 0) {
+                currentOpenMounth.current = end_diff;
+                if(end_diff + 1 === calculatedEndMounth.current) onNextMonthClick(false);
+            }
+        }
+    },[start_date])
 
     let onDateChange = (new_date) => {
         let startDate = new_date.clone().startOf("isoweek");
@@ -113,22 +136,54 @@ export const WeekPicker = ({ start_date, setStartDate, end_date, setEndDate, hov
         setFocusedInput(false);
     }
 
+    // як не крути ми не по тижням будемо витягувати дані, а по місяцям. Отже будемо не тижні рахувати а місяці. І відносно них вже витягувати дані.
+
     const onPrevWeekClick = () => {
-        let newStartDate = moment(start_date).clone().subtract(1,'week');
+
+        let newStartDate = moment(start_date).clone().subtract(1, 'week');
         setStartDate(newStartDate);
-        setEndDate(moment(end_date).clone().subtract(1,'week'));
+        setEndDate(moment(end_date).clone().subtract(1, 'week'));
         onDateHovered(newStartDate);
     }
 
     const onNextWeekClick = () => {
-        let newStartDate = moment(start_date).clone().add(1,'week');
+
+        let newStartDate = moment(start_date).clone().add(1, 'week');
         setStartDate(newStartDate);
-        setEndDate(moment(end_date).clone().add(1,'week'));
+        setEndDate(moment(end_date).clone().add(1, 'week'));
         onDateHovered(newStartDate);
+    }
+
+    let onNextMonthClick = async (isChange) => {
+        console.log(isChange);
+        if(isChange) currentOpenMounth.current += 1;
+        if (calculatedEndMounth.current === currentOpenMounth.current + 1) {
+            let old_end_date = currentMoment.clone().startOf('M').add(calculatedEndMounth.current + 1, 'M');
+            let new_end_date = old_end_date.clone().add(2, 'M').endOf('M');
+            // console.log(old_end_date, new_end_date);
+            // await getHomeworks(old_end_date, new_end_date);
+            calculatedEndMounth.current += 3;
+        }
+
+    }
+
+    let onPrevMonthClick = async (isChange) => {
+        if(isChange) currentOpenMounth.current -= 1;
+        if (calculatedStartMounth.current === currentOpenMounth.current - 1) {
+            let old_start_date = currentMoment.clone().startOf('M').subtract(-(calculatedStartMounth.current - 1), 'M').endOf('M'); // 31
+            let new_start_date = currentMoment.clone().startOf('M').subtract(-(calculatedStartMounth.current - 3), 'M');
+            // console.log(new_start_date, old_start_date);
+            // await getHomeworks(new_start_date, old_start_date);
+            calculatedStartMounth.current -= 3;
+        }
     }
 
     const onFocusChange = ({ focused }) => {
         setFocusedInput(focused);
+        let start_diff = start_date.clone().startOf('M').diff(currentMoment.clone().startOf('M'), 'M');
+        let end_diff = end_date.clone().endOf('M').diff(currentMoment.clone().endOf('M'), 'M');
+        if(start_diff < 0 ) currentOpenMounth.current = start_diff; 
+        else if(end_diff > 0) currentOpenMounth.current = end_diff;
     }
 
     const onCloseDatePicker = () => {
@@ -139,10 +194,10 @@ export const WeekPicker = ({ start_date, setStartDate, end_date, setEndDate, hov
         const displayDateFormat = `${moment(start_date).format("DD.MM.YYYY")} - ${moment(end_date).format("DD.MM.YYYY")}`;
         let momentStartDay = moment(start_date).clone();
         let momentCurrentIsoWeek = currentMoment.startOf('isoWeek');
-        if(momentStartDay.isSame(momentCurrentIsoWeek, 'day')) return langObj[lang].thisWeek;
-        else if(momentStartDay.isSame(momentCurrentIsoWeek.clone().subtract(1, 'week'))) return langObj[lang].prevWeek;
-        else if(momentStartDay.isSame(momentCurrentIsoWeek.clone().add(1, 'week'))) return langObj[lang].nextWeek;
-        return displayDateFormat;  
+        if (momentStartDay.isSame(momentCurrentIsoWeek, 'day')) return langObj[lang].thisWeek;
+        else if (momentStartDay.isSame(momentCurrentIsoWeek.clone().subtract(1, 'week'))) return langObj[lang].prevWeek;
+        else if (momentStartDay.isSame(momentCurrentIsoWeek.clone().add(1, 'week'))) return langObj[lang].nextWeek;
+        return displayDateFormat;
     }
 
     moment.locale(lang === "ua" ? "uk" : lang);
@@ -170,8 +225,8 @@ export const WeekPicker = ({ start_date, setStartDate, end_date, setEndDate, hov
                 enableOutsideDays
                 // isDayHighlighted={(d) => d.isSame(new Date(), "day")}
                 renderCalendarDay={renderCalendarDay}
-                // onNextMonthClick={onNextMonthClick}
-                // onPrevMonthClick={onPrevMonthClick}
+                onNextMonthClick={onNextMonthClick}
+                onPrevMonthClick={onPrevMonthClick}
                 onClose={onCloseDatePicker}
                 // monthFormat = "MMMM YYYY"
                 // showClearDate   

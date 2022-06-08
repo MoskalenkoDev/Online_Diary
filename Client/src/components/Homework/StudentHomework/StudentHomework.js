@@ -73,9 +73,17 @@ export const StudentHomework = ({ state }) => {
         // window.addEventListener('resize', (e) => {console.log(e)});
     }, []);
 
+    // мені потрібно щоб дані зберігалися . А нахуя вони мені в редаксі. Ладно, я хочу щоб при перелистуванні сторінки не було оцього мерехтіння. Тобто дані на найближчі 2 місяці 
+    // мають зберігалися в редаксі. 
+    // Взагалі було б класно якщо б я рахував оці місяці в самому вік пікеру , а коли лічильник досягав би кінцевої точки, то воно викликало б передану функцію на витягування даних
+    // дані все одно в батьківському компоненті зберігаються. або десь ще. В батьківський компонент мають передаватися стартова і кінцева дата, дані яких треба підтягнути з бд.
+    // 1. Лічильники всі в вік пікері
+    // 2. функція трігера передається з батьківського компонента (передається start and end дата, з якої треба підтягнути)
+    // 3. Дані нехай зберігаються і далі в редаксі, но лічильник то скинеться. Тобто кожного разу все одно буде підтягувати дані. Якщо вони зміняться то перерендиреться інфа.
+
     const getHomeworks = async (start_date, end_date) => {
         const homeworkInfofromDB = await get_homework_tasks(start_date, end_date);
-        let newReceivedHomeworkInfo = [...receivedHomeworkInfo, ...homeworkInfofromDB];
+        let newReceivedHomeworkInfo = [...homeworkInfofromDB]; // напевно тому , що тут воно додає. Все зрозуміло, просто робимо вибірку по старій схемі
         setReceivedHomeworkInfo(newReceivedHomeworkInfo);
         createDropDownLiList(newReceivedHomeworkInfo);
     }
@@ -90,7 +98,7 @@ export const StudentHomework = ({ state }) => {
         let subjectsList = [];
         weekHomeworks.forEach((record) => {
             subjectsList.push(
-                <li className='drop_down_with_title '>
+                <li className='drop_down_with_title ' key={record._id}>
                     <span className='drop_down_with_title_title'>{record.subject}</span>
 
                     <div className="drop_down_with_title_padding_wrapper">
@@ -110,9 +118,9 @@ export const StudentHomework = ({ state }) => {
         hoveredDays.forEach((hoveredDay, index) => {
             let weekHomeworks = receivedHomeworkInfo.filter((homeworkDay) => moment(hoveredDay).isSame(moment(homeworkDay.date), 'day')); // якщо isSame працює лише на день, 
             //не враховуючи місяць та рік, то зробимо перевірку як ото було з isHighlighted().
-            console.log(weekHomeworks);
+            // console.log(weekHomeworks);
             weekLiList.push((
-                <li className='drop_down_with_title '>
+                <li className='drop_down_with_title ' key={langObj[lang].weekDays[index]}>
                     <span className='drop_down_with_title_title'>{langObj[lang].weekDays[index]}</span>
 
                     <div className="drop_down_with_title_padding_wrapper">
@@ -126,6 +134,11 @@ export const StudentHomework = ({ state }) => {
         });
         setWeek_list(weekLiList);
     }
+
+    // Реалізувати таку ж логіку підтягування даних як і на сторінці додавання дз
+    // При перелистувані сторінки брати дані з редаксу
+    // Реалізувати перерахунок висоти усіх елементів списку. Це і допоможе при ресайзі та і при перелистуванні тижнів
+    // провірити чому нам приходить два раза одні і ті ж дані і формуються однакові компоненти
 
     let timer = useRef(null);
     let onHidePopup = () => {
@@ -194,6 +207,7 @@ export const StudentHomework = ({ state }) => {
                     setEndDate={setEndDate}
                     hoveredDays={hoveredDays}
                     setHoveredDays={setHoveredDays}
+                    getHomeworks = {getHomeworks}
                     lang={lang}
                 />
             </div>
