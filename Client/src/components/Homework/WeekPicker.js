@@ -155,7 +155,6 @@ export const WeekPicker = ({ start_date, setStartDate, end_date, setEndDate, hov
     }
 
     let onNextMonthClick = async (isChange) => {
-        console.log(isChange);
         if(isChange) currentOpenMounth.current += 1;
         if (calculatedEndMounth.current === currentOpenMounth.current + 1) {
             let old_end_date = currentMoment.clone().startOf('M').add(calculatedEndMounth.current + 1, 'M');
@@ -201,7 +200,7 @@ export const WeekPicker = ({ start_date, setStartDate, end_date, setEndDate, hov
     }
 
     moment.locale(lang === "ua" ? "uk" : lang);
-    
+
     return (
         <Fragment>
             <button className='date_picker_prev_week_btn light_gray_btn' onClick={onPrevWeekClick}></button>

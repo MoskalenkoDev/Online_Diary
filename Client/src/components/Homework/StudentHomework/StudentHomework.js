@@ -8,6 +8,8 @@ import 'moment/locale/uk';
 
 import { StudentTeachersEditor } from './Popups/StudentTeachersEditor';
 import { get_homework_tasks } from '../../../controllers/StudentHomeworkController';
+import { WeekLiList } from '../WeekLiList';
+import { SubjectLiList } from '../SubjectLiList';
 
 export const StudentHomework = ({ state }) => {
     let lang = state.lang.language;
@@ -65,12 +67,12 @@ export const StudentHomework = ({ state }) => {
     const [hoveredDays, setHoveredDays] = useState();
     const [receivedHomeworkInfo, setReceivedHomeworkInfo] = useState([]);
     const [week_list, setWeek_list] = useState([]);
+    const [subject_list, setSubjectList] = useState([]);
 
     const [homework_popup_active_type, setHomework_popup_active_type] = useState("homework_add_class_popup");
 
     useEffect(() => {
         state.dispatch(ActionCreators.change_homework_popup_active_menu_item("active_popup_menu_teachers_list")); // Ставим активным первый пункт меню
-        // window.addEventListener('resize', (e) => {console.log(e)});
     }, []);
 
     // мені потрібно щоб дані зберігалися . А нахуя вони мені в редаксі. Ладно, я хочу щоб при перелистуванні сторінки не було оцього мерехтіння. Тобто дані на найближчі 2 місяці 
@@ -98,16 +100,11 @@ export const StudentHomework = ({ state }) => {
         let subjectsList = [];
         weekHomeworks.forEach((record) => {
             subjectsList.push(
-                <li className='drop_down_with_title ' key={record._id}>
-                    <span className='drop_down_with_title_title'>{record.subject}</span>
-
-                    <div className="drop_down_with_title_padding_wrapper">
-                        <div className='homework_task_wpapper'>
-                            <span>{record.homework}</span>
-                        </div>
-                    </div>
-
-                </li>
+                <SubjectLiList
+                    subjectTitle = {record.subject}
+                    key = {record._id}
+                    homework = {record.homework}
+                />
             );
         });
         return subjectsList;
@@ -118,21 +115,18 @@ export const StudentHomework = ({ state }) => {
         hoveredDays.forEach((hoveredDay, index) => {
             let weekHomeworks = receivedHomeworkInfo.filter((homeworkDay) => moment(hoveredDay).isSame(moment(homeworkDay.date), 'day')); // якщо isSame працює лише на день, 
             //не враховуючи місяць та рік, то зробимо перевірку як ото було з isHighlighted().
-            // console.log(weekHomeworks);
+            let subjectList = createSubjectsList(weekHomeworks);
             weekLiList.push((
-                <li className='drop_down_with_title ' key={langObj[lang].weekDays[index]}>
-                    <span className='drop_down_with_title_title'>{langObj[lang].weekDays[index]}</span>
-
-                    <div className="drop_down_with_title_padding_wrapper">
-                        <ul className="drop_down_with_title_content_wrapper">
-                            {createSubjectsList(weekHomeworks)}
-                        </ul>
-                    </div>
-
-                </li>
+                <WeekLiList
+                    isContainSubjects = {subjectList.length}
+                    weekTitle = {langObj[lang].weekDays[index]}
+                    innerContent = {subjectList}
+                    key = {langObj[lang].weekDays[index]}
+                />
             ));
         });
         setWeek_list(weekLiList);
+
     }
 
     // Реалізувати таку ж логіку підтягування даних як і на сторінці додавання дз
@@ -162,27 +156,6 @@ export const StudentHomework = ({ state }) => {
         else alert(langObj[lang].alertWarningTitle);
     }
 
-    const onWeekDaysListClisk = (e) => {
-        let isOpen = !e?.nativeEvent?.path[4]?.className.includes("open_drop_down") && e?.nativeEvent?.path[2]?.className === "drop_down_with_title_content_wrapper";
-        if (e.nativeEvent.path[0].className !== "drop_down_with_title_title" || isOpen) return;
-        let elem = e.nativeEvent.path[1]; // the clicked element
-        let children_height = e.nativeEvent.path[1].children[1].children[0].offsetHeight;
-        let new_children_height = e.nativeEvent.path[1].children[1].offsetHeight > 0 ? "0px" : `${children_height}px`;
-
-        if (!e.nativeEvent.target.parentNode.className.includes("open_drop_down") && new_children_height === "0px") return;
-
-        elem.children[1].style.height = new_children_height; // it is assign the height of inner content
-        if (e?.nativeEvent?.path[2]?.className === "drop_down_with_title_content_wrapper") {
-            let main_parent = e.nativeEvent.path[3];
-            let new_parent_height = +main_parent.style.height.replace("px", "") + (new_children_height === "0px" ? -children_height : children_height);
-            main_parent.style.height = `${new_parent_height}px`;
-        }  // this is our wrapper we are styling
-
-        elem.className = elem.className.includes("open_drop_down") ?
-            elem.className.replace("open_drop_down", "") :
-            elem.className + "open_drop_down";
-    }
-
     return (
         <div className="homework_wrapper">
 
@@ -207,14 +180,14 @@ export const StudentHomework = ({ state }) => {
                     setEndDate={setEndDate}
                     hoveredDays={hoveredDays}
                     setHoveredDays={setHoveredDays}
-                    getHomeworks = {getHomeworks}
+                    getHomeworks={getHomeworks}
                     lang={lang}
                 />
             </div>
 
             <div className="homework_week_days_list_wrapper">
 
-                <ul className="homework_week_days_list" onClick={onWeekDaysListClisk}>
+                <ul className="homework_week_days_list">
                     {week_list}
                 </ul>
 

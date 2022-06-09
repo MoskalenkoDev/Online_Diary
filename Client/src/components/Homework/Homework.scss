@@ -65,8 +65,17 @@
     & .drop_down_with_title {
         display: flex;
         flex-direction: column;
-        
 
+        &.no_homework {
+            pointer-events: none;
+        }
+
+        &.no_homework .drop_down_with_title_title {
+            background: #dfdfdf;
+            &::after {
+                display: none;
+            }
+        }
 
         &.open_drop_down > .drop_down_with_title_title {
             border-radius: 0.5vmax 0.5vmax 0px 0px;
@@ -90,6 +99,7 @@
             transition: 0.2s border-radius ease-out;
             transition-delay: 0.3s;
             position: relative;
+            cursor: pointer;
             &::after {
                 content: "";
                 display: block;
