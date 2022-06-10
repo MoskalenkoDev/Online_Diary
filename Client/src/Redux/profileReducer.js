@@ -46,7 +46,7 @@ export const profileReducer = (state = initialState, action) => {
       return { ...state, img_crop_info : {...action.payload} }
     case ACTION_CHANGE_INPUT_DATA_IMG_SHOW_POPUP:
       {
-        if(action.payload == "") return { ...state, img_show_popup: action.payload, img_crop_info : {...initialState.img_crop_info} }
+        if(action.payload === "") return { ...state, img_show_popup: action.payload, img_crop_info : {...initialState.img_crop_info} }
         else  return { ...state, img_show_popup: action.payload};
       }
     case ACTION_CHANGE_INPUT_DATA_IMG_SHOW_POPUP_CROP_WRAPPER:

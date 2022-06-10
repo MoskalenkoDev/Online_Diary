@@ -9,6 +9,7 @@ export const SubjectLiList = ({ subjectTitle, homework, onChildResize }) => {
 
     const onDropDownClick = (e) => {
         setIsOpen(!isOpen);
+        dropDownContentRef.current.parentElement.style.transitionDuration = "0.4s";
         let childHeight =  dropDownContentRef.current.clientHeight;
         let nextHeight = isOpen ? 0 : childHeight;
         setSubjectHeight(nextHeight);
@@ -17,6 +18,7 @@ export const SubjectLiList = ({ subjectTitle, homework, onChildResize }) => {
     }
 
     const resizeCalcHeight = () => {
+        if(isOpen) dropDownContentRef.current.parentElement.style.transitionDuration = "0s";
         let childHeight =  dropDownContentRef.current.clientHeight;
         if(currentHeight.current !== childHeight && isOpen) {
             setSubjectHeight(childHeight);

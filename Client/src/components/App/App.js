@@ -38,5 +38,4 @@ const mapStateToProps = (state) => // кладет стейт в качеств�
 {
   return{...state.languageState}
 }
-
 export const WrappedApp = connect(mapStateToProps)(App);

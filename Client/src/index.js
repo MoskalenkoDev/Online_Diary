@@ -6,5 +6,4 @@ import { store } from './Redux/store';
 import 'react-dates/initialize';
 
 if(!window.localStorage.getItem("language")) window.localStorage.setItem("language","ua");
-
 ReactDOM.render(<Provider store = {store}><WrappedApp/></Provider>,document.getElementById("root"));

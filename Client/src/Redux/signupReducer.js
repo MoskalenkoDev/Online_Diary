@@ -23,8 +23,6 @@ if(token) {
   catch(e) {
     localStorage.removeItem("token")
   }
-
-  console.log("Hello from signupReducer");
 } 
 
 // Pure Functions

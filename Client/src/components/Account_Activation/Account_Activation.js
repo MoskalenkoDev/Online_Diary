@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import jwtDecode from 'jwt-decode';
 import { useParams, Redirect } from 'react-router-dom';
 import { dispatch } from '../../Redux/store'
@@ -54,7 +54,7 @@ export const Account_Activation = ({ lang }) => {
         localStorage.removeItem("token");
       }
     }
-  }, [])
+  }, [accessToken])
 
   setTimeout(() => {
     setTimer(timer - 1)

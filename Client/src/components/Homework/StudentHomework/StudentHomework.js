@@ -65,9 +65,8 @@ export const StudentHomework = ({ state }) => {
     const [start_date, setStartDate] = useState(null);
     const [end_date, setEndDate] = useState(null);
     const [hoveredDays, setHoveredDays] = useState();
-    const [receivedHomeworkInfo, setReceivedHomeworkInfo] = useState([]);
-    const [week_list, setWeek_list] = useState([]);
-    const [subject_list, setSubjectList] = useState([]);
+
+    const [week_list, setWeek_list] = useState([]); // зберігаються лішки дз
 
     const [homework_popup_active_type, setHomework_popup_active_type] = useState("homework_add_class_popup");
 
@@ -75,26 +74,31 @@ export const StudentHomework = ({ state }) => {
         state.dispatch(ActionCreators.change_homework_popup_active_menu_item("active_popup_menu_teachers_list")); // Ставим активным первый пункт меню
     }, []);
 
-    // мені потрібно щоб дані зберігалися . А нахуя вони мені в редаксі. Ладно, я хочу щоб при перелистуванні сторінки не було оцього мерехтіння. Тобто дані на найближчі 2 місяці 
-    // мають зберігалися в редаксі. 
-    // Взагалі було б класно якщо б я рахував оці місяці в самому вік пікеру , а коли лічильник досягав би кінцевої точки, то воно викликало б передану функцію на витягування даних
-    // дані все одно в батьківському компоненті зберігаються. або десь ще. В батьківський компонент мають передаватися стартова і кінцева дата, дані яких треба підтягнути з бд.
-    // 1. Лічильники всі в вік пікері
-    // 2. функція трігера передається з батьківського компонента (передається start and end дата, з якої треба підтягнути)
-    // 3. Дані нехай зберігаються і далі в редаксі, но лічильник то скинеться. Тобто кожного разу все одно буде підтягувати дані. Якщо вони зміняться то перерендиреться інфа.
-
     const getHomeworks = async (start_date, end_date) => {
         const homeworkInfofromDB = await get_homework_tasks(start_date, end_date);
         let newReceivedHomeworkInfo = [...homeworkInfofromDB]; // напевно тому , що тут воно додає. Все зрозуміло, просто робимо вибірку по старій схемі
-        setReceivedHomeworkInfo(newReceivedHomeworkInfo);
-        createDropDownLiList(newReceivedHomeworkInfo);
+        state.dispatch(ActionCreators.change_homework_student_homework_info(newReceivedHomeworkInfo));
     }
 
-    useEffect(async () => {
-        if (start_date) {
-            await getHomeworks(start_date, end_date);
+    useEffect(() => {
+        return () => { // я хочу щоб коли мінялася дата, то списки закривалися. Бажано без анімації
+            setWeek_list([]);
         }
     }, [start_date])
+
+    let isfirstTime = useRef(true);
+
+    useEffect(() => {
+        
+        if(week_list.length) return; 
+        if(state.homework_student_homework_info.length && isfirstTime.current && start_date) {
+            createDropDownLiList(state.homework_student_homework_info);
+            isfirstTime.current = false;
+        }
+        else if(start_date && !isfirstTime.current) {
+            createDropDownLiList(state.homework_student_homework_info);
+        }
+    }, [start_date, state.homework_student_homework_info, week_list])
 
     const createSubjectsList = (weekHomeworks) => {
         let subjectsList = [];
@@ -126,7 +130,6 @@ export const StudentHomework = ({ state }) => {
             ));
         });
         setWeek_list(weekLiList);
-
     }
 
     // Реалізувати таку ж логіку підтягування даних як і на сторінці додавання дз
@@ -156,6 +159,10 @@ export const StudentHomework = ({ state }) => {
         else alert(langObj[lang].alertWarningTitle);
     }
 
+    let changeStartAndEndDate = (newDatesArr) => {
+        state.dispatch(ActionCreators.change_homework_student_start_and_end_date(newDatesArr));
+    }
+
     return (
         <div className="homework_wrapper">
 
@@ -181,6 +188,8 @@ export const StudentHomework = ({ state }) => {
                     hoveredDays={hoveredDays}
                     setHoveredDays={setHoveredDays}
                     getHomeworks={getHomeworks}
+                    startAndEndDate = {state.homework_student_start_and_end_date}
+                    changeStartAndEndDate = {changeStartAndEndDate}
                     lang={lang}
                 />
             </div>
@@ -196,3 +205,4 @@ export const StudentHomework = ({ state }) => {
         </div>
     );
 }
+

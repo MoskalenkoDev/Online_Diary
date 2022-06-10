@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState, Fragment } from 'react';
+import * as ActionCreators from '../../Redux/Actions/actions_homework';
 import "react-dates/lib/css/_datepicker.css";
 import { SingleDatePicker } from "react-dates";
 import "./CalendarStyles.scss";
@@ -6,7 +7,7 @@ import moment from 'moment';
 import 'moment/locale/ru';
 import 'moment/locale/uk';
 
-export const WeekPicker = ({ start_date, setStartDate, end_date, setEndDate, hoveredDays, setHoveredDays, getHomeworks, lang }) => {
+export const WeekPicker = ({ start_date, setStartDate, end_date, setEndDate, hoveredDays, setHoveredDays, getHomeworks, startAndEndDate, changeStartAndEndDate ,lang }) => {
 
     const langObj = {
         ua: {
@@ -93,6 +94,7 @@ export const WeekPicker = ({ start_date, setStartDate, end_date, setEndDate, hov
                     className={dayClasses}
                     onClick={() => onDateChange(date.day)}
                     onMouseEnter={() => onDateHovered(date.day)}
+                    key = {date.day.format("DD.MM.YYYY")}
                 >
                     {dayOfMonth}
                 </td>
@@ -102,15 +104,31 @@ export const WeekPicker = ({ start_date, setStartDate, end_date, setEndDate, hov
         }
     };
 
-    useEffect(async () => {
+    useEffect(() => {
         onDateHovered(currentMoment);
         let startDate = currentMoment.clone().startOf("isoweek");
         setStartDate(startDate);
         let endDate = currentMoment.clone().endOf("isoweek");
         setEndDate(endDate);
-        calculatedStartMounth.current = -2;
-        calculatedEndMounth.current = 2;
-        // await getHomeworks();
+        
+        if(!startAndEndDate[0]) {
+            calculatedStartMounth.current = -2;
+            calculatedEndMounth.current = 2;
+
+            let startCalcDay = moment().startOf('M').subtract(2,'M');
+            let endCalcDay = moment().startOf('M').add(2, 'M').endOf('M');
+    
+            getHomeworks(startCalcDay, endCalcDay);
+        }
+        else {
+            calculatedStartMounth.current = startAndEndDate[0];
+            calculatedEndMounth.current = startAndEndDate[1];
+        }  
+
+        return () => {
+            changeStartAndEndDate([calculatedStartMounth.current, calculatedEndMounth.current]);
+        }
+        
     }, []);
 
     useEffect(()=> {
@@ -159,8 +177,7 @@ export const WeekPicker = ({ start_date, setStartDate, end_date, setEndDate, hov
         if (calculatedEndMounth.current === currentOpenMounth.current + 1) {
             let old_end_date = currentMoment.clone().startOf('M').add(calculatedEndMounth.current + 1, 'M');
             let new_end_date = old_end_date.clone().add(2, 'M').endOf('M');
-            // console.log(old_end_date, new_end_date);
-            // await getHomeworks(old_end_date, new_end_date);
+            getHomeworks(old_end_date, new_end_date);
             calculatedEndMounth.current += 3;
         }
 
@@ -171,8 +188,7 @@ export const WeekPicker = ({ start_date, setStartDate, end_date, setEndDate, hov
         if (calculatedStartMounth.current === currentOpenMounth.current - 1) {
             let old_start_date = currentMoment.clone().startOf('M').subtract(-(calculatedStartMounth.current - 1), 'M').endOf('M'); // 31
             let new_start_date = currentMoment.clone().startOf('M').subtract(-(calculatedStartMounth.current - 3), 'M');
-            // console.log(new_start_date, old_start_date);
-            // await getHomeworks(new_start_date, old_start_date);
+            await getHomeworks(new_start_date, old_start_date);
             calculatedStartMounth.current -= 3;
         }
     }

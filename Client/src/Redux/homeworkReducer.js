@@ -5,7 +5,8 @@ import {
   ACTION_DELETE_HOMEWORK_REQUESTS_TO_TEACHERS_LI_LIST_ITEM, ACTION_CHANGE_HOMEWORK_STUDENT_REQUESTS_TO_JOIN_LI_LIST,
   ACTION_DELETE_HOMEWORK_STUDENT_REQUESTS_TO_JOIN_LI_LIST_ITEM, ACTION_CHANGE_HOMEWORK_STUDENTS_IN_CLASS_LI_LIST,
   ACTION_DELETE_HOMEWORK_STUDENTS_IN_CLASS_LI_LIST_ITEM, ACTION_CHANGE_HOMEWORK_ACCEPTED_TEACHERS_LI_LIST,
-  ACTION_DELETE_HOMEWORK_ACCEPTED_TEACHERS_LI_LIST_ITEM, ACTION_CLEANUP_HOMEWORK_LI_LIST, ACTION_CLEAN_HOMEWORK_TEACHERS_LI_LISTS
+  ACTION_DELETE_HOMEWORK_ACCEPTED_TEACHERS_LI_LIST_ITEM, ACTION_CLEANUP_HOMEWORK_LI_LIST, ACTION_CLEAN_HOMEWORK_TEACHERS_LI_LISTS,
+  ACTION_CHANGE_HOMEWORK_STUDENT_START_AND_END_DATE, ACTION_CHANGE_HOMEWORK_STUDENT_HOMEWORK_INFO
 } from './types';
 
 const initialState =
@@ -20,7 +21,9 @@ const initialState =
   homework_accepted_teachers_li_list: [], // the list of teachers accepted request
 
   homework_student_requests_to_join_li_list: [], // the student requests to join to the class list
-  homework_students_in_class_li_list: [] // the list of teachers accepted request
+  homework_students_in_class_li_list: [], // the list of teachers accepted request
+  homework_student_start_and_end_date: [0,0], // the period from when we got homework info from DB
+  homework_student_homework_info: [], // our homework from DB
 };
 
 const changeLiList = (goalList, newList ,key = null) => {
@@ -104,6 +107,12 @@ export const homeworkReducer = (state = initialState, action) => {
     }
     case ACTION_CLEAN_HOMEWORK_TEACHERS_LI_LISTS: {
       return {...state, homework_student_requests_to_join_li_list: [], homework_students_in_class_li_list: []}
+    }
+    case ACTION_CHANGE_HOMEWORK_STUDENT_START_AND_END_DATE: {
+      return {...state, homework_student_start_and_end_date: [...action.payload]}
+    }
+    case ACTION_CHANGE_HOMEWORK_STUDENT_HOMEWORK_INFO: {
+      return {...state, homework_student_homework_info: [...state.homework_student_homework_info, ...action.payload]}
     }
     default: return state
   }
