@@ -1,0 +1,99 @@
+.school_marks_calculate_btn {
+    &::before {
+        mask-image: url('../../images/calculate.svg');
+        -webkit-mask-image: url('../../images/calculate.svg');
+    }
+}
+
+.homework_popup.add_school_marks.school_marks_add_marks_popup {
+    display: flex;
+    width: clamp(500px, 35vw, 62vw);
+}
+
+.marks_popup_students_list_wrapper {
+    width: 100%;
+    height: 300px;
+    overflow-y: scroll;
+    background: #f0f2f5;
+    padding: 10px;
+    color: #024047;
+
+    & .marks_popup_students_list {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        margin: 0px auto;
+
+        & .marks_popup_students_list_student_record {
+            display: flex;
+            background: white;
+            padding: clamp(5px, 0.5vmax, 2vmax);
+            border-radius: 5px;
+            position: relative;
+
+            &:not(:last-child) {
+                margin-bottom: 10px;
+            }
+        }
+
+        & .marks_popup_students_list_student_record.blocked_record {
+            background: #ff00004f;
+            
+            pointer-events: none;
+            & .marks_popup_student_record_desc_input, & .marks_popup_student_record_mark_input {
+                background: rgba(255, 255, 255, 0.555);
+            }
+        }
+
+        & .marks_popup_student_record_img_wrapper {
+            min-height: 45px;
+            height: 3.5vmax;
+            max-height: 50px;
+            margin-right: 10px;
+            
+            & img {
+                height: 100%;
+                border-radius: 5px;
+            }
+        }
+
+        & input {
+            border: 1px solid #b6b6b6;
+            font-size: clamp(14px, 0.7vw, 1vmax);
+            color: #024047;
+            padding: 4px 6px;
+            background: white;
+            border-radius: 3px;
+        }
+
+        & .marks_popup_student_record_inner_content_wrapper {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+
+            & .user_fio {
+                font-size: clamp(16px, 0.7vw, 1vmax);
+                margin-bottom: auto;
+                text-align: start;
+            }
+
+            & .marks_popup_student_record_name_and_description_wrapper {
+                display: flex;
+
+                & .marks_popup_student_record_desc_input {
+                    width: 100%;
+                    margin-right: 5px;
+                }
+
+                & .marks_popup_student_record_mark_input {
+                    width: 14%;
+                    min-width: 50px;
+                    height: fit-content;
+                    margin-top: auto;
+                }
+            }
+
+        }
+
+    }
+}

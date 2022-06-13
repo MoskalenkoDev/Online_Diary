@@ -54,3 +54,9 @@ export const ACTION_CHANGE_IS_LOGGED = 'ACTION_CHANGE_IS_LOGGED';
 export const ACTION_CHANGE_USER_TYPE = 'ACTION_CHANGE_USER_TYPE';
 export const ACTION_CHANGE_IS_FILLED_PROFILE = 'ACTION_CHANGE_IS_FILLED_PROFILE';
 //////////////////////////////////////////////////////////////////////////// - SignupReducer
+
+//////////////////////////////////////////////////////////////////////////// - SchoolMarksReducer
+export const ACTION_CHANGE_SCHOOL_MARKS_CLASS_LIST = 'ACTION_CHANGE_SCHOOL_MARKS_CLASS_LIST';
+
+
+//////////////////////////////////////////////////////////////////////////// - SchoolMarksReducer

@@ -10,14 +10,12 @@ export const WeekLiList = ({ isContainSubjects, weekTitle, innerContent }) => {
 
     const onDropDownClick = () => {
         setIsOpen(!isOpen);
-        dropDownContentRef.current.parentElement.style.transitionDuration = "0.4s";
         let nextHeight = isOpen ? 0 : dropDownContentRef.current.clientHeight;
         currentHeight.current = nextHeight;
         setDayHeight(nextHeight);
     }
 
     const onResizeChildComponent = (heightDiff) => {
-        dropDownContentRef.current.parentElement.style.transitionDuration = "0.4s";
         currentHeight.current += heightDiff;
         setDayHeight((dayHeight) => dayHeight + heightDiff);
     }
@@ -35,7 +33,6 @@ export const WeekLiList = ({ isContainSubjects, weekTitle, innerContent }) => {
     }, [innerContent]);
 
     const resizeCalcHeight = () => {
-        if(isOpen) dropDownContentRef.current.parentElement.style.transitionDuration = "0s";
         let contentHeight = dropDownContentRef.current.clientHeight;
         if(contentHeight !== currentHeight.current && isOpen) {
             setDayHeight(contentHeight);

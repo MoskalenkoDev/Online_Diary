@@ -9,6 +9,7 @@ import {WrappedProfile} from '../Profile/Profile';
 import {WrappedHomework} from '../Homework/Homework';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import {Account_Activation} from '../Account_Activation/Account_Activation';
+import { WrappedSchoolMarks } from '../School_marks/SchoolMarks';
 
 export default class  App extends Component
 {
@@ -27,6 +28,7 @@ export default class  App extends Component
           </Switch> 
           <Route path= "/diary_menu/profile" ><WrappedProfile lang = {this.props}/></Route>
           <Route path= "/diary_menu/homework"><WrappedHomework lang = {this.props}/></Route>
+          <Route path= "/diary_menu/marks"> <WrappedSchoolMarks lang = {this.props}/></Route>
         </div>
       </Router>
     );  

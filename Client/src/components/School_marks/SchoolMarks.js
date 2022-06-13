@@ -1,20 +1,22 @@
 import React,{Component, Fragment} from 'react';
 import {connect} from 'react-redux';
 import {Redirect} from 'react-router-dom';
-import './Homework.scss';
-import {TeacherHomework} from './TeacherHomework/TeacherHomework';
-import {StudentHomework} from './StudentHomework/StudentHomework';
-class Homework extends Component
+import './SchoolMarks.scss';
+import {StudentSchoolMarks} from './StudentSchoolMarks/StudenSchoolMarks';
+import {TeacherSchoolMarks} from './TeacherSchoolMarks/TeacherSchoolMarks';
+
+class SchoolMarks extends Component
 {
+    
     render()
     {   
         if(!this.props.isLogged) return (<Redirect to = "/signup" />);
         switch(this.props.userType)
         {
             case "teacher" :
-                return(<TeacherHomework state = {this.props}/>)
+                return(<TeacherSchoolMarks state = {this.props}/>)
             case "student" :
-                return(<StudentHomework state = {this.props}/>)
+                return(<StudentSchoolMarks state = {this.props}/>)
         } 
         return(
             <Fragment>
@@ -26,7 +28,7 @@ class Homework extends Component
 }
 
 const mapStateToProps = (state) => { // кладет стейт в качестве пропса в наш компонент (который мы законектили)
-  return{...state.homeworkState, ...state.signupState}
+  return{...state.schoolMarksState,...state.signupState}
 }
 
-export const WrappedHomework = connect(mapStateToProps)(Homework);
+export const WrappedSchoolMarks = connect(mapStateToProps)(SchoolMarks);

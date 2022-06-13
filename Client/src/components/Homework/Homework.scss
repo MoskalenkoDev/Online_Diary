@@ -18,11 +18,16 @@
         font-size: clamp(16px, 1.3vmax, 2vmax);
         color: #486c70;
         margin-top: clamp(5px, 0.5vmax, 0.55vmax);
+        margin-bottom: clamp(17px,1.7vmax, 2vmax);
     }
 }
 
+// .school_marks_wrapper .homework_header span{
+//     margin-bottom: 2.05vmax;
+// }
+
 .homework_add_btn {
-    margin-bottom: 1.7vmax;
+    margin-bottom: auto;
 }
 
 .homework_class_list_block, .homework_week_days_list_wrapper {
@@ -41,7 +46,7 @@
         font-size: clamp(16px, 1.2vmax, 2vmax);
         background: #f2f4f5;
         border-radius: 0.5vmax;
-        padding: clamp(12px, 0.9vmax, 2vmax);
+        padding: clamp(10px, 0.75vmax, 2vmax);
 
         &:not(:last-child) {
             margin-bottom: 1vmax;
@@ -261,7 +266,7 @@
     overflow-y: scroll;
     opacity: 0;
     transition: opacity 0.25s ease, visibility 0.25s ease;
-    &.homework_popup_active { // когда активен
+    &.homework_popup_active, &.school_marks_active { // когда активен
         visibility: visible;
         opacity: 1;
         pointer-events: all;
@@ -852,7 +857,7 @@
         font-size: clamp(16px, 0.7vw, 1vmax);
         color: #024047;
         transition: opacity ease-in 0.2s, visibility ease-in 0.2s, max-height ease-in 0.2s;
-
+        z-index: 20;
         & li {
             overflow: hidden;
             padding: 5px;

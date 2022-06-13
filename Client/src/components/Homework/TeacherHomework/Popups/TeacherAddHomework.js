@@ -252,14 +252,20 @@ export const TeacherAddHomework = ({
         return false;
     }
 
-    const compareDate = (date,CalendarDate) => { 
+    // const compareDate = (date,CalendarDate) => { 
+    //     if(typeof date === 'string') date = moment(date);
+    //     if(typeof CalendarDate === 'string') CalendarDate = moment(CalendarDate);
+    //     const isDayOfMonthMatch = date.date() === CalendarDate.date();
+    //     const isMonthMatch = date.month() === CalendarDate.month();
+    //     const isYearMatch = date.year() === CalendarDate.year();
+    //     if(isDayOfMonthMatch && isMonthMatch && isYearMatch) return true;
+    //     return false;
+    // }
+
+        const compareDate = (date, CalendarDate) => {
         if(typeof date === 'string') date = moment(date);
         if(typeof CalendarDate === 'string') CalendarDate = moment(CalendarDate);
-        const isDayOfMonthMatch = date.date() === CalendarDate.date();
-        const isMonthMatch = date.month() === CalendarDate.month();
-        const isYearMatch = date.year() === CalendarDate.year();
-        if(isDayOfMonthMatch && isMonthMatch && isYearMatch) return true;
-        return false;
+        return moment(date).isSame(CalendarDate, 'date');
     }
 
     const isDayHighlighted = CalendarDate => {
@@ -454,7 +460,6 @@ export const TeacherAddHomework = ({
                             // initialVisibleMonth={() => moment().subtract(2, 'months')}                          // start showing from adjusted month 
                             // isDayBlocked = {(day) => !isDayHighlighted(day)}                                                      // block all days, but only from availibles 
                             hideKeyboardShortcutsPanel
-
                         />
 
                     </div>
