@@ -9,6 +9,7 @@ import * as ActionCreators from '../../../../Redux/Actions/action_school_marks';
 import { DropDownSubjectsList } from '../../../DropDownSubjectsList/DropDownSubjectsList';
 import { get_student_subscribers } from '../../../../controllers/TeacherHomeworkController';
 import { SignleDayPicker } from '../../../Calendars/SingleDayPicker/SingleDayPicker';
+import { StudentCardAddMark } from '../StudentCardAddMark';
 import defaultImg from '../../../Profile/default_user_image.js';
 
 export const AddMarksPopup = ({ lang, class_id, school_marks_popup_type, onHidePopup, school_subjects, }) => {
@@ -44,6 +45,17 @@ export const AddMarksPopup = ({ lang, class_id, school_marks_popup_type, onHideP
     const [chosen_subject, setChosen_subject] = useState(null);
     const [date, setDate] = useState(null);
     const [focusedInput, setFocusedInput] = useState(null);
+    const [studentCards, setStudentCards] = useState([]);
+
+    const fakeDataFromDB = [
+        {
+            student_id: "62690381a146a6275007b405",
+            school_subject: "Фізика", 
+            marks: ["12", "11+"],
+            description: "Завдання виконано тупо чотко", 
+            date: moment().add(1, 'day')
+        }
+    ];
 
     let getActualStudentsInClass = async () => {
         const studentsInfo = await get_student_subscribers(class_id);
@@ -66,6 +78,87 @@ export const AddMarksPopup = ({ lang, class_id, school_marks_popup_type, onHideP
         setDate(new_date);
     }
 
+    const createCards = (img_src,name,surname,lastName, description = "", mark = "", isBlocked = true) => {
+        return (
+            <StudentCardAddMark
+                img_src = {img_src}
+                name = {name}
+                surname = {surname}
+                lastName = {lastName}
+                description = {description}
+                mark = {mark}
+                isBlocked = {isBlocked}
+                key = {name+surname+lastName}
+            />
+        )
+    }
+
+    const createStudentCards = (actualStudentsInfo, deletedStudentsInfo ,recordsFromDB) => {
+        let ourStudentCards = [];
+        
+        if(!date || !chosen_subject) {
+            actualStudentsInfo.forEach((student)=> {
+                ourStudentCards.push(createCards(student.img_src,student.name, student.surname, student.lastName));
+            });
+        }
+        else if(date && chosen_subject) {
+            let dateDifference = moment(date).startOf("M").diff(moment().startOf('M'), 'M');
+            if(dateDifference <= -2 || !school_subjects.includes(chosen_subject)) {
+                recordsFromDB.forEach((record)=> {
+                    if(moment(record.date).isSame(date, 'date') && record.school_subject === chosen_subject) {
+                        let studentFromRecord = actualStudentsInfo.find((student) => student.student_id === record.student_id);
+                        if(!studentFromRecord) studentFromRecord = deletedStudentsInfo.find((student) => student.student_id === record.student_id);
+                        let card = createCards(
+                            studentFromRecord.img_src,
+                            studentFromRecord.name,
+                            studentFromRecord.surname,
+                            studentFromRecord.lastName,
+                            record.description,
+                            record.marks.join(", "));
+
+                        ourStudentCards.push(card);
+                    }
+                })
+            } 
+            else {
+
+                let currentDayRecords = recordsFromDB.filter((record) => (moment(record.date).isSame(date, 'date') && record.school_subject === chosen_subject ));
+
+                actualStudentsInfo.forEach((student) => {
+
+                    let record = currentDayRecords.find((record) => (student.student_id === record.student_id));
+                    
+                    let card = createCards(
+                        student.img_src,
+                        student.name,
+                        student.surname,
+                        student.lastName,
+                        record?.description || "",
+                        record?.marks.join(", ") || "",
+                        false);
+
+                    ourStudentCards.push(card);
+                });
+
+                deletedStudentsInfo.forEach((deletedStudent) => {
+                    let record = currentDayRecords.find((record) => (deletedStudent.student_id === record.student_id));
+                    
+                    let card = createCards(
+                        deletedStudent.img_src,
+                        deletedStudent.name,
+                        deletedStudent.surname,
+                        deletedStudent.lastName,
+                        record.description,
+                        record.marks.join(", "));
+
+                    if(record) ourStudentCards.push(card);
+                });
+            } 
+        }
+
+        setStudentCards(ourStudentCards);
+    }
+
     useEffect(() => {
         if (class_id) {
             getActualStudentsInClass(); // ми отримали студентів зареєстрованих в класі
@@ -76,6 +169,12 @@ export const AddMarksPopup = ({ lang, class_id, school_marks_popup_type, onHideP
             console.log("Cleanup");
         }
     }, [class_id])
+
+    useEffect(() => {
+        if((actualStudentsInClass.length || deletedStudentsInClass.length)) {
+            createStudentCards(actualStudentsInClass,deletedStudentsInClass, fakeDataFromDB);
+        }
+    }, [actualStudentsInClass, deletedStudentsInClass, date, chosen_subject]); // maybe we need to add dataFromDB too
 
     return (
         <div className={"homework_popup add_school_marks " + school_marks_popup_type}>
@@ -117,86 +216,7 @@ export const AddMarksPopup = ({ lang, class_id, school_marks_popup_type, onHideP
 
                     <div className="marks_popup_students_list_wrapper">
                         <ul className="marks_popup_students_list">
-
-                            <li className='marks_popup_students_list_student_record blocked_record'>
-
-                                <div className="marks_popup_student_record_img_wrapper">
-                                    <img src={defaultImg} alt="" />
-                                </div>
-                                <div className="marks_popup_student_record_inner_content_wrapper">
-                                    <span className='user_fio'>Москаленко Микола</span>
-
-                                    <div className="marks_popup_student_record_name_and_description_wrapper">
-                                        <input type="text" placeholder='description' className='marks_popup_student_record_desc_input' />
-                                        <input type="text" placeholder='mark' className='marks_popup_student_record_mark_input' />
-                                    </div>
-
-                                </div>
-                            </li>
-
-                            <li className='marks_popup_students_list_student_record'>
-
-                                <div className="marks_popup_student_record_img_wrapper">
-                                    <img src={defaultImg} alt="" />
-                                </div>
-                                <div className="marks_popup_student_record_inner_content_wrapper">
-                                    <span className='user_fio'>Москаленко Микола</span>
-
-                                    <div className="marks_popup_student_record_name_and_description_wrapper">
-                                        <input type="text" placeholder='description' className='marks_popup_student_record_desc_input' />
-                                        <input type="text" placeholder='mark' className='marks_popup_student_record_mark_input' />
-                                    </div>
-
-                                </div>
-                            </li>
-
-                            <li className='marks_popup_students_list_student_record'>
-
-                                <div className="marks_popup_student_record_img_wrapper">
-                                    <img src={defaultImg} alt="" />
-                                </div>
-                                <div className="marks_popup_student_record_inner_content_wrapper">
-                                    <span className='user_fio'>Москаленко Микола</span>
-
-                                    <div className="marks_popup_student_record_name_and_description_wrapper">
-                                        <input type="text" placeholder='description' className='marks_popup_student_record_desc_input' />
-                                        <input type="text" placeholder='mark' className='marks_popup_student_record_mark_input' />
-                                    </div>
-
-                                </div>
-                            </li>
-
-                            <li className='marks_popup_students_list_student_record'>
-
-                                <div className="marks_popup_student_record_img_wrapper">
-                                    <img src={defaultImg} alt="" />
-                                </div>
-                                <div className="marks_popup_student_record_inner_content_wrapper">
-                                    <span className='user_fio'>Москаленко Микола</span>
-
-                                    <div className="marks_popup_student_record_name_and_description_wrapper">
-                                        <input type="text" placeholder='description' className='marks_popup_student_record_desc_input' />
-                                        <input type="text" placeholder='mark' className='marks_popup_student_record_mark_input' />
-                                    </div>
-
-                                </div>
-                            </li>
-
-                            <li className='marks_popup_students_list_student_record'>
-
-                                <div className="marks_popup_student_record_img_wrapper">
-                                    <img src={defaultImg} alt="" />
-                                </div>
-                                <div className="marks_popup_student_record_inner_content_wrapper">
-                                    <span className='user_fio'>Москаленко Микола</span>
-
-                                    <div className="marks_popup_student_record_name_and_description_wrapper">
-                                        <input type="text" placeholder='description' className='marks_popup_student_record_desc_input' />
-                                        <input type="text" placeholder='mark' className='marks_popup_student_record_mark_input' />
-                                    </div>
-
-                                </div>
-                            </li>
+                            {studentCards}
                         </ul>
                     </div>
                 </div>

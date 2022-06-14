@@ -65,9 +65,10 @@ export const SignleDayPicker = ({
         return false;
     }
 
-    const onCalendarClose = () => {
+    const onCalendarClose = (new_date) => {
         currentOpenMonthCounter.current = 0; // this is wrong solution because it not consider on which mounth current date is
-        console.log(moment(date).startOf('M').diff(moment().startOf('M'), 'M'));
+        // console.log(moment(new_date.date).format("DD.MM.YYYY"));
+        console.log(moment(new_date.date).startOf('M').diff(moment().startOf('M'), 'M'));
     }
 
     let onNextMonthClick = async () => {  
