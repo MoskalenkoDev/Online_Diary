@@ -38,12 +38,15 @@
         }
 
         & .marks_popup_students_list_student_record.blocked_record {
-            // background: #ff00004f;
             background: #00000060;
             pointer-events: none;
             & .marks_popup_student_record_desc_input, & .marks_popup_student_record_mark_input {
                 background: rgba(255, 255, 255, 0.555);
             }
+        }
+
+        & .marks_popup_students_list_student_record.deleted_user {
+            background: #ff00004f;
         }
 
         & .marks_popup_students_list_student_record.edited_record {

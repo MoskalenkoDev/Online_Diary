@@ -2,9 +2,11 @@ const class_model = require("../models/class_model");
 const student_users_model = require("../models/student_users_model");
 const student_in_classes = require("../models/student_in_classes");
 const homework_tasks = require("../models/homework_tasks");
+const school_mark_model = require('../models/school_mark_model');
 const ApiError = require('../exceptions/api_error');
 const StudentInfo = require("../dtos/student_info_dto");
 const HomeworkTasks = require("../dtos/homework_tasks_dto");
+const MarkRecord = require('../dtos/mark_record_dto');
 class TeacherService {
 
     async add_new_class(teacher_id, title, school_subjects) {
@@ -109,6 +111,31 @@ class TeacherService {
     async delete_homework(record_id) {
         await homework_tasks.findByIdAndDelete(record_id);
     }
+
+    async get_marks(class_id, start_date, end_date) {
+        let new_mark_records = [];
+        let marks = await school_mark_model.find({class_id, date :{$gte: start_date ,$lt:end_date}}).lean();
+
+        marks.forEach(record => {
+            const newMark = new MarkRecord(record);
+            new_mark_records.push(newMark);
+        });
+        return new_mark_records;
+    }
+
+    async get_deleted_students(students) {
+        let new_students_info = [];
+        
+        const deleted_students_from_class = await student_users_model.find({"_id": {$in: students} });
+
+        deleted_students_from_class.forEach(record => {
+            const student = new StudentInfo(record);
+            new_students_info.push(student);
+        });
+        return new_students_info;
+    }
+
+    
 }
 
 module.exports = new TeacherService();

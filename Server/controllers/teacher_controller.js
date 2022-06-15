@@ -194,6 +194,39 @@ class TeacherController
             next(e);
         }
     }
+
+    async get_marks(req, res, next) {
+        try {
+            const {class_id, start_date, end_date} = req.body;
+            
+            const errors = validationResult(req);
+            if(!errors.isEmpty()) {
+               return next(ApiError.BadRequest('wrong parameter type', errors.array())); 
+            }
+            const mark_records = await teacher_service.get_marks(class_id, start_date, end_date);
+            return res.json(mark_records);
+        }
+        catch (e) {
+            next(e);
+        }
+    }
+
+    async get_deleted_students(req, res, next) {
+        try {
+            const {students} = req.body;
+            
+            const errors = validationResult(req);
+            if(!errors.isEmpty()) {
+               return next(ApiError.BadRequest('wrong parameter type', errors.array())); 
+            }
+            const students_info = await teacher_service.get_deleted_students(students);
+            return res.json(students_info);
+        }
+        catch (e) {
+            next(e);
+        }
+    }
+
 }
 
 module.exports = new TeacherController();

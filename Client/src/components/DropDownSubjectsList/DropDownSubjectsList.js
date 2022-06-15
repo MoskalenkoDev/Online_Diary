@@ -22,10 +22,6 @@ export const DropDownSubjectsList = ({lang, school_subjects, infoFromDB, date, s
     let selected_li = useRef(null);
     const onChooseSubject = (e) => {
         if(e.target.innerText === chosen_subject) {setIs_active_drop_down(false); return;} // якщо нажали на одну і ту ж лішку то нічо не робиться
-        if(e.target.className.includes("highlighted")) {
-            console.log("highlighted");
-        }
-
         if (selected_li.current) selected_li.current.className = selected_li.current.className.replace(" selected_li", "") ; 
         e.target.className += " selected_li";  // просто вибирає предмет і відповідає за зміну активної лішки 
         setChosen_subject(e.target.innerText);
@@ -90,7 +86,7 @@ export const DropDownSubjectsList = ({lang, school_subjects, infoFromDB, date, s
 
     useEffect(()=> {
         createLiList(infoFromDB)
-    },[])
+    },[date])
 
     return (
         <div className={"subject_drop_down " + (is_active_drop_down ? "active_drop_down" : "")}>

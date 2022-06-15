@@ -49,7 +49,7 @@ export const TeacherSchoolMarks = ({ state }) => {
     }
 
     let li_creator = (li_mass) => {
-        console.log(li_mass);
+        // console.log(li_mass);
         let our_li_components = li_mass.map((new_class_obj, index) => {
             return (
                 <li key={index}>

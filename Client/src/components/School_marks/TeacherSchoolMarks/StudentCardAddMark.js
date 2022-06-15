@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-export const StudentCardAddMark = ({img_src, name, surname, lastName, description, mark, isBlocked}) => {
+export const StudentCardAddMark = ({img_src, name, surname, lastName, description, mark, isBlocked, isStudentDeleted, setEditedCards, student_id}) => {
 
-    const [editMark, setEditMark] = useState(mark);
-    const [editDescription, setEditDescription] = useState(description);
+    const [editMark, setEditMark] = useState("");
+    const [editDescription, setEditDescription] = useState("");
     const [isEdited, setIsEdited] = useState(false);
 
     const onChangeDesk = (e) => {
@@ -15,8 +15,30 @@ export const StudentCardAddMark = ({img_src, name, surname, lastName, descriptio
     }
 
     useEffect(()=> {
-        if(editMark !== mark || editDescription !== description) {if(!isEdited) setIsEdited(true);} 
-        else setIsEdited(false);
+        setEditMark(mark);
+        setEditDescription(description);
+    },[mark, description])
+
+    // const editedCardsTemplate = { // якщо змінюється дата або предмет, то список просто очищується
+    //     student_id: "62690381a146a6275007b405",
+    //     mark: "12",
+    //     description: "круто що все вийшло"
+    // }
+
+    const changeEditedCards = (editedCards) => {
+       let records =  editedCards.filter((record) => record.student_id !== student_id);
+       return [...records, {student_id, mark : editMark, description: editDescription}];
+    }
+
+    useEffect(()=> {
+        if(editMark !== mark || editDescription !== description) {
+            if(!isEdited) setIsEdited(true);
+            setEditedCards(changeEditedCards);
+        } 
+        else {
+            setIsEdited(false);
+            setEditedCards(editedCards => editedCards.filter(record => record.student_id !== student_id));
+        };
     }, [editMark, editDescription]);
 
     useEffect(()=> {
@@ -27,8 +49,15 @@ export const StudentCardAddMark = ({img_src, name, surname, lastName, descriptio
         } 
     }, [isBlocked]);
 
+    
     return (
-        <li className={'marks_popup_students_list_student_record ' + (isBlocked? "blocked_record " : "") + (isEdited? "edited_record" : "")}>
+        <li className= { 
+                'marks_popup_students_list_student_record ' + 
+                (isBlocked? "blocked_record " : "") + 
+                (isStudentDeleted? "deleted_user ": "") + 
+                (isEdited? "edited_record " : "")
+            }
+        >
 
             <div className="marks_popup_student_record_img_wrapper">
                 <img src={img_src} alt="" />

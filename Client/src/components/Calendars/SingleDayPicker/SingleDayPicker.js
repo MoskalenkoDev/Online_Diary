@@ -15,7 +15,8 @@ export const SignleDayPicker = ({
     receivedRecordsFromDB, 
     chosen_subject, 
     school_subjects, 
-    class_id
+    class_id,
+    compareDate
 }) => {
 
     let langObj =
@@ -36,12 +37,6 @@ export const SignleDayPicker = ({
     const [end_date, setEnd_date] = useState(0);
 
     const currentOpenMonthCounter = useRef(0);
-
-    const compareDate = (firstDate, secondDate) => {
-        if(typeof firstDate === 'string') firstDate = moment(firstDate);
-        if(typeof secondDate === 'string') secondDate = moment(secondDate);
-        return moment(firstDate).isSame(secondDate, 'date');
-    }
 
     const isDayHighlighted = (CalendarDate) => {
         let isHighlighted = false;
@@ -68,7 +63,7 @@ export const SignleDayPicker = ({
     const onCalendarClose = (new_date) => {
         currentOpenMonthCounter.current = 0; // this is wrong solution because it not consider on which mounth current date is
         // console.log(moment(new_date.date).format("DD.MM.YYYY"));
-        console.log(moment(new_date.date).startOf('M').diff(moment().startOf('M'), 'M'));
+        // console.log(moment(new_date.date).startOf('M').diff(moment().startOf('M'), 'M'));
     }
 
     let onNextMonthClick = async () => {  

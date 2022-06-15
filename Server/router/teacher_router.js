@@ -91,4 +91,18 @@ router.post("/diary_menu/homework/get_homework_tasks",
     teacher_controller.get_homework_tasks
 );
 
+router.post("/diary_menu/school_marks/get_marks",
+    body("class_id").isString(),
+    body("start_date").isString(),
+    body("end_date").isString(),
+    auth_middleware,
+    teacher_controller.get_marks
+);
+
+router.post("/diary_menu/school_marks/get_deleted_students",
+    body("students").isArray(),
+    auth_middleware,
+    teacher_controller.get_deleted_students
+);
+
 module.exports = router;
