@@ -105,4 +105,10 @@ router.post("/diary_menu/school_marks/get_deleted_students",
     teacher_controller.get_deleted_students
 );
 
+router.post("/diary_menu/school_marks/saveOrEditMarks",
+    body("marksForSave").isObject(),
+    auth_middleware,
+    teacher_controller.saveOrEditMarks
+);
+
 module.exports = router;

@@ -10,4 +10,8 @@ export default class MarksService {
         return $api.post(`/teacher/diary_menu/school_marks/get_deleted_students`, {students});
     }
     
+    static async saveOrEditMarks(marksForSave) {
+        return $api.post(`/teacher/diary_menu/school_marks/saveOrEditMarks`, {marksForSave});
+    }
+    
 }

@@ -1,4 +1,4 @@
-export const TeacherSuccessMessagePopup = ({state,teacher_success_message_popup_class, message_text}) => {    
+export const TeacherSuccessMessagePopup = ({teacher_success_message_popup_class, message_text}) => {    
     
     return (
         <div className= {"copy_invite_link_popup " + teacher_success_message_popup_class}>

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import * as ActionCreators from '../../../Redux/Actions/action_school_marks';
 import { get_classes_info, get_student_subscribers } from '../../../controllers/TeacherHomeworkController';
 import { AddMarksPopup } from './Popups/AddMarksPopup';
+import { TeacherSuccessMessagePopup } from '../../Homework/TeacherHomework/Popups/TeacherSuccessMessagePopup';
 
 export const TeacherSchoolMarks = ({ state }) => {
     let lang = state.lang.language;
@@ -25,6 +26,9 @@ export const TeacherSchoolMarks = ({ state }) => {
     const [school_marks_popup_type, setSchool_marks_popup_type] = useState(""); // school_marks_add_marks_popup
     const [current_class_id, setCurrent_class_id] = useState("");
     const [school_subjects, setSchool_subjects] = useState(""); // пока что строка, но при отправке на бек мы превратим ее в массив
+
+    const [teacher_success_message_popup_class, setTeacher_success_message_popup_class] = useState(""); // активный класс - active_invite_copy_link_popup
+    const [teacher_success_message_popup_message_text, setTeacher_success_message_popup_message_text] = useState();
 
     const timer = useRef();
     let onHidePopup = () =>
@@ -95,6 +99,16 @@ export const TeacherSchoolMarks = ({ state }) => {
     // prevMarks та перевіряємо чи точно щось змінилось. Якщо да, то формується фінальний список і відправляється на збереження в бд. Попап закривається.
     // Питання як позначати синім відредагований список. Думаю треба робити окремий компонент з оцими учнями та їхніми полями.
 
+    let timer_copy_popup = useRef(null);
+    let showSuccessMessage = (message) => {
+        clearTimeout(timer_copy_popup.current);
+        setTeacher_success_message_popup_message_text(message);
+        setTeacher_success_message_popup_class("active_invite_copy_link_popup");
+        timer_copy_popup.current = setTimeout(() => {
+            setTeacher_success_message_popup_class("");
+        },2000);
+    }
+
     useEffect(() => {
         get_classes_info(li_creator); // in my opinion it is correct
     }, []);
@@ -116,7 +130,7 @@ export const TeacherSchoolMarks = ({ state }) => {
                     school_subjects={school_subjects}
                     class_id={current_class_id}
                     timer={timer}
-                    // showSuccessMessage={showSuccessMessage}
+                    showSuccessMessage={showSuccessMessage}
                 />}
             </div>
 
@@ -125,6 +139,11 @@ export const TeacherSchoolMarks = ({ state }) => {
                     {state.school_marks_class_list}
                 </ul>
             </div>
+
+            <TeacherSuccessMessagePopup 
+                teacher_success_message_popup_class = {teacher_success_message_popup_class} 
+                message_text = {teacher_success_message_popup_message_text}
+            />
 
         </div>
     );

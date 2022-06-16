@@ -380,8 +380,11 @@ export const TeacherAddHomework = ({
         setDate(moment(activeRecord.date));
     }
 
-    const onCalendarClose = () => {
-        currentOpenMonthCounter.current = 0;
+    const onCalendarClose = (new_date) => {
+        if(!new_date.date) currentOpenMonthCounter.current = 0;
+        else {
+            currentOpenMonthCounter.current = moment(new_date.date).startOf('M').diff(moment().startOf('M'), 'M');
+        }
     }
 
     let onNextMonthClick = async () => {  

@@ -227,6 +227,22 @@ class TeacherController
         }
     }
 
+    async saveOrEditMarks(req , res,next) {
+        try {
+            const {marksForSave} = req.body;
+            const errors = validationResult(req);
+            if(!errors.isEmpty()) {
+               return next(ApiError.BadRequest('wrong parameter type', errors.array())); 
+            }
+            await teacher_service.saveOrEditMarks(marksForSave);
+            return res.sendStatus(200, 'OK');
+        }
+        catch(e) {
+            console.log(e);
+            next(e);
+        }
+    }
+
 }
 
 module.exports = new TeacherController();

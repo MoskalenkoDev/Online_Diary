@@ -24,3 +24,5 @@ yarn-debug.log*/
 yarn-error.log*/
 Логика как должна работать регистрация.docx
 план розвитку сайту.txt
+*.docx
+*.txt
