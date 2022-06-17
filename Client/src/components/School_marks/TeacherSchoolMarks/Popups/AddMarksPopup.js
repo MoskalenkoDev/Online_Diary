@@ -66,7 +66,7 @@ export const AddMarksPopup = ({ lang, class_id, school_marks_popup_type, onHideP
     const showWarning = () => {
         window.clearTimeout(timer.current);
         setPopup_warning_class("homework_popup_warning_active");
-        timer.current = window.setTimeout(() => {setPopup_warning_class("")}, 4000)
+        timer.current = window.setTimeout(() => {setPopup_warning_class("")}, 4000);
     } 
 
     const getActualStudentsInClass = async () => {
@@ -86,7 +86,7 @@ export const AddMarksPopup = ({ lang, class_id, school_marks_popup_type, onHideP
         if(deleted_user_ids.length) {
             const deletedStudents = await get_deleted_students(deleted_user_ids);
             setDeletedStudentsInClass([...deletedStudentsInClass, ...deletedStudents]);            
-        }
+        };
     }
     const newMarks = useRef([]);
     const getRecordsFromDB = async (start_date, end_date) => {
@@ -109,7 +109,7 @@ export const AddMarksPopup = ({ lang, class_id, school_marks_popup_type, onHideP
         else {
             await saveOrEditMarks(editedCards,chosen_subject,date,class_id);
             onHidePopup();
-            showSuccessMessage(langObj.[lang].successAddedMessage);
+            showSuccessMessage(langObj[lang].successAddedMessage);
         }
     }
 

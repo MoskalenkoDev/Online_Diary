@@ -618,14 +618,16 @@
     display: flex;
     height: 100%;
     width: 100%;
-    padding: 10px;
+    // padding: 10px;
 }
 
 .homework_popup_menu_item_content_compact_cards_wrapper{
     display: flex;
     margin: 0px auto;
     flex-direction: column;
-    width: 90%;
+    width: 100%;
+    padding: 10px;
+    // max-width: 90%;
     height: 100%;
     position: relative;
     align-items: center;
@@ -637,9 +639,9 @@
         width: fit-content;
         height: fit-content;
         top: 0px;
-        left: 0px;
+        left: 10px;
         bottom: 0px;
-        right: 0px;
+        right: 10px;
         color: #9b9b9b;
         padding: 5px;
         border: 2px dashed #9b9b9b;
@@ -654,11 +656,10 @@
 .compact_user_card {
     display: flex;
     justify-content: space-between;
-    width: 100%;
+    width: 90%;
     background: rgb(255, 255, 255);
     border-radius: 0.5vmax;
-    overflow:hidden;
-    max-height: 140px;
+    max-height: 180px;
     & .compact_user_card_inner_content_wrapper {
         width: 100%;
         display: flex;
@@ -684,12 +685,13 @@
 
 @keyframes user-card-deleted-animation {
     0% {
-        max-height: 140px;
+        max-height: 180px;
     }
     100% {
         margin-bottom: 0px;
         opacity: 0.5;
         max-height: 0px;
+        overflow:hidden;
     }
 }
 
@@ -990,7 +992,7 @@
         width: 90%;
     }
 
-    .homework_popup_menu_item_content_compact_cards_wrapper { // homework_popup_menu_item_content_requests_to_teacher_cards_list
+    .compact_user_card { // homework_popup_menu_item_content_requests_to_teacher_cards_list
         width: 100%;
     }
 }

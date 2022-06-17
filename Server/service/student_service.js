@@ -36,6 +36,7 @@ class StudentService {
     async get_sent_requests_to_teachers(student_id) {
         const classList = await student_in_classes.findOne({student_id}).lean();
         let teachersInfoArr = [];
+        if(!classList) return teachersInfoArr;
         for(let class_id of classList.requests_to_join) {
             const classInfo = await class_model.findById(class_id).lean();
             const teacherInfo = await teacher_users_model.findById(classInfo.teacher_id).lean();
@@ -57,6 +58,7 @@ class StudentService {
     async get_accepted_teachers(student_id) {
         const classList = await student_in_classes.findOne({student_id}).lean();
         let teachersInfoArr = [];
+        if(!classList) return teachersInfoArr;
         for(let class_id of classList.classes) {
             const classInfo = await class_model.findById(class_id).lean();
             const teacherInfo = await teacher_users_model.findById(classInfo.teacher_id).lean();
@@ -77,12 +79,15 @@ class StudentService {
     async get_homework_tasks(student_id, start_date, end_date) {
         let new_homework_tasks = [];
         let studentClasses = await student_in_classes.findOne({student_id});
-        let homeworks = await homework_tasks.find({"class_id": {$in: studentClasses.classes}, date :{$gte: start_date ,$lt:end_date}}); // 
-        console.log(homeworks);
-        homeworks.forEach(record => {
-            const newTask = new HomeworkTasks(record);
-            new_homework_tasks.push(newTask);
-        });
+        if(studentClasses) {
+            let homeworks = await homework_tasks.find({"class_id": {$in: studentClasses.classes}, date :{$gte: start_date ,$lt:end_date}}); // 
+            console.log(homeworks);
+            homeworks.forEach(record => {
+                const newTask = new HomeworkTasks(record);
+                new_homework_tasks.push(newTask);
+            });
+        }
+
         return new_homework_tasks;
     }
 }
