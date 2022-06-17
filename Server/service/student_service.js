@@ -90,6 +90,19 @@ class StudentService {
 
         return new_homework_tasks;
     }
+
+    async get_marks(student_id, start_date, end_date) {
+        let new_mark_records = [];
+        console.log(student_id,start_date,end_date);
+        // let marks = await school_mark_model.find({ class_id, date: { $gte: start_date, $lt: end_date } }).lean();
+        // marks.forEach(record => {
+        //     const newMark = new MarkRecord(record);
+        //     new_mark_records.push(newMark);
+        // });
+
+        return new_mark_records;
+    }
+
 }
 
 module.exports = new StudentService();

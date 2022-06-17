@@ -7,7 +7,7 @@ import moment from 'moment';
 import 'moment/locale/ru';
 import 'moment/locale/uk';
 
-export const WeekPicker = ({ start_date, setStartDate, end_date, setEndDate, hoveredDays, setHoveredDays, getHomeworks, startAndEndDate, changeStartAndEndDate ,lang }) => {
+export const WeekPicker = ({ start_date, setStartDate, end_date, setEndDate, hoveredDays, setHoveredDays, getDataFromDB, startAndEndDate, changeStartAndEndDate ,lang }) => {
 
     const langObj = {
         ua: {
@@ -118,7 +118,7 @@ export const WeekPicker = ({ start_date, setStartDate, end_date, setEndDate, hov
             let startCalcDay = moment().startOf('M').subtract(2,'M');
             let endCalcDay = moment().startOf('M').add(2, 'M').endOf('M');
     
-            getHomeworks(startCalcDay, endCalcDay);
+            getDataFromDB(startCalcDay, endCalcDay);
         }
         else {
             calculatedStartMounth.current = startAndEndDate[0];
@@ -177,7 +177,7 @@ export const WeekPicker = ({ start_date, setStartDate, end_date, setEndDate, hov
         if (calculatedEndMounth.current === currentOpenMounth.current + 1) {
             let old_end_date = currentMoment.clone().startOf('M').add(calculatedEndMounth.current + 1, 'M');
             let new_end_date = old_end_date.clone().add(2, 'M').endOf('M');
-            getHomeworks(old_end_date, new_end_date);
+            getDataFromDB(old_end_date, new_end_date);
             calculatedEndMounth.current += 3;
         }
 
@@ -188,7 +188,7 @@ export const WeekPicker = ({ start_date, setStartDate, end_date, setEndDate, hov
         if (calculatedStartMounth.current === currentOpenMounth.current - 1) {
             let old_start_date = currentMoment.clone().startOf('M').subtract(-(calculatedStartMounth.current - 1), 'M').endOf('M'); // 31
             let new_start_date = currentMoment.clone().startOf('M').subtract(-(calculatedStartMounth.current - 3), 'M');
-            await getHomeworks(new_start_date, old_start_date);
+            await getDataFromDB(new_start_date, old_start_date);
             calculatedStartMounth.current -= 3;
         }
     }

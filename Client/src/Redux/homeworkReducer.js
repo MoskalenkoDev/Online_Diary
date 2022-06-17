@@ -26,7 +26,7 @@ const initialState =
   homework_student_homework_info: [], // our homework from DB
 };
 
-const changeLiList = (goalList, newList ,key = null) => {
+const changeLiList = (goalList, newList, key = null) => {
   
   let updatedList = [];
 

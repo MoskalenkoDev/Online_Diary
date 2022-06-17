@@ -14,4 +14,7 @@ export default class MarksService {
         return $api.post(`/teacher/diary_menu/school_marks/saveOrEditMarks`, {marksForSave});
     }
     
+    static async student_get_marks(start_date, end_date) {
+        return $api.get(`/student/diary_menu/school_marks/get_marks/${start_date}/${end_date}`);
+    }
 }

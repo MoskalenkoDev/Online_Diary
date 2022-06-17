@@ -187,7 +187,7 @@ export const StudentHomework = ({ state }) => {
                     setEndDate={setEndDate}
                     hoveredDays={hoveredDays}
                     setHoveredDays={setHoveredDays}
-                    getHomeworks={getHomeworks}
+                    getDataFromDB={getHomeworks}
                     startAndEndDate = {state.homework_student_start_and_end_date}
                     changeStartAndEndDate = {changeStartAndEndDate}
                     lang={lang}

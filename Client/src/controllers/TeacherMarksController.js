@@ -55,3 +55,19 @@ export async function saveOrEditMarks(markArr, subject, date, class_id) {
         }
     }
 }
+
+export async function student_get_marks(start_date, end_date) {
+    try {
+        let response = await MarksService.student_get_marks(start_date, end_date); // можливо в респонсі прийде відповідь з записами видалених учнів, тоді подивимось як то сортувати будемо
+        return response.data;
+    }
+    catch (e) {
+
+        switch (e.response.status) {
+            case 500: {
+                console.log(e.response)
+                break;
+            }
+        }
+    }
+}

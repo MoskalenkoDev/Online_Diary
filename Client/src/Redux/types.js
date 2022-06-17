@@ -57,6 +57,8 @@ export const ACTION_CHANGE_IS_FILLED_PROFILE = 'ACTION_CHANGE_IS_FILLED_PROFILE'
 
 //////////////////////////////////////////////////////////////////////////// - SchoolMarksReducer
 export const ACTION_CHANGE_SCHOOL_MARKS_CLASS_LIST = 'ACTION_CHANGE_SCHOOL_MARKS_CLASS_LIST';
+export const ACTION_CHANGE_SCHOOL_MARKS_STUDENT_START_AND_END_DATE = "ACTION_CHANGE_SCHOOL_MARKS_STUDENT_START_AND_END_DATE";
+export const ACTION_CHANGE_SCHOOL_MARKS_STUDENT_MARKS_INFO = 'ACTION_CHANGE_SCHOOL_MARKS_STUDENT_MARKS_INFO';
 
 
 //////////////////////////////////////////////////////////////////////////// - SchoolMarksReducer

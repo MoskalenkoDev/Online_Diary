@@ -42,4 +42,11 @@ router.post("/diary_menu/homework/get_homework_tasks",
     student_controller.get_homework_tasks
 );
 
+router.get("/diary_menu/school_marks/get_marks/:start_date/:end_date",
+    param("start_date").isString(),
+    param("end_date").isString(),
+    auth_middleware,
+    student_controller.get_marks
+);
+
 module.exports = router;
