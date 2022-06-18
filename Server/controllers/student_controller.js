@@ -103,7 +103,7 @@ class StudentController {
         try {
             const {start_date, end_date} = req.params;
             const {id} = req.user; // student_id
-            console.log("$@#@#2")
+
             const errors = validationResult(req);
             if(!errors.isEmpty()) {
                return next(ApiError.BadRequest('wrong parameter type', errors.array())); 
@@ -112,6 +112,7 @@ class StudentController {
             return res.json(mark_records);
         }
         catch (e) {
+            console.log(e);
             next(e);
         }
     }

@@ -31,7 +31,7 @@
             border-radius: 5px;
             position: relative;
             transition: 0.4s ease background-color;
-        
+
             &:not(:last-child) {
                 margin-bottom: 10px;
             }
@@ -40,7 +40,9 @@
         & .marks_popup_students_list_student_record.blocked_record {
             background: #00000060;
             pointer-events: none;
-            & .marks_popup_student_record_desc_input, & .marks_popup_student_record_mark_input {
+
+            & .marks_popup_student_record_desc_input,
+            & .marks_popup_student_record_mark_input {
                 background: rgba(255, 255, 255, 0.555);
             }
         }
@@ -59,7 +61,7 @@
             height: 3.5vmax;
             max-height: 50px;
             margin-right: 10px;
-            
+
             & img {
                 height: 100%;
                 border-radius: 5px;
@@ -80,7 +82,7 @@
             flex-direction: column;
             width: 100%;
             overflow: hidden;
-            
+
             & .user_fio {
                 font-size: clamp(16px, 0.7vw, 1vmax);
                 margin-bottom: auto;
@@ -109,4 +111,37 @@
         }
 
     }
+}
+
+.marks_table {
+    border-collapse: collapse;
+    width: 100%;
+
+
+    & tr th {
+        font-size: clamp(16px, 0.7vw, 1vmax);
+        padding: 10px;
+        text-align: center;
+        border: 1px solid #b6b6b6;
+        background-color: #f2f4f5;
+    }
+
+    & tr th:first-of-type {
+        text-align: left;
+    }
+    & tr td {
+        border: 1px solid #b6b6b6;
+        text-align: left;
+        padding: 10px;
+        font-size: clamp(16px, 0.7vw, 1vmax);
+    }
+
+    & tr .marks_field {
+        text-align: center;
+        width: 25%;
+    }
+}
+
+.homework_task_wpapper .marks_table:not(:last-of-type) {
+    margin-bottom: 10px;
 }

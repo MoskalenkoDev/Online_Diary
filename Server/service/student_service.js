@@ -2,9 +2,11 @@ const class_model = require("../models/class_model");
 const TeacherInfo = require('../dtos/teacher_info_dto');
 const teacher_users_model = require('../models/teacher_users_model');
 const student_in_classes = require('../models/student_in_classes');
+const school_mark_model = require("../models/school_mark_model");
 const ApiError = require('../exceptions/api_error');
 const homework_tasks = require("../models/homework_tasks");
 const HomeworkTasks = require("../dtos/homework_tasks_dto");
+const MarkRecord = require("../dtos/mark_record_dto");
 class StudentService {
 
     async search_teacher_by_id(_id, student_id) {
@@ -80,7 +82,7 @@ class StudentService {
         let new_homework_tasks = [];
         let studentClasses = await student_in_classes.findOne({student_id});
         if(studentClasses) {
-            let homeworks = await homework_tasks.find({"class_id": {$in: studentClasses.classes}, date :{$gte: start_date ,$lt:end_date}}); // 
+            let homeworks = await homework_tasks.find({"class_id": {$in: studentClasses.classes}, date :{$gte: start_date ,$lte:end_date}}); // 
             console.log(homeworks);
             homeworks.forEach(record => {
                 const newTask = new HomeworkTasks(record);
@@ -94,11 +96,11 @@ class StudentService {
     async get_marks(student_id, start_date, end_date) {
         let new_mark_records = [];
         console.log(student_id,start_date,end_date);
-        // let marks = await school_mark_model.find({ class_id, date: { $gte: start_date, $lt: end_date } }).lean();
-        // marks.forEach(record => {
-        //     const newMark = new MarkRecord(record);
-        //     new_mark_records.push(newMark);
-        // });
+        let marks = await school_mark_model.find({ student_id, date: { $gte: start_date, $lte: end_date } }).lean();
+        marks.forEach(record => {
+            const newMark = new MarkRecord(record);
+            new_mark_records.push(newMark);
+        });
 
         return new_mark_records;
     }

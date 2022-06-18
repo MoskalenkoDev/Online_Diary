@@ -15,19 +15,19 @@ export default class Menu extends Component
     {
       profile: "Профіль",
       homework: "Домашня работа",
-      grades: "Оцінки"
+      marks: "Оцінки"
     },
     ru : 
     {
       profile: "Профиль",
       homework: "Домашняя работа",
-      grades: "Оценки"
+      marks: "Оценки"
     },
     en :
     {
       profile: "Profile",
       homework: "Homework",
-      grades: "Grades"
+      marks: "Marks"
     }
   }
   render() 
@@ -40,7 +40,7 @@ export default class Menu extends Component
         <nav className = "main_nav">
           <NavLink to = "/diary_menu/profile" activeClassName = {'active_menu_item'}><div className="a_inner_wrapper"><img src={profile_pic} alt="Профиль"/><span>{this.langObj[lang].profile}</span></div></NavLink>
           <NavLink to = "/diary_menu/homework" activeClassName = {'active_menu_item'}><div className="a_inner_wrapper"><img src={homework_pic} alt="Домашняя работа"/> <span>{this.langObj[lang].homework}</span></div></NavLink>
-          <NavLink to = "/diary_menu/marks" activeClassName = {'active_menu_item'}><div className="a_inner_wrapper"><img src={school_marks_pic} alt="Оценки"/> <span>{this.langObj[lang].grades}</span></div></NavLink>
+          <NavLink to = "/diary_menu/marks" activeClassName = {'active_menu_item'}><div className="a_inner_wrapper"><img src={school_marks_pic} alt="Оценки"/> <span>{this.langObj[lang].marks}</span></div></NavLink>
         </nav>
         
       </div>

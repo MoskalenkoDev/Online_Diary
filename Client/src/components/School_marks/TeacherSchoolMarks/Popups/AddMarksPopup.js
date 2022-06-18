@@ -51,16 +51,6 @@ export const AddMarksPopup = ({ lang, class_id, school_marks_popup_type, onHideP
     const [popup_warning_class, setPopup_warning_class] = useState(""); // homework_popup_warning_active
     const [popup_warning_title, setPopup_warning_title] = useState("...");
 
-    // const fakeDataFromDB = [
-    //     {
-    //         student_id: "62690381a146a6275007b405",
-    //         subject: "Фізика", 
-    //         marks: ["12", "11+"],
-    //         description: "Завдання виконано тупо чотко", 
-    //         date: moment().subtract(3, 'M')
-    //     }
-    // ];
-
     let timer = useRef();
 
     const showWarning = () => {

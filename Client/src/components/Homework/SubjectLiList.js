@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, Fragment } from 'react';
 
-export const SubjectLiList = ({ subjectTitle, homework, onChildResize }) => {
+export const SubjectLiList = ({ subjectTitle, innerContent,  onChildResize }) => {
 
     const [isOpen, setIsOpen] = useState(false);
     const [subjectHeight, setSubjectHeight] = useState(0);
@@ -39,7 +39,7 @@ export const SubjectLiList = ({ subjectTitle, homework, onChildResize }) => {
 
             <div className="drop_down_with_title_padding_wrapper" style={{height: `${subjectHeight}px`}} >
                 <div className='homework_task_wpapper' ref = {dropDownContentRef}>
-                    <span>{homework}</span>
+                    {innerContent}
                 </div>
             </div>
 

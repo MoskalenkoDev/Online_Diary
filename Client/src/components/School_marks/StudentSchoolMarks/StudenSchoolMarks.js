@@ -5,6 +5,7 @@ import moment from 'moment';
 import { WeekPicker } from '../../Homework/WeekPicker';
 import { WeekLiList } from '../../Homework/WeekLiList';
 import { SubjectLiList } from '../../Homework/SubjectLiList';
+import { MarkTable } from '../MarkTable';
 import {student_get_marks} from '../../../controllers/TeacherMarksController';
 export const StudentSchoolMarks = ({state}) => {
 
@@ -58,15 +59,9 @@ export const StudentSchoolMarks = ({state}) => {
 
     const [week_list, setWeek_list] = useState([]); // зберігаються лішки дз
 
-    // const getHomeworks = async (start_date, end_date) => {
-    //     const homeworkInfofromDB = await get_homework_tasks(start_date, end_date);
-    //     let newReceivedHomeworkInfo = [...homeworkInfofromDB]; // напевно тому , що тут воно додає. Все зрозуміло, просто робимо вибірку по старій схемі
-    //     state.dispatch(ActionCreators.change_homework_student_homework_info(newReceivedHomeworkInfo));
-    // }
-
     const getMarks = async(start_date, end_date) => {
         const marksInfo = await student_get_marks(start_date, end_date);
-        console.log(marksInfo);
+        state.dispatch(ActionCreators.school_marks_change_student_marks_info(marksInfo));
     }
     useEffect(() => {
         return () => { // я хочу щоб коли мінялася дата, то списки закривалися. Бажано без анімації
@@ -94,8 +89,8 @@ export const StudentSchoolMarks = ({state}) => {
             marksList.push(
                 <SubjectLiList
                     subjectTitle = {record.subject}
-                    key = {record._id}
-                    homework = {record.marks}
+                    key = {record.record_id}
+                    innerContent = {<MarkTable description = {record.description} marks = {record.marks} lang = {lang}/>}
                 />
             );
         });

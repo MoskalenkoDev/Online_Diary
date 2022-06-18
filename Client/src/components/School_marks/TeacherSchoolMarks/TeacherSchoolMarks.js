@@ -41,8 +41,8 @@ export const TeacherSchoolMarks = ({ state }) => {
         },250);
     }
 
-    const onCalculateBtnClick = (class_id) => {
-        console.log(class_id);
+    const onCalculateBtnClick = (class_info) => {
+        console.log(class_info);
     }
 
     const onAddMarksBtnClick = async (class_info) => {
@@ -53,13 +53,12 @@ export const TeacherSchoolMarks = ({ state }) => {
     }
 
     let li_creator = (li_mass) => {
-        // console.log(li_mass);
         let our_li_components = li_mass.map((new_class_obj, index) => {
             return (
                 <li key={index}>
                     <span>{new_class_obj.title}</span>
                     <div className="homework_li_buttons">
-                        <button className="homework_grey_btn school_marks_calculate_btn" onClick={() => onCalculateBtnClick(new_class_obj._id)}></button>
+                        <button className="homework_grey_btn school_marks_calculate_btn" onClick={() => onCalculateBtnClick(new_class_obj)}></button>
                         <button className="homework_grey_btn homework_li_add_homework_btn" onClick={() => onAddMarksBtnClick(new_class_obj)}></button>
                     </div>
                 </li>

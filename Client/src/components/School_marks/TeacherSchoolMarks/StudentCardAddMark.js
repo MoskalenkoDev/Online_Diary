@@ -19,12 +19,6 @@ export const StudentCardAddMark = ({img_src, name, surname, lastName, descriptio
         setEditDescription(description);
     },[mark, description])
 
-    // const editedCardsTemplate = { // якщо змінюється дата або предмет, то список просто очищується
-    //     student_id: "62690381a146a6275007b405",
-    //     mark: "12",
-    //     description: "круто що все вийшло"
-    // }
-
     const changeEditedCards = (editedCards) => {
        let records =  editedCards.filter((record) => record.student_id !== student_id);
        return [...records, {student_id, mark : editMark, description: editDescription}];

@@ -2,6 +2,7 @@
 
 module.exports = class MarkRecord {
 
+    record_id;
     student_id;   
     subject;
     marks;
@@ -14,6 +15,7 @@ module.exports = class MarkRecord {
         this.marks = markRecord.marks;
         this.description = markRecord.description;
         this.date = markRecord.date;
+        this.record_id = markRecord._id;
     }
 
 }

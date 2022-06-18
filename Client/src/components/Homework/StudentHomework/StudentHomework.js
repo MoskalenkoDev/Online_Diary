@@ -107,7 +107,7 @@ export const StudentHomework = ({ state }) => {
                 <SubjectLiList
                     subjectTitle = {record.subject}
                     key = {record._id}
-                    homework = {record.homework}
+                    innerContent = {<span>{record.homework}</span>}
                 />
             );
         });
