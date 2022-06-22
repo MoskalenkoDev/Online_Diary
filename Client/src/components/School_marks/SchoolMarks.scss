@@ -5,7 +5,8 @@
     }
 }
 
-.homework_popup.add_school_marks.school_marks_add_marks_popup {
+.homework_popup.add_school_marks.school_marks_add_marks_popup,
+.homework_popup.calculate_school_marks.school_marks_calculate_marks_popup {
     display: flex;
     width: clamp(500px, 35vw, 62vw);
 }
@@ -17,6 +18,7 @@
     background: #f0f2f5;
     padding: 10px;
     color: #024047;
+
 
     & .marks_popup_students_list {
         display: flex;
@@ -110,6 +112,33 @@
 
         }
 
+    }
+}
+
+.marks_popup_students_list_wrapper .homework_week_days_list .drop_down_with_title  {
+
+    &.no_homework .drop_down_with_title_title {
+        background: #00000060;
+    }
+    & .drop_down_with_title_title {
+        background: #dfdfdf;
+    }
+    
+    & .drop_down_with_title_content_wrapper {
+        background: white;
+    }
+}
+
+
+.deleted_user .drop_down_with_title_title{
+    background: #ff00004f !important;
+}
+
+#calculateMarksPopupInputBlock {
+    margin: 0px;
+
+    & .marks_popup_students_list_wrapper {
+        height: 450px;
     }
 }
 

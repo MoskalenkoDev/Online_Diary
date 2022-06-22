@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import * as ActionCreators from '../../../Redux/Actions/action_school_marks';
 import { get_classes_info, get_student_subscribers } from '../../../controllers/TeacherHomeworkController';
 import { AddMarksPopup } from './Popups/AddMarksPopup';
+import { CalculateMarksPopup } from './Popups/CalculateMarksPopup';
 import { TeacherSuccessMessagePopup } from '../../Homework/TeacherHomework/Popups/TeacherSuccessMessagePopup';
 
 export const TeacherSchoolMarks = ({ state }) => {
@@ -31,18 +32,20 @@ export const TeacherSchoolMarks = ({ state }) => {
     const [teacher_success_message_popup_message_text, setTeacher_success_message_popup_message_text] = useState();
 
     const timer = useRef();
-    let onHidePopup = () =>
-    {
+    let onHidePopup = () => {
         window.clearTimeout(timer.current);
         setSchool_marks_popup_class("");
         setTimeout(() => {
             setCurrent_class_id("");
             setSchool_marks_popup_type("");
-        },250);
+        }, 250);
     }
 
     const onCalculateBtnClick = (class_info) => {
-        console.log(class_info);
+        setSchool_subjects(class_info.school_subjects);
+        setCurrent_class_id(class_info._id);
+        setSchool_marks_popup_class("school_marks_active");
+        setSchool_marks_popup_type("school_marks_calculate_marks_popup");;
     }
 
     const onAddMarksBtnClick = async (class_info) => {
@@ -74,7 +77,7 @@ export const TeacherSchoolMarks = ({ state }) => {
         setTeacher_success_message_popup_class("active_invite_copy_link_popup");
         timer_copy_popup.current = setTimeout(() => {
             setTeacher_success_message_popup_class("");
-        },2000);
+        }, 2000);
     }
 
     useEffect(() => {
@@ -94,12 +97,21 @@ export const TeacherSchoolMarks = ({ state }) => {
                 {school_marks_popup_type === "school_marks_add_marks_popup" && <AddMarksPopup
                     onHidePopup={onHidePopup}
                     lang={lang}
-                    school_marks_popup_type={school_marks_popup_type} 
+                    school_marks_popup_type={school_marks_popup_type}
                     school_subjects={school_subjects}
                     class_id={current_class_id}
                     timer={timer}
                     showSuccessMessage={showSuccessMessage}
                 />}
+
+                {school_marks_popup_type === "school_marks_calculate_marks_popup" && <CalculateMarksPopup
+                    onHidePopup={onHidePopup}
+                    lang={lang}
+                    school_marks_popup_type={school_marks_popup_type}
+                    school_subjects={school_subjects}
+                    class_id={current_class_id}
+                />}
+
             </div>
 
             <div className="homework_class_list_block">
@@ -108,9 +120,9 @@ export const TeacherSchoolMarks = ({ state }) => {
                 </ul>
             </div>
 
-            <TeacherSuccessMessagePopup 
-                teacher_success_message_popup_class = {teacher_success_message_popup_class} 
-                message_text = {teacher_success_message_popup_message_text}
+            <TeacherSuccessMessagePopup
+                teacher_success_message_popup_class={teacher_success_message_popup_class}
+                message_text={teacher_success_message_popup_message_text}
             />
 
         </div>

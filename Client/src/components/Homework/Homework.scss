@@ -157,7 +157,6 @@
     }
 }
 
-
 .homework_li_buttons {
     display: flex;
     margin-left: 2vmax;
@@ -808,7 +807,7 @@
     flex-direction: column;
     position: relative;
     height: fit-content;
-
+    margin-right: 8px;
     & .subject_drop_down_btn {
         display: flex;
         border-radius: 0.2vmax;
@@ -817,6 +816,7 @@
         color: #024047;
         white-space: nowrap;
         width: clamp(110px, 7vmax, 7vmax);
+        
         &:hover {
             background: #e4e4e4;
             transition: 0.4s ease all;
@@ -963,7 +963,7 @@
     }
 
     .homework_popup {
-        width: 94vw;
+        width: 94vw !important;
 
         & .important_field {
             display: none;
