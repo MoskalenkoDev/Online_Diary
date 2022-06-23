@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, Fragment } from 'react';
+import React, { useEffect, useState } from 'react';
 
 export const PeriodMarksTable = ({ lang, studentRecords }) => {
 
@@ -42,7 +42,6 @@ export const PeriodMarksTable = ({ lang, studentRecords }) => {
 
     useEffect(() => {
         calculateMarks();
-        return () => setContent([]);
     }, [studentRecords])
 
     return (

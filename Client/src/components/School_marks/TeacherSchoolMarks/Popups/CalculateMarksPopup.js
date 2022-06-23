@@ -1,16 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import "react-dates/lib/css/_datepicker.css";
-import "../../../Homework/CalendarStyles.scss";
 import moment from 'moment';
 import 'moment/locale/ru';
 import 'moment/locale/uk';
-import '../../../Calendars/CalendarStyles.scss'
-import * as ActionCreators from '../../../../Redux/Actions/action_school_marks';
 import { DropDownSubjectsList } from '../../../DropDownSubjectsList/DropDownSubjectsList';
 import { StudentMarksPeriodDropDownList } from '../../StudentMarksPeriodDropDownList';
 import { get_student_subscribers } from '../../../../controllers/TeacherHomeworkController';
 import { DateRangePicker } from '../../../Calendars/DateRangePicker/DateRangePicker';
-import { get_marks, get_deleted_students, saveOrEditMarks } from '../../../../controllers/TeacherMarksController';
+import { get_marks, get_deleted_students } from '../../../../controllers/TeacherMarksController';
 
 export const CalculateMarksPopup = ({ lang, class_id, school_marks_popup_type, onHidePopup, school_subjects }) => {
     let langObj =
@@ -47,7 +44,7 @@ export const CalculateMarksPopup = ({ lang, class_id, school_marks_popup_type, o
         setActualStudentsInClass(studentsInfo);
     }
 
-    const getDeletedStudentsInClass = async (new_marks) => { // не просто отримує на основі оцінок видалених студентів та їх інфу з аватаркою. 
+    const getDeletedStudentsInClass = async (new_marks) => {  
         let deleted_user_ids = [];
         new_marks.forEach(record => {
             let found_actual_id = actualStudentsInClass.filter(student => (student.student_id === record.student_id));
@@ -63,7 +60,6 @@ export const CalculateMarksPopup = ({ lang, class_id, school_marks_popup_type, o
 
     const newMarks = useRef([]);
     const getRecordsFromDB = async (start_date, end_date) => {
-        // console.log(moment(start_date).format("DD.MM.YYYY"), moment(end_date).format("DD.MM.YYYY"));
         const marks = await get_marks(class_id, start_date, end_date);
         setMarksInfoFromDB([...marksInfoFromDB, ...marks]);
         newMarks.current = marks;
@@ -78,11 +74,10 @@ export const CalculateMarksPopup = ({ lang, class_id, school_marks_popup_type, o
         setEndDate(endDate);
     }
 
-    const createCards = (img_src, name, surname, lastName, studentRecords = [], student_id = "", isStudentDeleted = false) => {
+    const createCards = (name, surname, lastName, studentRecords = [], student_id = "", isStudentDeleted = false) => {
         
         return (
             <StudentMarksPeriodDropDownList
-                img_src = {img_src}
                 name = {name}
                 surname = {surname}
                 lastName = {lastName}
@@ -99,14 +94,11 @@ export const CalculateMarksPopup = ({ lang, class_id, school_marks_popup_type, o
         let ourStudentCards = [];
         if (!startDate || !endDate || !chosen_subject) {
             actualStudentsInfo.forEach((student) => {
-                ourStudentCards.push(createCards(student.img_src, student.name, student.surname, student.lastName));
+                ourStudentCards.push(createCards(student.name, student.surname, student.lastName));
             });
         }
         else if (startDate && endDate && chosen_subject) {
 
-            //  тут кажись треба пройтися по усім студентам. Потрібно зібрати усі записи за вибраний період на конкретного студента. Сформувати список даних та передати
-            //  в функцію створення лішки. 
-            
             let recordsInPeriod = recordsFromDB.filter((record) => (checkIsDayInPeriod(record.date) && record.subject === chosen_subject));
 
             actualStudentsInfo.forEach((student) => {
@@ -114,7 +106,6 @@ export const CalculateMarksPopup = ({ lang, class_id, school_marks_popup_type, o
                 let studentRecords = recordsInPeriod.filter((record) => (student.student_id === record.student_id && record.marks.length));
             
                 let card = createCards(
-                    student.img_src,
                     student.name,
                     student.surname,
                     student.lastName,
@@ -129,7 +120,6 @@ export const CalculateMarksPopup = ({ lang, class_id, school_marks_popup_type, o
 
                 if (studentRecords.length) {
                     let card = createCards(
-                        deletedStudent.img_src,
                         deletedStudent.name,
                         deletedStudent.surname,
                         deletedStudent.lastName,
@@ -146,8 +136,7 @@ export const CalculateMarksPopup = ({ lang, class_id, school_marks_popup_type, o
 
     useEffect(() => {
         if (class_id) {
-            getActualStudentsInClass(); // ми отримали студентів зареєстрованих в класі
-            // тепер нам потрібно отримати всі записи по усім предметам цього класу за вибраний період
+            getActualStudentsInClass(); 
         }
 
     }, [class_id])
@@ -161,9 +150,7 @@ export const CalculateMarksPopup = ({ lang, class_id, school_marks_popup_type, o
     useEffect(() => {
         if (marksInfoFromDB.length && actualStudentsInClass.length) getDeletedStudentsInClass(newMarks.current);
     }, [marksInfoFromDB, actualStudentsInClass]);
-
-
-    // короче зараз в нас календар чисто витягує дані з бд, по місяцям. 
+ 
     return (
         <div className={"homework_popup calculate_school_marks " + school_marks_popup_type}>
 

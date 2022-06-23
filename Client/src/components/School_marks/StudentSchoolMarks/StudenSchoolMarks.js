@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import * as ActionCreators from '../../../Redux/Actions/action_school_marks';
 import moment from 'moment';
 
-import { WeekPicker } from '../../Homework/WeekPicker';
+import { WeekPicker } from '../../Calendars/WeekPicker/WeekPicker';
 import { WeekLiList } from '../../Homework/WeekLiList';
 import { SubjectLiList } from '../../Homework/SubjectLiList';
 import { MarkTable } from '../MarkTable';
@@ -57,14 +57,14 @@ export const StudentSchoolMarks = ({state}) => {
     const [end_date, setEndDate] = useState(null);
     const [hoveredDays, setHoveredDays] = useState();
 
-    const [week_list, setWeek_list] = useState([]); // зберігаються лішки дз
+    const [week_list, setWeek_list] = useState([]); 
 
     const getMarks = async(start_date, end_date) => {
         const marksInfo = await student_get_marks(start_date, end_date);
         state.dispatch(ActionCreators.school_marks_change_student_marks_info(marksInfo));
     }
     useEffect(() => {
-        return () => { // я хочу щоб коли мінялася дата, то списки закривалися. Бажано без анімації
+        return () => { 
             setWeek_list([]);
         }
     }, [start_date])
@@ -100,8 +100,7 @@ export const StudentSchoolMarks = ({state}) => {
     const createDropDownLiList = (receivedMarksInfo) => {
         let weekLiList = [];
         hoveredDays.forEach((hoveredDay, index) => {
-            let weekMarks = receivedMarksInfo.filter((homeworkDay) => moment(hoveredDay).isSame(moment(homeworkDay.date), 'day')); // якщо isSame працює лише на день, 
-            //не враховуючи місяць та рік, то зробимо перевірку як ото було з isHighlighted().
+            let weekMarks = receivedMarksInfo.filter((homeworkDay) => moment(hoveredDay).isSame(moment(homeworkDay.date), 'day')); 
             let marksList = createMarksList(weekMarks);
             weekLiList.push((
                 <WeekLiList

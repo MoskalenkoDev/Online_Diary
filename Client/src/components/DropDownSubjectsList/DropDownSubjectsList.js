@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import moment from 'moment';
 
 export const DropDownSubjectsList = ({lang, school_subjects, infoFromDB, date, setChosen_subject, chosen_subject, compareDate}) => {
 

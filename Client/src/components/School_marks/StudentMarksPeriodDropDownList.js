@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, Fragment } from 'react';
 import { PeriodMarksTable } from './PeriodMerksTable';
 
-export const StudentMarksPeriodDropDownList = ({ img_src, name, surname, lastName, studentRecords, isStudentDeleted , lang, student_id}) => {
+export const StudentMarksPeriodDropDownList = ({ name, surname, lastName, studentRecords, isStudentDeleted, lang, student_id }) => {
 
     const [isOpen, setIsOpen] = useState(false);
     const [dayHeight, setDayHeight] = useState(0);
@@ -18,7 +18,7 @@ export const StudentMarksPeriodDropDownList = ({ img_src, name, surname, lastNam
 
     const resizeCalcHeight = () => {
         let contentHeight = dropDownContentRef.current.clientHeight;
-        if(contentHeight !== currentHeight.current && isOpen) {
+        if (contentHeight !== currentHeight.current && isOpen) {
             setDayHeight(contentHeight);
             currentHeight.current = contentHeight;
         }
@@ -26,25 +26,25 @@ export const StudentMarksPeriodDropDownList = ({ img_src, name, surname, lastNam
 
     useEffect(() => {
         return () => {
-            setIsOpen(false); 
+            setIsOpen(false);
             setDayHeight(0);
-            if(dropDownContentRef?.current?.parentNode) dropDownContentRef.current.parentNode.style.transitionDuration = "0s";
+            if (dropDownContentRef?.current?.parentNode) dropDownContentRef.current.parentNode.style.transitionDuration = "0s";
         }
-    },[studentRecords])
+    }, [studentRecords])
 
     useEffect(() => {
-        window.addEventListener('resize',resizeCalcHeight);
+        window.addEventListener('resize', resizeCalcHeight);
         return () => {
-            window.removeEventListener('resize',resizeCalcHeight);
+            window.removeEventListener('resize', resizeCalcHeight);
         }
     }, [isOpen]);
-    
+
     return (
-        <li className={'drop_down_with_title ' + (studentRecords.length ? "" : "no_homework ") + (isOpen ? "open_drop_down " : "") + (isStudentDeleted ? "deleted_user": "")} >
+        <li className={'drop_down_with_title ' + (studentRecords.length ? "" : "no_homework ") + (isOpen ? "open_drop_down " : "") + (isStudentDeleted ? "deleted_user" : "")} >
             <span className='drop_down_with_title_title' onClick={onDropDownClick}>{`${name} ${surname} ${lastName}`}</span>
             <div className="drop_down_with_title_padding_wrapper" style={{ height: `${dayHeight}px` }}>
-                <ul className="drop_down_with_title_content_wrapper" ref = {dropDownContentRef}>
-                    <PeriodMarksTable lang={lang} studentRecords = {studentRecords} key = {student_id}/>
+                <ul className="drop_down_with_title_content_wrapper" ref={dropDownContentRef}>
+                    <PeriodMarksTable lang={lang} studentRecords={studentRecords} key={student_id} />
                 </ul>
             </div>
         </li>

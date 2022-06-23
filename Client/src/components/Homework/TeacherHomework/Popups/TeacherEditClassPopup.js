@@ -84,6 +84,7 @@ export const TeacherEditClassPopup = ({
         onHidePopup();
     }
 
+    
     return (
         <div className={"homework_popup edit_popup " + homework_popup_active_type}>
 

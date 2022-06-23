@@ -34,7 +34,7 @@ export const TeacherStudentsEditor= ({state,invite_link,homework_popup_active_ty
     }
 
     let prevActiveMenuItem = useRef();
-
+    
     return (
         <div className= {"homework_popup teachers_and_students_editor_popup " + homework_popup_active_type}>
 

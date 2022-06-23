@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as ActionCreators from '../../../Redux/Actions/actions_homework';
-import { WeekPicker } from '../WeekPicker';
-import "../CalendarStyles.scss";
+import { WeekPicker } from '../../Calendars/WeekPicker/WeekPicker';
 import moment from 'moment';
 import 'moment/locale/ru';
 import 'moment/locale/uk';

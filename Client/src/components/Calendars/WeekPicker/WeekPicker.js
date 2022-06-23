@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState, Fragment } from 'react';
-import * as ActionCreators from '../../Redux/Actions/actions_homework';
 import "react-dates/lib/css/_datepicker.css";
 import { SingleDatePicker } from "react-dates";
-import "./CalendarStyles.scss";
+import "../CalendarStyles.scss";
 import moment from 'moment';
 import 'moment/locale/ru';
 import 'moment/locale/uk';
@@ -227,26 +226,18 @@ export const WeekPicker = ({ start_date, setStartDate, end_date, setEndDate, hov
                 focused={focusedInput} // PropTypes.bool
                 onFocusChange={onFocusChange} // PropTypes.func.isRequired
                 firstDayOfWeek={1}
-                // showDefaultInputIcon
                 numberOfMonths={1}
                 daySize={30}
                 anchorDirection="left"
                 isOutsideRange={() => false}
                 placeholder={langObj[lang].dataTitle}
-                // isDayHighlighted={isDayHighlighted}
                 displayFormat={displayFormat}
-                // dayAriaLabelFormat = "string"
                 readOnly
                 enableOutsideDays
-                // isDayHighlighted={(d) => d.isSame(new Date(), "day")}
                 renderCalendarDay={renderCalendarDay}
                 onNextMonthClick={onNextMonthClick}
                 onPrevMonthClick={onPrevMonthClick}
                 onClose={onCloseDatePicker}
-                // monthFormat = "MMMM YYYY"
-                // showClearDate   
-                // initialVisibleMonth={() => moment().subtract(2, 'months')}                          // start showing from adjusted month 
-                // isDayBlocked = {(day) => !isDayHighlighted(day)}                                                      // block all days, but only from availibles 
                 hideKeyboardShortcutsPanel
 
             />

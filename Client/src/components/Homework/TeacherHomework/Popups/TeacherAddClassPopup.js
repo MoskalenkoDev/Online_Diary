@@ -66,7 +66,7 @@ export const TeacherAddClassPopup = ({
             onHidePopup();
         }
     }
-
+    
     return (
         <div className={"homework_popup add_class_popup " + homework_popup_active_type}>
 

@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
+import "react-dates/lib/css/_datepicker.css";
 import "../CalendarStyles.scss";
 import { SingleDatePicker } from "react-dates";
 import moment from 'moment';
 import 'moment/locale/ru';
 import 'moment/locale/uk';
-import "react-dates/lib/css/_datepicker.css";
 
 export const SignleDayPicker = ({ 
     lang, 

@@ -34,8 +34,6 @@ export const DateRangePicker = ({
     const [focusedInput, setFocusedInput] = useState(null);
     const [start_date, setStart_date] = useState(0);
     const [end_date, setEnd_date] = useState(0);
-    // потрібно реалізувати те саме що і на інших календарях : 
-    // 1. спершу на 2 місяці отримувати інфу, а потім кожні 3 місяці
 
     const currentOpenMonthCounter = useRef(0);
 

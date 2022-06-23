@@ -1,17 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { SingleDatePicker } from "react-dates";
 import "react-dates/lib/css/_datepicker.css";
-import "../../../Homework/CalendarStyles.scss";
 import moment from 'moment';
 import 'moment/locale/ru';
 import 'moment/locale/uk';
-import * as ActionCreators from '../../../../Redux/Actions/action_school_marks';
 import { DropDownSubjectsList } from '../../../DropDownSubjectsList/DropDownSubjectsList';
 import { get_student_subscribers } from '../../../../controllers/TeacherHomeworkController';
 import { SignleDayPicker } from '../../../Calendars/SingleDayPicker/SingleDayPicker';
 import { StudentCardAddMark } from '../StudentCardAddMark';
 import {get_marks,get_deleted_students, saveOrEditMarks} from '../../../../controllers/TeacherMarksController';
-import defaultImg from '../../../Profile/default_user_image.js';
 
 export const AddMarksPopup = ({ lang, class_id, school_marks_popup_type, onHidePopup, school_subjects, showSuccessMessage}) => {
     let langObj =
@@ -45,7 +41,6 @@ export const AddMarksPopup = ({ lang, class_id, school_marks_popup_type, onHideP
     const [marksInfoFromDB, setMarksInfoFromDB] = useState([]);
     const [chosen_subject, setChosen_subject] = useState(null);
     const [date, setDate] = useState(null);
-    // const [focusedInput, setFocusedInput] = useState(null);
     const [studentCards, setStudentCards] = useState([]);
     const [editedCards, setEditedCards] = useState([]);
     const [popup_warning_class, setPopup_warning_class] = useState(""); // homework_popup_warning_active
@@ -61,7 +56,6 @@ export const AddMarksPopup = ({ lang, class_id, school_marks_popup_type, onHideP
 
     const getActualStudentsInClass = async () => {
         const studentsInfo = await get_student_subscribers(class_id);
-        // console.log(studentsInfo);
         setActualStudentsInClass(studentsInfo);
     }
 
@@ -80,7 +74,6 @@ export const AddMarksPopup = ({ lang, class_id, school_marks_popup_type, onHideP
     }
     const newMarks = useRef([]);
     const getRecordsFromDB = async (start_date, end_date) => {
-        // console.log(moment(start_date).format("DD.MM.YYYY"), moment(end_date).format("DD.MM.YYYY"));
         const marks = await get_marks(class_id, start_date, end_date);
         setMarksInfoFromDB([...marksInfoFromDB, ...marks]);
         newMarks.current = marks;
@@ -95,7 +88,6 @@ export const AddMarksPopup = ({ lang, class_id, school_marks_popup_type, onHideP
     const onSaveClick = async () => {
         if(!date || !chosen_subject) {showWarning(); setPopup_warning_title(langObj[lang].warningTitleDateAndSubject)} 
         else if(!editedCards.length) {showWarning(); setPopup_warning_title(langObj[lang].warningTitleNoChanges)}
-        // else console.log(editedCards);
         else {
             await saveOrEditMarks(editedCards,chosen_subject,date,class_id);
             onHidePopup();
@@ -199,8 +191,7 @@ export const AddMarksPopup = ({ lang, class_id, school_marks_popup_type, onHideP
 
     useEffect(() => {
         if (class_id) {
-            getActualStudentsInClass(); // ми отримали студентів зареєстрованих в класі
-            // тепер нам потрібно отримати всі записи по усім предметам цього класу за вибраний період
+            getActualStudentsInClass(); 
         }
 
     }, [class_id])
@@ -234,7 +225,6 @@ export const AddMarksPopup = ({ lang, class_id, school_marks_popup_type, onHideP
                             lang={lang}
                             school_subjects={school_subjects}
                             infoFromDB={marksInfoFromDB}
-                            // infoFromDB={fakeDataFromDB}
                             date={date}
                             setChosen_subject={setChosen_subject}
                             chosen_subject={chosen_subject}
@@ -248,7 +238,6 @@ export const AddMarksPopup = ({ lang, class_id, school_marks_popup_type, onHideP
                             onDateChange = {onDateChange}
                             getRecordsFromDB = {getRecordsFromDB}
                             receivedRecordsFromDB= {marksInfoFromDB}
-                            // receivedRecordsFromDB= {fakeDataFromDB}
                             chosen_subject={chosen_subject}
                             school_subjects= {school_subjects}
                             class_id = {class_id}

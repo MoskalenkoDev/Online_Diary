@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import { SingleDatePicker } from "react-dates";
+import { SignleDayPicker } from '../../../Calendars/SingleDayPicker/SingleDayPicker';
 import "react-dates/lib/css/_datepicker.css";
-import "../../CalendarStyles.scss";
 import moment from 'moment';
 import 'moment/locale/ru';
 import 'moment/locale/uk';
 import {TeacherAddHomeworkWarningCopyHomeworkText} from './TeacherAddHomeworkWarningCopyHomeworkText';
+
 import {add_homework,edit_homework,delete_homework,get_homework_tasks} from '../../../../controllers/TeacherHomeworkController';
 import * as ActionCreators from '../../../../Redux/Actions/actions_homework';
 
@@ -74,11 +74,8 @@ export const TeacherAddHomework = ({
     const [subjects_li_list, setSubjects_li_list] = useState([]);
     const [chosen_subject, setChosen_subject] = useState(null);
     const [date, setDate] = useState(null);
-    const [focusedInput, setFocusedInput] = useState(null);
     const [homeworkText, setHomeworkText] = useState("");
     const [receivedHomeworkInfo,setReceivedHomeworkInfo] = useState([]);
-    const [start_date, setStart_date] = useState(0);
-    const [end_date, setEnd_date] = useState(0);
     const [homeworkMode, setHomeworkMode] = useState("plain_mode"); // буде три мода : звичайний мод (plain_mode), мод редагування заданої домашки (edit_mode), 
     const [isOpenWarningPopup, setIsOpenWarningPopup] = useState(false);                 // мод перегляду домашки (watch_mode)
     const [activeRecord, setActiveRecord] = useState();
@@ -92,7 +89,6 @@ export const TeacherAddHomework = ({
 
     let cancelChanges = useRef();
     let prevSelectedLi = useRef(); 
-    let currentOpenMonthCounter = useRef(0);
 
     const goSubjectBack = () => {
         if (selected_li.current) selected_li.current.className = selected_li.current.className.replace(" selected_li", "");
@@ -221,48 +217,16 @@ export const TeacherAddHomework = ({
                 prevSelectedLi.current = null;
                 cancelChanges.current = null;
                 setReceivedHomeworkInfo([]);
-                currentOpenMonthCounter.current = 0;
-                setEnd_date(0);
-                setStart_date(0);
             }
         }
 
     }, [current_class_id]);
 
-    useEffect(async () => {
-        if(current_class_id) {
-            let new_start_day = moment().subtract(2, 'M').startOf('M');
-            let new_end_date = moment().add(2, 'M').endOf('M');
-            setStart_date(-2);
-            setEnd_date(2);
-            await getHomeworks(new_start_day,new_end_date);
-        } 
-    },[current_class_id])
-
     useEffect(() => {
         if(current_class_id) createLiList();
     },[receivedHomeworkInfo, date])
 
-    const outsideRangeSelector = (day) => {
-        let diff = moment(day).diff(moment().startOf('M'), 'M');
-        let isHighlighted = isDayHighlighted(day);
-        // тут треба перевірити чи є вибраний предмет - та чи є він одним із видалених
-        if(chosen_subject && !school_subjects.includes(chosen_subject) && !isHighlighted) return true; // якщо предмет вибраний, він є видаленим і день не підсвічений
-        if (diff <= -2 && !isHighlighted) return true;
-        return false;
-    }
-
-    // const compareDate = (date,CalendarDate) => { 
-    //     if(typeof date === 'string') date = moment(date);
-    //     if(typeof CalendarDate === 'string') CalendarDate = moment(CalendarDate);
-    //     const isDayOfMonthMatch = date.date() === CalendarDate.date();
-    //     const isMonthMatch = date.month() === CalendarDate.month();
-    //     const isYearMatch = date.year() === CalendarDate.year();
-    //     if(isDayOfMonthMatch && isMonthMatch && isYearMatch) return true;
-    //     return false;
-    // }
-
-        const compareDate = (date, CalendarDate) => {
+    const compareDate = (date, CalendarDate) => {
         if(typeof date === 'string') date = moment(date);
         if(typeof CalendarDate === 'string') CalendarDate = moment(CalendarDate);
         return moment(date).isSame(CalendarDate, 'date');
@@ -380,32 +344,6 @@ export const TeacherAddHomework = ({
         setDate(moment(activeRecord.date));
     }
 
-    const onCalendarClose = (new_date) => {
-        if(!new_date.date) currentOpenMonthCounter.current = 0;
-        else {
-            currentOpenMonthCounter.current = moment(new_date.date).startOf('M').diff(moment().startOf('M'), 'M');
-        }
-    }
-
-    let onNextMonthClick = async () => {  
-        currentOpenMonthCounter.current += 1;
-        if(currentOpenMonthCounter.current === end_date) {
-            let old_end_date = moment().add(end_date + 1, 'M').startOf('M');
-            let new_end_date = moment(old_end_date).add(2, 'M').endOf('M');
-            await getHomeworks(old_end_date, new_end_date);
-            setEnd_date(end_date + 3);
-        }
-    }
-    let onPrevMonthClick = async () => {
-        currentOpenMonthCounter.current -= 1;
-        if(currentOpenMonthCounter.current === start_date) {
-            let old_start_day = moment().subtract(-(start_date) + 1, 'M').endOf('M');
-            let new_start_day = moment(old_start_day).subtract(2, 'M').startOf('M');
-            await getHomeworks(new_start_day, old_start_day );
-            setStart_date(start_date - 3);
-        }
-    }
-
     moment.locale(lang === "ua" ? "uk" : lang);
     return (
         <div className={"homework_popup add_homework_popup " + homework_popup_active_type}>
@@ -434,37 +372,18 @@ export const TeacherAddHomework = ({
 
                         </div>
 
-                        <SingleDatePicker
-                            small
-                            date={date} // momentPropTypes.momentObj or null
-                            onDateChange={onDateChange} // PropTypes.func.isRequired
-                            focused={focusedInput} // PropTypes.bool
-                            onFocusChange={({ focused }) => setFocusedInput(focused)} // PropTypes.func.isRequired
-                            id="add_homework_popup_date_picker" // PropTypes.string.isRequired,
-                            firstDayOfWeek={lang === "en" ? 0 : 1}
-                            // showDefaultInputIcon
-                            numberOfMonths={1}
-                            daySize={30}
-                            anchorDirection="right"
-                            isOutsideRange={outsideRangeSelector}
-                            placeholder={langObj[lang].dataTitle}
-                            isDayHighlighted={isDayHighlighted}
-                            displayFormat="DD.MM.YYYY"
-                            readOnly
-                            showClearDate
-                            onNextMonthClick={onNextMonthClick}
-                            onPrevMonthClick = {onPrevMonthClick}
-                            onClose = {onCalendarClose}
-                            // isDayHighlighted={(day) => {console.log(day); return true;}} 
-                            // monthFormat="YYYY[年]MMMM"
-                            // monthFormat = "MMMM YYYY"
-                            // enableOutsideDays 
-                            // showClearDate   
-                            // initialVisibleMonth={() => moment().subtract(2, 'months')}                          // start showing from adjusted month 
-                            // isDayBlocked = {(day) => !isDayHighlighted(day)}                                                      // block all days, but only from availibles 
-                            hideKeyboardShortcutsPanel
+                        <SignleDayPicker
+                            date={date}
+                            lang={lang}
+                            id = {"add_homework_popup_date_picker"}
+                            onDateChange = {onDateChange}
+                            getRecordsFromDB = {getHomeworks}
+                            receivedRecordsFromDB= {receivedHomeworkInfo}
+                            chosen_subject={chosen_subject}
+                            school_subjects= {school_subjects}
+                            class_id = {current_class_id}
+                            compareDate={compareDate}
                         />
-
                     </div>
 
                     <div className="homework_popup_create_homework_message">
