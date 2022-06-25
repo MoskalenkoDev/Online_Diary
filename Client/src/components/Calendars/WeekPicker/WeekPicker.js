@@ -23,7 +23,7 @@ export const WeekPicker = ({ start_date, setStartDate, end_date, setEndDate, hov
         },
         en: {
             dataTitle: "Date",
-            prevWeek: "Рrеviou🇸 ᴡее𝗄",
+            prevWeek: "Рrеviouꜱ ᴡее𝗄", // 🇸
             thisWeek: "Currеnt ᴡее𝗄", // T𝗁i🇸 ᴡее𝗄
             nextWeek: "Νехt ᴡее𝗄"
         }
