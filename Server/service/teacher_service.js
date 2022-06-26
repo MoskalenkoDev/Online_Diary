@@ -16,7 +16,18 @@ class TeacherService {
     }
 
     async teacher_delete_class(_id) {
+
+        let classRecord = await class_model.findById(_id);
+        for(let student_id of classRecord.new_students) {
+            await student_in_classes.findOneAndUpdate({student_id}, {$pull : {"requests_to_join" : _id}});
+        }
+        for(let student_id of classRecord.students) {
+            await student_in_classes.findOneAndUpdate({student_id}, {$pull : {"classes" : _id}});
+        }
+        await homework_tasks.deleteMany({class_id : _id});
+        await school_mark_model.deleteMany({class_id : _id});
         let result = await class_model.deleteOne({ _id });
+        
         return result.deletedCount;
     }
 
@@ -64,7 +75,6 @@ class TeacherService {
 
 
     async get_student_subscribers(class_id) {
-
         let classInfo = await class_model.findById(class_id);
         let studentsArr = [];
         for (let student_id of classInfo.students) {

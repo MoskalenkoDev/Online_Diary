@@ -83,7 +83,7 @@ class StudentService {
         let studentClasses = await student_in_classes.findOne({student_id});
         if(studentClasses) {
             let homeworks = await homework_tasks.find({"class_id": {$in: studentClasses.classes}, date :{$gte: start_date ,$lte:end_date}}); // 
-            console.log(homeworks);
+            // console.log(homeworks);
             homeworks.forEach(record => {
                 const newTask = new HomeworkTasks(record);
                 new_homework_tasks.push(newTask);
@@ -95,7 +95,7 @@ class StudentService {
 
     async get_marks(student_id, start_date, end_date) {
         let new_mark_records = [];
-        console.log(student_id,start_date,end_date);
+        // console.log(student_id,start_date,end_date);
         let marks = await school_mark_model.find({ student_id, date: { $gte: start_date, $lte: end_date } }).lean();
         marks.forEach(record => {
             const newMark = new MarkRecord(record);

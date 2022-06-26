@@ -5,11 +5,11 @@ class MailService {
     async sendMail(to, activationLink) {
 
         const oAuth2Client = new google.auth.OAuth2(process.env.CLIENT_ID, process.env.CLIENT_SECRET, process.env.REDIRECT_URI);
-        oAuth2Client.setCredentials({refresh_token: process.env.REFRESH_TOKEN})
-
+        oAuth2Client.setCredentials({refresh_token: process.env.REFRESH_TOKEN});
         const accessToken = await oAuth2Client.getAccessToken();
-
+ 
         let transporter = nodemailer.createTransport({
+            
             service: 'gmail',
             auth: {
                 type: 'OAuth2',
@@ -17,7 +17,7 @@ class MailService {
                 clientId: process.env.CLIENT_ID,
                 clientSecret: process.env.CLIENT_SECRET,
                 refreshToken: process.env.REFRESH_TOKEN,
-                accessToken
+                accessToken: accessToken.res.data.access_token
             },
         });
         
