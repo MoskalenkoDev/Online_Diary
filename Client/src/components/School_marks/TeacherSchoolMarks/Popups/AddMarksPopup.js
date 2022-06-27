@@ -47,7 +47,7 @@ export const AddMarksPopup = ({ lang, class_id, school_marks_popup_type, onHideP
     const [popup_warning_title, setPopup_warning_title] = useState("...");
 
     let timer = useRef();
-
+    const isGotActualStudents = useRef(false);
     const showWarning = () => {
         window.clearTimeout(timer.current);
         setPopup_warning_class("homework_popup_warning_active");
@@ -57,6 +57,7 @@ export const AddMarksPopup = ({ lang, class_id, school_marks_popup_type, onHideP
     const getActualStudentsInClass = async () => {
         const studentsInfo = await get_student_subscribers(class_id);
         setActualStudentsInClass(studentsInfo);
+        isGotActualStudents.current = true;
     }
 
     const getDeletedStudentsInClass = async(new_marks) => {
@@ -70,8 +71,7 @@ export const AddMarksPopup = ({ lang, class_id, school_marks_popup_type, onHideP
         if(deleted_user_ids.length) {
             const deletedStudents = await get_deleted_students(deleted_user_ids);
             setDeletedStudentsInClass([...deletedStudentsInClass, ...deletedStudents]);            
-        }
-        else setDeletedStudentsInClass([]);
+        };
     }
     const newMarks = useRef([]);
     const getRecordsFromDB = async (start_date, end_date) => {
@@ -186,7 +186,7 @@ export const AddMarksPopup = ({ lang, class_id, school_marks_popup_type, onHideP
 
             } 
         }
-
+        console.log(deletedStudentsInfo);
         setStudentCards(ourStudentCards);
     }
 
@@ -194,7 +194,6 @@ export const AddMarksPopup = ({ lang, class_id, school_marks_popup_type, onHideP
         if (class_id) {
             getActualStudentsInClass(); 
         }
-
     }, [class_id])
 
     useEffect(() => {
@@ -205,7 +204,7 @@ export const AddMarksPopup = ({ lang, class_id, school_marks_popup_type, onHideP
     }, [actualStudentsInClass, deletedStudentsInClass, date, chosen_subject]); // maybe we need to add dataFromDB too
 
     useEffect(()=> {
-        if(marksInfoFromDB.length) getDeletedStudentsInClass(newMarks.current);
+        if(marksInfoFromDB.length && isGotActualStudents.current) getDeletedStudentsInClass(newMarks.current);
     },[marksInfoFromDB,actualStudentsInClass]);
     
     return (
