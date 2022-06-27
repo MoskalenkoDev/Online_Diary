@@ -55,7 +55,8 @@ export const CalculateMarksPopup = ({ lang, class_id, school_marks_popup_type, o
         if (deleted_user_ids.length) {
             const deletedStudents = await get_deleted_students(deleted_user_ids);
             setDeletedStudentsInClass([...deletedStudentsInClass, ...deletedStudents]);
-        };
+        }
+        else setDeletedStudentsInClass([]);
     }
 
     const newMarks = useRef([]);

@@ -13,21 +13,21 @@ export const AddMarksPopup = ({ lang, class_id, school_marks_popup_type, onHideP
     let langObj =
     {
         ua: {
-            popupHeader: "Додавання домашнього завдання",
+            popupHeader: "Виставлення оцінок",
             warningTitleDateAndSubject: "Дата та предмет мають бути обрані!",
             warningTitleNoChanges: "Ви не внесли ніяких змін!",
             addHomeworkBtnTitle: "Зберегти",
             successAddedMessage: "Зміни успішно внесені",
         },
         ru: {
-            popupHeader: "Добавление домашнего задания",
+            popupHeader: "Выставление оценок",
             warningTitleDateAndSubject: "Дата и предмет должны быть выбраны!",
             warningTitleNoChanges: "Вы не внесли никаких изменений!",
             addHomeworkBtnTitle: "Сохранить",
             successAddedMessage: "Изменения успешно внесены",
         },
         en: {
-            popupHeader: "Adding homework",
+            popupHeader: "Adding marks",
             warningTitleDateAndSubject: "Date and subject must be chosen!",
             warningTitleNoChanges: "You haven't changed anything!",
             addHomeworkBtnTitle: "Save",
@@ -70,7 +70,8 @@ export const AddMarksPopup = ({ lang, class_id, school_marks_popup_type, onHideP
         if(deleted_user_ids.length) {
             const deletedStudents = await get_deleted_students(deleted_user_ids);
             setDeletedStudentsInClass([...deletedStudentsInClass, ...deletedStudents]);            
-        };
+        }
+        else setDeletedStudentsInClass([]);
     }
     const newMarks = useRef([]);
     const getRecordsFromDB = async (start_date, end_date) => {
