@@ -64,10 +64,15 @@ export const DropDownSubjectsList = ({lang, school_subjects, infoFromDB, date, s
                if(!deletedSubjects.some(subject => subject === item.subject) && !school_subjects.includes(item.subject)) deletedSubjects.push(item.subject);
             }) 
         }
+        
         if(date) {
             let homeworkOnDayArr = infoFromDB.filter(item => (compareDate(item.date, date))); // вибирає всі записи, які мають конкретний день.
             let deletedHighlightedSubjects = [];
-            homeworkOnDayArr.forEach(val => { if(deletedSubjects.some(subject => (subject === val.subject))) deletedHighlightedSubjects.push(val.subject)} );
+            homeworkOnDayArr.forEach(val => { 
+                if(deletedSubjects.some(subject => (subject === val.subject) && !deletedHighlightedSubjects.includes(subject))) {
+                    deletedHighlightedSubjects.push(val.subject)
+                } 
+            });
             our_li_list.push(...createLiveLiList(homeworkOnDayArr)); // добавляю спочатку звичайні предмети
             our_li_list.push(...createDeletedLiList(deletedHighlightedSubjects, true)); // добавляю видалені предмети
         }
@@ -84,8 +89,8 @@ export const DropDownSubjectsList = ({lang, school_subjects, infoFromDB, date, s
     },[is_active_drop_down])
 
     useEffect(()=> {
-        createLiList(infoFromDB)
-    },[date])
+        createLiList(infoFromDB);
+    },[date,infoFromDB])
 
     return (
         <div className={"subject_drop_down " + (is_active_drop_down ? "active_drop_down" : "")}>

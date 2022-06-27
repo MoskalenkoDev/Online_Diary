@@ -204,7 +204,7 @@ export const AddMarksPopup = ({ lang, class_id, school_marks_popup_type, onHideP
     }, [actualStudentsInClass, deletedStudentsInClass, date, chosen_subject]); // maybe we need to add dataFromDB too
 
     useEffect(()=> {
-        if(marksInfoFromDB.length && actualStudentsInClass.length) getDeletedStudentsInClass(newMarks.current);
+        if(marksInfoFromDB.length) getDeletedStudentsInClass(newMarks.current);
     },[marksInfoFromDB,actualStudentsInClass]);
     
     return (

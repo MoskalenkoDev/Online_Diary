@@ -148,7 +148,7 @@ export const CalculateMarksPopup = ({ lang, class_id, school_marks_popup_type, o
     }, [actualStudentsInClass, deletedStudentsInClass, startDate, endDate, chosen_subject]); // maybe we need to add dataFromDB too
 
     useEffect(() => {
-        if (marksInfoFromDB.length && actualStudentsInClass.length) getDeletedStudentsInClass(newMarks.current);
+        if (marksInfoFromDB.length) getDeletedStudentsInClass(newMarks.current);
     }, [marksInfoFromDB, actualStudentsInClass]);
  
     return (

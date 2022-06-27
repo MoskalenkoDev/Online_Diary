@@ -60,8 +60,9 @@ class StudentService {
     async get_accepted_teachers(student_id) {
         const classList = await student_in_classes.findOne({student_id}).lean();
         let teachersInfoArr = [];
-        if(!classList) return teachersInfoArr;
+        if(!classList.classes) return teachersInfoArr;
         for(let class_id of classList.classes) {
+            
             const classInfo = await class_model.findById(class_id).lean();
             const teacherInfo = await teacher_users_model.findById(classInfo.teacher_id).lean();
             let result_obj = new TeacherInfo(teacherInfo, classInfo);
