@@ -1,17 +1,17 @@
-const {Schema,model} = require('mongoose');
+const { Schema, model } = require('mongoose');
 
 const class_schema = new Schema({
-  teacher_id : { // id
+  teacher_id: { // id
     type: Schema.Types.ObjectId,
-    required : true
+    required: true
   },
-  title : { // 7 class or 9 class
+  title: { // 7 class or 9 class
     type: String,
-    required : true
+    required: true
   },
-  new_students : {type: [Schema.Types.ObjectId],default : []}, // array contains only string type
-  students: {type: [Schema.Types.ObjectId],default : []}, // array contains only string type
-  school_subjects : {type: [String],default : []},
+  new_students: { type: [Schema.Types.ObjectId], default: [] }, // array contains only string type
+  students: { type: [Schema.Types.ObjectId], default: [] }, // array contains only string type
+  school_subjects: { type: [String], default: [] },
 });
 
 module.exports = classes = model('classes', class_schema);
